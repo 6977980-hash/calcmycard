@@ -1,0 +1,36 @@
+# Keeps the `theme-live` branch equal to theme/calcmycard/ on main, with the
+# theme files at the branch root. Hostinger's "Deploy from GitHub" pulls
+# `theme-live` into public_html/wp-content/themes/calcmycard, so no FTP
+# passwords or GitHub secrets are needed.
+name: Sync theme-live branch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'theme/calcmycard/**'
+      - '.github/workflows/sync-theme-live.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-theme-live
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PHP syntax
+        run: find theme/calcmycard -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Push theme/calcmycard to theme-live
+        run: |
+          git subtree split --prefix=theme/calcmycard -b theme-live-split
+          git push origin theme-live-split:theme-live
