@@ -20,11 +20,11 @@ function cmc_articles() {
 
 		'how-does-credit-card-interest-work' => array(
 			'slug'             => 'how-does-credit-card-interest-work',
-			'title'            => 'How Does Credit Card Interest Work? A Plain-English Example',
-			'breadcrumb'       => 'How Does Credit Card Interest Work?',
-			'seo_title'        => 'How Does Credit Card Interest Work? (With a Real Example)',
+			'title'            => 'How Credit Card Interest Works: A Plain-English Example',
+			'breadcrumb'       => 'How Credit Card Interest Works',
+			'seo_title'        => 'How Credit Card Interest Works (With a Real Example)',
 			'meta_description' => 'A plain-English walkthrough of how credit card interest actually works, with a real dollar example showing how your balance grows.',
-			'target_keyword'   => 'how does credit card interest work example',
+			'target_keyword'   => 'how credit card interest works',
 			'sources'          => array( 'cfpb-grace', 'cfpb-cash-advance' ),
 			'related_calculators' => array( 'credit-card-interest-calculator', 'daily-periodic-rate-calculator' ),
 		),
@@ -62,10 +62,11 @@ function cmc_articles() {
 
 		'credit-card-grace-period-explained' => array(
 			'slug'             => 'credit-card-grace-period-explained',
-			'title'            => 'Credit Card Grace Period, Explained',
-			'seo_title'        => 'Credit Card Grace Period Explained: How to Avoid Interest',
+			'title'            => 'What Is a Credit Card Grace Period?',
+			'breadcrumb'       => 'Credit Card Grace Period',
+			'seo_title'        => 'What Is a Credit Card Grace Period? How It Works and How to Keep It',
 			'meta_description' => 'What a credit card grace period is, how it works, and the rule that usually keeps it: paying your full statement balance by the due date.',
-			'target_keyword'   => 'credit card grace period explained',
+			'target_keyword'   => 'what is a credit card grace period',
 			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'cfpb-cash-advance', 'cfpb-deferred' ),
 			'related_calculators' => array( 'credit-card-interest-calculator' ),
 		),
