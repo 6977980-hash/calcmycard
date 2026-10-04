@@ -1,5 +1,5 @@
 /**
- * CMCFinance — shared vanilla-JS financial math engine used by all 12
+ * CMCFinance — shared vanilla-JS financial math engine used by the
  * CalcMyCard calculators. No dependencies, no external requests: every
  * number a user types stays in the browser.
  *
