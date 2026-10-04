@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "title": "How to Calculate Credit Card Interest",
+      "slug": "credit-card-interest-calculator-guide",
+      "post_type": "post",
+      "status": "draft",
+      "content": "<p>Credit card interest is calculated daily using your APR...</p>",
+      "excerpt": "A simple guide to how credit card interest is calculated.",
+      "categories": ["Guides"],
+      "tags": ["credit card", "interest", "APR"],
+      "seo_title": "Credit Card Interest Calculator Guide | CalcMyCard",
+      "meta_description": "Learn how credit card interest is calculated from APR and daily balance, with examples.",
+      "focus_keyword": "credit card interest",
+      "faq": [
+        { "question": "How is credit card interest calculated?", "answer": "Divide your APR by 365 and multiply by your average daily balance." },
+        { "question": "Can I avoid interest?", "answer": "Yes, pay the full statement balance by the due date." }
+      ]
+    }
+  ]
+}
