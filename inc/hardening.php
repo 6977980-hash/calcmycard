@@ -107,3 +107,14 @@ function cmc_llms_txt() {
 	exit;
 }
 add_action( 'parse_request', 'cmc_llms_txt', 0 );
+
+/**
+ * Bing Webmaster Tools site verification (added 2026-10-04 at the owner's
+ * request). Front page only; Bing checks the home URL.
+ */
+function cmc_bing_site_verification() {
+	if ( is_front_page() ) {
+		echo '<meta name="msvalidate.01" content="3CA5D5A38222486BA11B6778E763417C" />' . "\n";
+	}
+}
+add_action( 'wp_head', 'cmc_bing_site_verification', 1 );
