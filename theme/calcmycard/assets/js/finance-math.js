@@ -134,9 +134,12 @@
 		if ( method === 'percent' ) {
 			result = flatPercent;
 		} else {
+			// Interest + a slice of principal (1% by default). Some issuers
+			// (e.g. Discover) add a fixed dollar amount instead of a percent.
 			var interest = balance * monthlyRate( apr );
-			var onePercentPrincipal = balance * 0.01;
-			result = Math.max( flatPercent, interest + onePercentPrincipal );
+			var principalPct = opts.interestPlusPercent != null ? Number( opts.interestPlusPercent ) : 1;
+			var principalFixed = opts.interestPlusFixed != null ? Number( opts.interestPlusFixed ) : 0;
+			result = Math.max( flatPercent, interest + balance * ( principalPct / 100 ) + principalFixed );
 		}
 
 		result = Math.max( result, floor );
@@ -163,6 +166,7 @@
 			var minPay = estimateMinimumPayment( {
 				balance: balance, apr: apr,
 				percent: opts.percent, floor: opts.floor, method: opts.method,
+				interestPlusPercent: opts.interestPlusPercent, interestPlusFixed: opts.interestPlusFixed,
 			} );
 			var payment = Math.min( minPay, balance + interest );
 			var principal = payment - interest;

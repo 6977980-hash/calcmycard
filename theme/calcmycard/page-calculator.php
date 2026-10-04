@@ -89,6 +89,7 @@ $related_guides = cmc_articles_related_to_calculator( $slug, 3 );
 			if ( ! empty( $calc['sources'] ) ) {
 				cmc_render_sources( $calc['sources'] );
 			}
+			cmc_render_embed_box( $calc );
 			cmc_render_author_box( 'calculator' );
 			?>
 		</div>

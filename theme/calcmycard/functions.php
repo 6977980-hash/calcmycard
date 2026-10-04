@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_THEME_VERSION', '1.0.11' );
+define( 'CMC_THEME_VERSION', '1.0.12' );
 define( 'CMC_THEME_DIR', get_template_directory() );
 define( 'CMC_THEME_URI', get_template_directory_uri() );
 
@@ -50,8 +50,15 @@ function cmc_enqueue_assets() {
 	wp_enqueue_script( 'cmc-chart', CMC_THEME_URI . '/assets/js/chart-helper.js', array( 'cmc-finance-math' ), CMC_THEME_VERSION, true );
 	wp_enqueue_script( 'cmc-ui', CMC_THEME_URI . '/assets/js/ui-helper.js', array( 'cmc-finance-math' ), CMC_THEME_VERSION, true );
 
-	// Per-page calculator script, only on pages that declare a calc id via page meta.
+	// Per-page calculator script: on calculator pages, and on guides that
+	// embed a calculator ('embed_calc' in inc/data-articles.php).
 	$calc = cmc_get_calculator_for_current_page();
+	if ( ! $calc && is_page() ) {
+		$article = cmc_get_article( get_post_field( 'post_name', get_queried_object_id() ) );
+		if ( $article && ! empty( $article['embed_calc'] ) ) {
+			$calc = cmc_get_calculator( $article['embed_calc'] );
+		}
+	}
 	if ( $calc && ! empty( $calc['js'] ) ) {
 		$path = CMC_THEME_DIR . '/assets/js/calculators/' . $calc['js'];
 		if ( file_exists( $path ) ) {
@@ -76,6 +83,7 @@ require_once CMC_THEME_DIR . '/inc/breadcrumbs.php';
 require_once CMC_THEME_DIR . '/inc/helpers.php';
 require_once CMC_THEME_DIR . '/inc/hardening.php';
 require_once CMC_THEME_DIR . '/inc/page-sync.php';
+require_once CMC_THEME_DIR . '/inc/embed.php';
 
 /**
  * Register the "Calculator Page" and "Article Page" templates so editors can
