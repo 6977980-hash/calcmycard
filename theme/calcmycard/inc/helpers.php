@@ -158,6 +158,9 @@ function cmc_qa_status() {
 	return array(
 		'cases'    => 66,
 		'last_run' => '2026-09-25',
+		// Calculators added after that run: checked against the worked
+		// examples on their pages, not yet part of the automated suite.
+		'not_in_suite' => array( 'cash-advance-calculator', 'biweekly-payment-calculator', 'credit-card-interest-charge-checker' ),
 	);
 }
 
@@ -209,12 +212,15 @@ function cmc_render_author_box( $kind = 'guide' ) {
 	echo '<div>';
 	echo '<h3>About the author: <a href="' . esc_url( $author['url'] ) . '" rel="author">' . esc_html( $author['name'] ) . '</a></h3>';
 	echo '<p>' . esc_html( $author['name'] ) . ' is the founder of CalcMyCard. He builds and maintains the calculators and writes the guides on this site. ';
-	if ( 'calculator' === $kind ) {
+	$slug = $post_id ? get_post_field( 'post_name', $post_id ) : '';
+	if ( 'calculator' === $kind && in_array( $slug, $qa['not_in_suite'], true ) ) {
+		echo 'This calculator&rsquo;s results were checked against the hand-worked examples on this page before launch on October 4, 2026, including inputs that should trigger its error and warning messages. ';
+	} elseif ( 'calculator' === $kind ) {
 		echo 'This calculator&rsquo;s math was last checked on ' . esc_html( date_i18n( 'F j, Y', strtotime( $qa['last_run'] ) ) ) . ' against an automated test suite of ' . (int) $qa['cases'] . ' test cases, including edge cases such as 0% APR and payments that don&rsquo;t cover interest. ';
 	} elseif ( 'guide' === $kind ) {
 		echo 'Facts about credit card rules and rates are checked against the primary sources listed on this page. ';
 	} else {
-		echo 'Every calculator is checked against an automated test suite, and facts in the guides link to their primary sources. ';
+		echo 'Every calculator is checked against hand-worked examples (most also by an automated test suite), and facts in the guides link to their primary sources. ';
 	}
 	echo 'CalcMyCard is not a lender or financial adviser, and this page is educational, not personalized advice.</p>';
 	echo '<p><a href="' . esc_url( $author['linkedin'] ) . '" target="_blank" rel="noopener me">' . esc_html( $author['name'] ) . ' on LinkedIn</a> &middot; <a href="' . esc_url( home_url( '/methodology/' ) ) . '">Methodology</a> &middot; <a href="' . esc_url( home_url( '/editorial-policy/' ) ) . '">Editorial policy</a> ' . ( $date ? '&middot; Last updated ' . esc_html( $date ) . '.' : '' ) . '</p>';

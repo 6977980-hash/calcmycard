@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-04.3' );
+define( 'CMC_CONTENT_SYNC', '2026-10-04.4' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -38,6 +38,7 @@ function cmc_maybe_sync_content() {
 	cmc_sync_guide_pages();
 	cmc_sync_seo_meta();
 	cmc_sync_page_text();
+	cmc_sync_calculator_count_text();
 
 	update_option( 'cmc_content_sync', CMC_CONTENT_SYNC );
 	delete_transient( 'cmc_content_sync_lock' );
@@ -118,9 +119,17 @@ function cmc_content_sync_replacements() {
 			'The same disclosure appears above every calculator on the site.' => 'The same disclosure appears above every interest and payoff calculator on the site.',
 			'for anyone who wants that more granular figure.'                 => 'for anyone who wants that more granular figure. The <a href="/calculators/cash-advance-calculator/">Cash Advance Calculator</a> also uses simple daily interest (APR &divide; 365), because a cash advance starts accruing interest the day you take it.',
 			'It covers all 12 calculators with 66 test cases,'               => 'It covers the original 12 calculators with 66 test cases,',
+			'In practice, each calculator takes a monthly rate'              => 'In practice, each interest and payoff calculator takes a monthly rate',
+			'because a cash advance starts accruing interest the day you take it.' => 'because a cash advance starts accruing interest the day you take it. The <a href="/calculators/credit-card-interest-charge-checker/">Interest Charge Checker</a> uses the same daily method to check a statement, and the <a href="/calculators/biweekly-payment-calculator/">Bi-Weekly Payment Calculator</a> charges APR &times; 14 &divide; 365 for each two-week period.',
+			'It covers the original 12 calculators with 66 test cases,'      => 'It covers the site\'s original 12 calculators with 66 test cases (calculators added since launch, such as the Cash Advance, Bi-Weekly Payment and Interest Charge Checker tools, are checked against the hand-worked examples on their own pages),',
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
+			'Every calculator is checked with an automated test suite that loads' => 'The original calculators are checked with an automated test suite that loads',
+			'The suite has 66 test cases covering the original 12 calculators,' => 'Calculators added since launch (Cash Advance, Bi-Weekly Payment and Interest Charge Checker) are checked against the hand-worked examples on their own pages. The suite has 66 test cases covering the site\'s original 12 calculators (Payoff Time has since been merged into the Payoff Calculator),',
+		),
+		'editorial-policy' => array(
+			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
 		),
 	);
 }
@@ -216,6 +225,44 @@ function cmc_sync_guide_pages() {
 		) );
 		if ( $id && ! is_wp_error( $id ) ) {
 			update_post_meta( $id, '_wp_page_template', 'page-article.php' );
+		}
+	}
+}
+
+/**
+ * Keep "Twelve free credit card calculators"-style counts in the Rank Math
+ * home and hub descriptions and the site tagline in step with
+ * cmc_calculators().
+ */
+function cmc_sync_calculator_count_text() {
+	$word    = cmc_calculator_count_word();
+	$pattern = '/\\b(?:Ten|Eleven|Twelve|Thirteen|Fourteen|Fifteen|Sixteen|Seventeen|Eighteen|Nineteen|Twenty|\\d+)(?= free (?:credit card )?calculators)/';
+	$fix     = function ( $text ) use ( $pattern, $word ) {
+		return is_string( $text ) ? preg_replace( $pattern, $word, $text ) : $text;
+	};
+
+	$titles = get_option( 'rank-math-options-titles' );
+	if ( is_array( $titles ) && isset( $titles['homepage_description'] ) ) {
+		$new = $fix( $titles['homepage_description'] );
+		if ( $new !== $titles['homepage_description'] ) {
+			$titles['homepage_description'] = $new;
+			update_option( 'rank-math-options-titles', $titles );
+		}
+	}
+
+	$tagline = get_option( 'blogdescription' );
+	if ( $fix( $tagline ) !== $tagline ) {
+		update_option( 'blogdescription', $fix( $tagline ) );
+	}
+
+	foreach ( array( 'calculators', '' ) as $path ) {
+		$page = '' === $path ? get_post( (int) get_option( 'page_on_front' ) ) : get_page_by_path( $path );
+		if ( ! $page ) {
+			continue;
+		}
+		$desc = get_post_meta( $page->ID, 'rank_math_description', true );
+		if ( $desc && $fix( $desc ) !== $desc ) {
+			update_post_meta( $page->ID, 'rank_math_description', $fix( $desc ) );
 		}
 	}
 }
