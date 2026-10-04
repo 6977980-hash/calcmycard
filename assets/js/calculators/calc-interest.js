@@ -27,7 +27,20 @@
 			'<div class="cmc-chart-wrap"><canvas id="chart-donut" height="220"></canvas></div>' +
 			'<h3>Year-by-year breakdown</h3>' +
 			'<div id="table-wrap"></div>' +
+			'<div class="cmc-table-actions" id="table-actions"></div>' +
 		'</div>';
+
+	var lastSchedule = [];
+	UI.tableActions( root, 'table-actions', function () {
+		return {
+			title: 'Credit card payoff schedule',
+			filename: 'credit-card-interest-schedule.csv',
+			headers: [ 'Month', 'Payment', 'Interest', 'Principal', 'Ending balance' ],
+			rows: lastSchedule.map( function ( r ) {
+				return [ r.month, r.payment.toFixed( 2 ), r.interest.toFixed( 2 ), r.principal.toFixed( 2 ), r.balance.toFixed( 2 ) ];
+			} ),
+		};
+	} );
 
 	function calc() {
 		var balance = UI.num( root, 'balance' );
@@ -57,8 +70,12 @@
 		if ( result.neverPaysOff ) {
 			root.querySelector( '#stat-total-interest' ).textContent = 'Balance never shrinks';
 			root.querySelector( '#stat-months' ).textContent = 'Never (payment too low)';
+			lastSchedule = [];
+			root.querySelector( '#table-actions' ).style.display = 'none';
 			root.querySelector( '#table-wrap' ).innerHTML = '<p class="cmc-muted">Your payment doesn\'t cover the monthly interest (' + F.currency( monthlyInterest ) + '), so the balance will keep growing. Increase your payment to see a payoff timeline.</p>';
 		} else {
+			lastSchedule = result.schedule;
+			root.querySelector( '#table-actions' ).style.display = '';
 			root.querySelector( '#stat-total-interest' ).textContent = F.currency( result.totalInterest );
 			root.querySelector( '#stat-months' ).textContent = F.monthsToYearsMonths( result.months );
 

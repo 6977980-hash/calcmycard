@@ -2,7 +2,7 @@
 /**
  * Template Name: Article Page
  *
- * Renders one of the 15 SEO/AEO guide articles. Copy comes from
+ * Renders any of the SEO/AEO guide articles. Copy comes from
  * /content/articles/{slug}.html; metadata (title, meta description, related
  * calculators) comes from cmc_articles() (inc/data-articles.php).
  */
