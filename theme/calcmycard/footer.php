@@ -26,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<ul>
 					<li><a href="<?php echo esc_url( home_url( '/guides/how-does-credit-card-interest-work/' ) ); ?>">How Interest Works</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/guides/how-to-avoid-credit-card-interest/' ) ); ?>">How to Avoid Interest</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/guides/credit-card-glossary/' ) ); ?>">Credit Card Glossary</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/guides/' ) ); ?>">All Guides &rarr;</a></li>
 				</ul>
 			</div>

@@ -73,18 +73,22 @@ function cmc_calculators() {
 			'slug'             => 'credit-card-payoff-calculator',
 			'title'            => 'Credit Card Payoff Calculator',
 			'seo_title'        => 'Credit Card Payoff Calculator — Find Your Debt-Free Date',
-			'meta_description' => 'How long will it take to pay off your credit card? Get your debt-free date, the number of months, total interest, and how much sooner extra payments get you there.',
+			'meta_description' => 'How long will it take to pay off your credit card, or what monthly payment clears it by your deadline? Get your debt-free date, total interest and a payoff schedule.',
 			'h1'               => 'Credit Card Payoff Calculator',
 			'dek'              => 'Enter your balance, APR, and monthly payment to see your estimated payoff date and total interest cost — then test how extra payments shorten it.',
 			'target_keyword'   => 'credit card payoff calculator',
 			'calc_id'          => 'payoff',
 			'js'               => 'calc-payoff.js',
 			'sources'          => array( 'regz-1026-7', 'cfpb-grace' ),
-			'related'          => array( 'credit-card-interest-calculator', 'extra-payment-savings-calculator', 'minimum-payment-calculator', 'debt-payoff-snowball-avalanche' ),
+			'related'          => array( 'credit-card-interest-calculator', 'extra-payment-savings-calculator', 'biweekly-payment-calculator', 'debt-payoff-snowball-avalanche' ),
 			'faqs'             => array(
 				array(
 					'q' => 'How long will it take to pay off my credit card?',
 					'a' => 'It depends on your balance, APR, and monthly payment. For example, a $5,000 balance at 24% APR with $150 monthly payments takes about 56 months (4 years, 8 months) and roughly $3,300 in interest under the simplified monthly model. Enter your own numbers above for an estimated payoff date.',
+				),
+				array(
+					'q' => 'How much should I pay to pay off my credit card in a year?',
+					'a' => 'Choose "payment to be debt-free by a date" above and enter 12 months. For example, $5,000 at 22.99% APR takes about $470 a month to clear in 12 months, $262 a month for 24 months, or $194 a month for 36 months, assuming no new charges.',
 				),
 				array(
 					'q' => 'What\'s the smallest payment that makes progress?',
@@ -521,6 +525,70 @@ function cmc_calculators() {
 				array(
 					'q' => 'Do convenience checks and cash-like purchases count as cash advances?',
 					'a' => 'Often yes. Convenience checks, some money transfers, and buying gift cards or cryptocurrency can be treated as cash advances, with the same fee and APR. Check your cardholder agreement.',
+				),
+			),
+		),
+
+		'biweekly-payment-calculator' => array(
+			'slug'             => 'biweekly-payment-calculator',
+			'title'            => 'Bi-Weekly Credit Card Payment Calculator',
+			'seo_title'        => 'Bi-Weekly vs. Monthly Credit Card Payment Calculator',
+			'meta_description' => 'Does paying your credit card every two weeks save money? Compare bi-weekly and monthly payments: payoff time, interest saved, and where the saving comes from.',
+			'h1'               => 'Bi-Weekly vs. Monthly Credit Card Payment Calculator',
+			'dek'              => 'See how much paying half your payment every two weeks saves, and how much of it you would get just by paying a little more each month.',
+			'target_keyword'   => 'biweekly credit card payment calculator',
+			'calc_id'          => 'biweekly',
+			'js'               => 'calc-biweekly.js',
+			'sources'          => array( 'regz-1026-5', 'regz-1026-53' ),
+			'related'          => array( 'extra-payment-savings-calculator', 'credit-card-payoff-calculator', 'credit-card-interest-calculator' ),
+			'faqs'             => array(
+				array(
+					'q' => 'Is it better to pay a credit card weekly, bi-weekly, or monthly?',
+					'a' => 'Paying more often lowers your average daily balance a little, which trims interest, and bi-weekly payments add up to 13 monthly payments a year instead of 12. On $5,000 at 22.99% APR, $100 every two weeks instead of $200 a month saves about $248 in interest, but $208 of that comes from the extra money paid each year.',
+				),
+				array(
+					'q' => 'Can I make more than one credit card payment a month?',
+					'a' => 'Most issuers accept multiple payments in a billing cycle. Check how quickly yours posts payments, and make sure at least the minimum is paid by each due date.',
+				),
+				array(
+					'q' => 'Does paying twice a month help my credit score?',
+					'a' => 'It can, if it lowers the balance reported at your statement closing date, which lowers your credit utilization. Paying on time every month matters most.',
+				),
+				array(
+					'q' => 'Why does the calculator say most of the saving comes from the extra payment?',
+					'a' => 'Twenty-six half-payments a year equal thirteen full monthly payments, so a bi-weekly plan quietly pays one extra month each year. Paying that same yearly amount in monthly installments gets most of the same saving.',
+				),
+			),
+		),
+
+		'credit-card-interest-charge-checker' => array(
+			'slug'             => 'credit-card-interest-charge-checker',
+			'title'            => 'Credit Card Interest Charge Checker',
+			'seo_title'        => 'Credit Card Interest Charge Checker — Is Your Bill Right?',
+			'meta_description' => 'Check the interest charge on your credit card statement: compare it with what your APR should produce, see the APR it implies, and why it might be higher.',
+			'h1'               => 'Credit Card Interest Charge Checker',
+			'dek'              => 'Enter the numbers from your statement to see whether the interest charge matches your APR, and what to look for if it doesn\'t.',
+			'target_keyword'   => 'how to calculate interest charge on credit card',
+			'calc_id'          => 'interestcheck',
+			'js'               => 'calc-interest-check.js',
+			'sources'          => array( 'cfpb-grace', 'cfpb-cash-advance', 'regz-1026-55' ),
+			'related'          => array( 'daily-periodic-rate-calculator', 'credit-card-interest-calculator', 'cash-advance-calculator' ),
+			'faqs'             => array(
+				array(
+					'q' => 'How is the interest charge on my credit card statement calculated?',
+					'a' => 'Most issuers multiply your average daily balance by the daily periodic rate (APR ÷ 365) and by the number of days in the billing cycle, often compounding daily. A $2,033.33 average daily balance at 24.99% APR over 30 days comes to about $41.76.',
+				),
+				array(
+					'q' => 'Why was I charged interest after paying my balance in full?',
+					'a' => 'Usually it is residual (trailing) interest: interest that built up between your statement closing date and the day your payment arrived, after a month when you carried a balance. It typically stops once you pay in full two cycles in a row.',
+				),
+				array(
+					'q' => 'Where do I find my average daily balance?',
+					'a' => 'Many statements list it, with the APR and days in the cycle, in the interest charge calculation section near the end. If yours doesn\'t, use your statement balance for a rough check.',
+				),
+				array(
+					'q' => 'What if my interest charge is much higher than expected?',
+					'a' => 'Check for a cash advance or balance transfer at a higher APR, a lost grace period, a penalty APR after a late payment, or a promotional rate that ended. If none apply, ask your issuer to explain the charge.',
 				),
 			),
 		),
