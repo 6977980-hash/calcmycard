@@ -1,6 +1,6 @@
 <div class="cmc-answer-box">
 <span class="cmc-answer-label">Quick Answer</span>
-<p>Your estimated payoff date depends on three things: your balance, your APR, and your fixed monthly payment. The calculator above projects the month you'd reach zero, your total interest, and how much sooner an extra $50 a month would get you there.</p>
+<p>Your estimated payoff date depends on three things: your balance, your APR, and your fixed monthly payment. The calculator above shows how many months it will take to pay off your credit card, the month you'd reach zero, your total interest, and how much sooner an extra $50 a month would get you there. For example, $5,000 at 22.99% APR paid off at $175 a month takes about 42 months.</p>
 </div>
 
 <p>"How long is this going to take?" is the question most people carrying card debt want answered &mdash; not an abstract rate, but a date on the calendar. This calculator estimates that date, plus the total cost of getting there.</p>
@@ -8,10 +8,11 @@
 <h2>How the Calculator Works</h2>
 <p>Enter your current balance, APR, and the fixed amount you plan to pay every month. The calculator runs a month-by-month simulation: each month it adds interest on the remaining balance (APR &divide; 12), applies your payment, and carries the new balance forward. It stops when the balance hits zero and reports:</p>
 <ul>
-<li>Your estimated payoff date and number of months</li>
+<li>Your estimated payoff date and how many months it takes</li>
 <li>Total interest and total amount paid</li>
 <li>A chart of your balance declining over time</li>
 <li>An automatic comparison showing what adding $50 a month would change</li>
+<li>Milestones: the month you reach 25%, 50%, 75%, 90% and 100% paid off</li>
 </ul>
 
 <h2>Formula</h2>
@@ -37,6 +38,23 @@ Repeat until New Balance &le; 0 &rarr; months to payoff</div>
 
 <p>At $175 a month, payoff takes about 42 months (3 years, 6 months) and roughly $2,310 in interest. Adding $50 (a $225 payment) cuts that to about 30 months and $1,577 in interest &mdash; 12 months sooner and about $734 saved.</p>
 
+<h2>How Many Months Until Each Milestone?</h2>
+<div class="cmc-example-wrap"><table>
+<caption>$5,000 at 22.99% APR, paying $175 a month. Simplified monthly model; no new purchases.</caption>
+<thead><tr><th scope="col">Milestone</th><th scope="col">Reached at</th><th scope="col">Balance remaining</th></tr></thead>
+<tbody>
+<tr><td>25% paid off</td><td>Month 14</td><td>$3,742</td></tr>
+<tr><td>50% paid off</td><td>Month 25</td><td>$2,490</td></tr>
+<tr><td>75% paid off</td><td>Month 35</td><td>$1,102</td></tr>
+<tr><td>90% paid off</td><td>Month 39</td><td>$468</td></tr>
+<tr><td>Paid off</td><td>Month 42</td><td>$0</td></tr>
+</tbody>
+</table></div>
+<p>The first quarter takes 14 months, but the last quarter takes only 7, because less of each payment goes to interest as the balance falls.</p>
+
+<h2>If the Answer Is "Never"</h2>
+<p>If your payment doesn't cover the monthly interest (balance &times; APR &divide; 12, about $96 in this example), the balance never goes down. The calculator says so and shows the payment you need to start making progress.</p>
+
 <h2>Why Payoff Isn't a Straight Line</h2>
 <p>Because interest is charged on whatever balance remains, early payments are mostly interest and later payments are mostly principal. That's why a balance can feel stuck for the first year before it starts dropping visibly &mdash; the table above shows the principal share growing each month.</p>
 
@@ -54,4 +72,4 @@ Repeat until New Balance &le; 0 &rarr; months to payoff</div>
 <p>Your statement and cardholder agreement are the final word. See our <a href="/methodology/">methodology</a> for how every calculator on this site works.</p>
 
 <h2>Carrying More Than One Card?</h2>
-<p>This calculator handles a single balance. To see what all your cards cost together each month, see <a href="/guides/credit-card-interest-calculator-for-multiple-cards/">how to calculate total interest across multiple cards</a>. If you're juggling several cards, the order you pay them in affects total cost &mdash; compare strategies with the <a href="/calculators/debt-payoff-snowball-avalanche/">Multi-Card Debt Payoff Calculator</a>, or test different extra amounts with the <a href="/calculators/extra-payment-savings-calculator/">Extra Payment Savings Calculator</a>.</p>
+<p>This calculator handles a single balance. To see what all your cards cost together each month, see <a href="/guides/total-interest-multiple-credit-cards/">how to calculate total interest across multiple cards</a>. If you're juggling several cards, the order you pay them in affects total cost &mdash; compare strategies with the <a href="/calculators/debt-payoff-snowball-avalanche/">Multi-Card Debt Payoff Calculator</a>, or test different extra amounts with the <a href="/calculators/extra-payment-savings-calculator/">Extra Payment Savings Calculator</a>.</p>

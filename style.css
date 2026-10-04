@@ -4,7 +4,7 @@ Theme URI: https://calcmycard.com
 Author: Ali Ahmad
 Author URI: https://calcmycard.com/about/
 Description: A fast, lightweight, SEO/AEO-optimized WordPress theme purpose-built for a credit card calculator authority site. Built for Core Web Vitals, schema markup, and AdSense-ready layout.
-Version: 1.0.11
+Version: 1.0.12
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.6
@@ -302,3 +302,12 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
   .cmc-hub-card, .cmc-related-card, .cmc-btn { transition: none; }
   .cmc-hub-card:hover { transform: none; }
 }
+
+/* Embeddable calculator (?embed=1) and the "Embed this calculator" box. */
+.cmc-embed { background: #fff; }
+.cmc-embed .cmc-embed-main { padding: 14px; max-width: 760px; margin: 0 auto; }
+.cmc-embed .cmc-embed-title { font-size: 1.25rem; margin: 0 0 10px; }
+.cmc-embed .cmc-embed-credit { font-size: 0.8rem; margin: 12px 0 0; color: var(--cmc-text-muted); }
+.cmc-embed-box { margin: 22px 0; border: 1px solid var(--cmc-border); border-radius: 8px; padding: 12px 14px; }
+.cmc-embed-box summary { cursor: pointer; font-weight: 600; }
+.cmc-embed-box textarea { width: 100%; font-family: monospace; font-size: 0.78rem; margin: 6px 0 10px; }

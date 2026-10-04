@@ -53,8 +53,9 @@ function cmc_articles() {
 			'slug'             => 'how-to-calculate-credit-card-interest',
 			'title'            => 'How to Calculate Credit Card Interest by Hand',
 			'seo_title'        => 'How to Calculate Credit Card Interest (Formula + Steps)',
-			'meta_description' => 'A practical formula for estimating credit card interest, broken into simple steps you can follow with a calculator or spreadsheet.',
+			'meta_description' => 'How to calculate credit card interest: the daily-rate formula, a worked example with purchases and payments, the monthly shortcut, and a calculator to try it.',
 			'target_keyword'   => 'how to calculate credit card interest',
+			'embed_calc'       => 'daily-periodic-rate-calculator',
 			'sources'          => array( 'cfpb-grace' ),
 			'related_calculators' => array( 'daily-periodic-rate-calculator', 'credit-card-interest-calculator' ),
 		),
@@ -108,7 +109,7 @@ function cmc_articles() {
 			'meta_description' => 'Real examples showing how many years (and how much interest) it takes to pay off common credit card balances using only minimum payments.',
 			'target_keyword'   => 'how long to pay off credit card with minimum payments',
 			'sources'          => array( 'regz-1026-7' ),
-			'related_calculators' => array( 'minimum-payment-calculator', 'payoff-time-calculator', 'extra-payment-savings-calculator', 'credit-card-payoff-calculator' ),
+			'related_calculators' => array( 'minimum-payment-calculator', 'credit-card-payoff-calculator', 'extra-payment-savings-calculator' ),
 		),
 
 		'balance-transfer-fees-explained' => array(
@@ -161,8 +162,8 @@ function cmc_articles() {
 			'related_calculators' => array( 'credit-card-apr-calculator', 'daily-periodic-rate-calculator' ),
 		),
 
-		'credit-card-interest-calculator-for-multiple-cards' => array(
-			'slug'             => 'credit-card-interest-calculator-for-multiple-cards',
+		'total-interest-multiple-credit-cards' => array(
+			'slug'             => 'total-interest-multiple-credit-cards',
 			'title'            => 'How to Calculate Total Interest Across Multiple Credit Cards',
 			'seo_title'        => 'How to Calculate Total Interest Across Multiple Credit Cards',
 			'meta_description' => 'How to add up interest costs across several credit cards at once, and why looking at your total (not just each card) changes your payoff strategy.',

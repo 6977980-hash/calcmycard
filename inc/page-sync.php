@@ -11,7 +11,9 @@
  *   yet (published under /calculators/ with the Calculator Page template);
  * - copies seo_title / meta_description / target_keyword from the data
  *   files into each calculator and guide page's Rank Math fields;
- * - applies the text replacements listed in cmc_content_sync_replacements().
+ * - applies the text replacements listed in cmc_content_sync_replacements();
+ * - renames or unpublishes pages listed in cmc_moved_pages(), whose old
+ *   URLs then 301 to the new ones (cmc_redirect_moved_pages()).
  *
  * Bump CMC_CONTENT_SYNC whenever any of the above should run again.
  */
@@ -20,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-04.1' );
+define( 'CMC_CONTENT_SYNC', '2026-10-04.2' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -31,6 +33,7 @@ function cmc_maybe_sync_content() {
 	}
 	set_transient( 'cmc_content_sync_lock', 1, 5 * MINUTE_IN_SECONDS );
 
+	cmc_sync_moved_pages();
 	cmc_sync_calculator_pages();
 	cmc_sync_seo_meta();
 	cmc_sync_page_text();
@@ -141,3 +144,49 @@ function cmc_sync_page_text() {
 		}
 	}
 }
+
+/**
+ * Pages whose URL changed. 'to' => null means the page was merged into
+ * another and is unpublished; otherwise it is renamed to the new slug.
+ * Every 'from' path 301s to 'redirect'.
+ */
+function cmc_moved_pages() {
+	return array(
+		array(
+			'from'     => 'calculators/payoff-time-calculator',
+			'to'       => null,
+			'redirect' => '/calculators/credit-card-payoff-calculator/',
+		),
+		array(
+			'from'     => 'guides/credit-card-interest-calculator-for-multiple-cards',
+			'to'       => 'total-interest-multiple-credit-cards',
+			'redirect' => '/guides/total-interest-multiple-credit-cards/',
+		),
+	);
+}
+
+function cmc_sync_moved_pages() {
+	foreach ( cmc_moved_pages() as $move ) {
+		$page = get_page_by_path( $move['from'] );
+		if ( ! $page ) {
+			continue;
+		}
+		if ( null === $move['to'] ) {
+			wp_update_post( array( 'ID' => $page->ID, 'post_status' => 'draft' ) );
+		} else {
+			wp_update_post( array( 'ID' => $page->ID, 'post_name' => $move['to'] ) );
+		}
+	}
+}
+
+function cmc_redirect_moved_pages() {
+	$path = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+	$path = trim( (string) $path, '/' );
+	foreach ( cmc_moved_pages() as $move ) {
+		if ( $path === $move['from'] ) {
+			wp_safe_redirect( home_url( $move['redirect'] ), 301 );
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'cmc_redirect_moved_pages', 0 );

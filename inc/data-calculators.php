@@ -73,18 +73,22 @@ function cmc_calculators() {
 			'slug'             => 'credit-card-payoff-calculator',
 			'title'            => 'Credit Card Payoff Calculator',
 			'seo_title'        => 'Credit Card Payoff Calculator — Find Your Debt-Free Date',
-			'meta_description' => 'Estimate when you\'ll be debt-free. Our credit card payoff calculator estimates your payoff date, total interest paid, and how extra payments speed things up.',
+			'meta_description' => 'How long will it take to pay off your credit card? Get your debt-free date, the number of months, total interest, and how much sooner extra payments get you there.',
 			'h1'               => 'Credit Card Payoff Calculator',
 			'dek'              => 'Enter your balance, APR, and monthly payment to see your estimated payoff date and total interest cost — then test how extra payments shorten it.',
 			'target_keyword'   => 'credit card payoff calculator',
 			'calc_id'          => 'payoff',
 			'js'               => 'calc-payoff.js',
 			'sources'          => array( 'regz-1026-7', 'cfpb-grace' ),
-			'related'          => array( 'credit-card-interest-calculator', 'extra-payment-savings-calculator', 'payoff-time-calculator', 'debt-payoff-snowball-avalanche' ),
+			'related'          => array( 'credit-card-interest-calculator', 'extra-payment-savings-calculator', 'minimum-payment-calculator', 'debt-payoff-snowball-avalanche' ),
 			'faqs'             => array(
 				array(
 					'q' => 'How long will it take to pay off my credit card?',
 					'a' => 'It depends on your balance, APR, and monthly payment. For example, a $5,000 balance at 24% APR with $150 monthly payments takes about 56 months (4 years, 8 months) and roughly $3,300 in interest under the simplified monthly model. Enter your own numbers above for an estimated payoff date.',
+				),
+				array(
+					'q' => 'What\'s the smallest payment that makes progress?',
+					'a' => 'Your payment has to be larger than one month\'s interest, estimated here as balance × (APR ÷ 12). On $5,000 at 22.99%, that\'s about $96 a month; anything above it starts reducing the balance, and the calculator tells you if your payment falls short.',
 				),
 				array(
 					'q' => 'Does paying more than the minimum really make a big difference?',
@@ -112,8 +116,8 @@ function cmc_calculators() {
 		'minimum-payment-calculator' => array(
 			'slug'             => 'minimum-payment-calculator',
 			'title'            => 'Credit Card Minimum Payment Calculator',
-			'seo_title'        => 'Credit Card Minimum Payment Calculator — See the Real Cost',
-			'meta_description' => 'Calculate your credit card minimum payment and see how long it really takes (and how much interest it really costs) to pay off a balance making minimums only.',
+			'seo_title'        => 'Credit Card Minimum Payment Calculator (Chase, Citi & More)',
+			'meta_description' => 'Calculate your credit card minimum payment with your issuer\'s formula (Chase, Citi, Discover, Capital One, Amex) and see how long minimums only really take.',
 			'h1'               => 'Credit Card Minimum Payment Calculator',
 			'dek'              => 'Estimate your minimum payment under common formulas — and what paying only the minimum every month could cost.',
 			'target_keyword'   => 'credit card minimum payment calculator',
@@ -147,8 +151,16 @@ function cmc_calculators() {
 					'a' => 'The payment would generally be treated as late, which can mean a late fee, a possible penalty APR depending on your card\'s terms, and a negative mark on your credit report if it\'s 30 or more days past due.',
 				),
 				array(
+					'q' => 'What is the minimum payment on a $10,000 credit card balance?',
+					'a' => 'With the common formula of interest plus 1% of the balance, at 23.99% APR it is about $300 for the first month (roughly $200 of interest plus $100 of principal). Paying only the minimum from there would take about 21 years and cost about $18,200 in interest under this calculator\'s simplified monthly model.',
+				),
+				array(
+					'q' => 'How do Chase, Citi, and Discover calculate the minimum payment?',
+					'a' => 'Chase uses the greater of $40 or 1% of the balance plus interest and late fees. Citi uses the greater of $41 or 1% of the balance plus billed interest. Discover uses the greatest of $35, 2% of the balance, or $20 plus interest and late fees. Formulas can vary by card, so your cardmember agreement is the final word.',
+				),
+				array(
 					'q' => 'Does this calculator match my issuer\'s formula?',
-					'a' => 'Only if your card uses one of the structures and settings you enter. Percentages, dollar floors, and whether fees are included vary by card, and the calculator uses a simplified monthly-interest model (APR ÷ 12), so treat the result as an estimate.',
+					'a' => 'Choose Chase, Citi, Discover, Capital One, or American Express to load that issuer\'s standard published formula, or set your own. It will match only if your card uses that structure. Percentages, dollar floors, and whether fees are included vary by card, and the calculator uses a simplified monthly-interest model (APR ÷ 12), so treat the result as an estimate.',
 				),
 			),
 		),
@@ -389,42 +401,6 @@ function cmc_calculators() {
 				array(
 					'q' => 'Do new purchases get the 0% rate too?',
 					'a' => 'Only if the offer covers purchases. Some intro offers apply only to balance transfers, so new purchases would accrue interest at the regular purchase APR.',
-				),
-			),
-		),
-
-		'payoff-time-calculator' => array(
-			'slug'             => 'payoff-time-calculator',
-			'title'            => 'Credit Card Payoff Time Calculator',
-			'seo_title'        => 'Payoff Time Calculator — Months to Pay Off a Credit Card',
-			'meta_description' => 'Estimate how many months or years it will take to pay off your credit card balance at your current payment amount and APR.',
-			'h1'               => 'Credit Card Payoff Time Calculator',
-			'dek'              => 'Answer the question "how long will this actually take?" — enter your balance, APR, and payment for an estimated month-by-month countdown.',
-			'target_keyword'   => 'how long to pay off credit card calculator',
-			'calc_id'          => 'payofftime',
-			'js'               => 'calc-payoff-time.js',
-			'sources'          => array( 'regz-1026-7' ),
-			'related'          => array( 'credit-card-payoff-calculator', 'minimum-payment-calculator', 'extra-payment-savings-calculator' ),
-			'faqs'             => array(
-				array(
-					'q' => 'How many months will it take to pay off my credit card?',
-					'a' => 'It depends on your balance, APR, and payment size — enter your own numbers above for an estimated month count. For example, $4,200 at 23.49% APR with $160 a month takes about 38 months under the simplified monthly model.',
-				),
-				array(
-					'q' => 'What if my payment doesn\'t cover the interest?',
-					'a' => 'If your payment is smaller than the interest accruing each month, your balance will never go down — it will grow instead. The calculator flags this so you know your payment needs to increase.',
-				),
-				array(
-					'q' => 'What\'s the minimum payment needed to make progress?',
-					'a' => 'Your payment must be larger than one month\'s interest, estimated here as balance × (APR ÷ 12). On $4,200 at 23.49%, that\'s about $82 a month; anything above it reduces the balance.',
-				),
-				array(
-					'q' => 'Why do the later milestones come faster?',
-					'a' => 'As the balance falls, less of each payment goes to interest and more goes to principal, so each additional 25% is paid off faster than the one before.',
-				),
-				array(
-					'q' => 'How is this different from the Credit Card Payoff Calculator?',
-					'a' => 'Both use the same math. This one focuses on the month count and progress milestones; the Payoff Calculator shows a calendar payoff date, a balance chart, and a $50-extra comparison.',
 				),
 			),
 		),
