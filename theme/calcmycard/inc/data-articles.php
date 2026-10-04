@@ -172,6 +172,17 @@ function cmc_articles() {
 			'related_calculators' => array( 'debt-payoff-snowball-avalanche', 'credit-card-interest-calculator' ),
 		),
 
+		'credit-card-glossary' => array(
+			'slug'             => 'credit-card-glossary',
+			'title'            => 'Credit Card Glossary: Terms Explained in Plain English',
+			'breadcrumb'       => 'Credit Card Glossary',
+			'seo_title'        => 'Credit Card Glossary: APR, Grace Period & More Explained',
+			'meta_description' => 'Plain-English definitions of credit card terms: APR, daily periodic rate, average daily balance, grace period, minimum payment, penalty APR, and more.',
+			'target_keyword'   => 'credit card terms glossary',
+			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'regz-1026-53', 'regz-1026-55' ),
+			'related_calculators' => array( 'credit-card-interest-calculator', 'daily-periodic-rate-calculator', 'minimum-payment-calculator' ),
+		),
+
 	);
 
 	return $articles;

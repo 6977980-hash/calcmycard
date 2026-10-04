@@ -287,7 +287,11 @@ function cmc_render_calc_method_note( $calc_id ) {
 		return;
 	}
 
-	if ( 'cashadvance' === $calc_id ) {
+	if ( 'interestcheck' === $calc_id ) {
+		$text = 'This checker applies simple daily interest (APR &divide; 365, or 360 if selected) to the average daily balance you enter. Issuers often compound daily and may carry several balances at different APRs, so small differences are normal.';
+	} elseif ( 'biweekly' === $calc_id ) {
+		$text = 'This calculator compares a monthly plan (APR &divide; 12 per month) with a bi-weekly plan (APR &times; 14 &divide; 365 per two weeks). Issuers charge daily interest on your average daily balance, so your actual savings may differ.';
+	} elseif ( 'cashadvance' === $calc_id ) {
 		$text = 'This calculator applies simple daily interest (cash advance APR &divide; 365) from the day you take the cash, with no grace period and no compounding. Issuers\' exact methods vary (daily compounding, how the fee is billed, payment allocation), so your actual statement may differ.';
 	} elseif ( 'dpr' === $calc_id ) {
 		$text = 'This calculator applies a daily periodic rate (APR &divide; 365, or 360 if selected) to the average daily balance you enter. Issuers\' exact methods vary (compounding, grace periods, fees), so your actual statement may differ.';

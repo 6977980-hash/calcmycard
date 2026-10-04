@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-04.2' );
+define( 'CMC_CONTENT_SYNC', '2026-10-04.3' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -35,6 +35,7 @@ function cmc_maybe_sync_content() {
 
 	cmc_sync_moved_pages();
 	cmc_sync_calculator_pages();
+	cmc_sync_guide_pages();
 	cmc_sync_seo_meta();
 	cmc_sync_page_text();
 
@@ -190,3 +191,31 @@ function cmc_redirect_moved_pages() {
 	}
 }
 add_action( 'template_redirect', 'cmc_redirect_moved_pages', 0 );
+
+/**
+ * Create missing guide pages under /guides/.
+ */
+function cmc_sync_guide_pages() {
+	$parent = get_page_by_path( 'guides' );
+	if ( ! $parent ) {
+		return;
+	}
+	foreach ( cmc_articles() as $article ) {
+		if ( get_page_by_path( 'guides/' . $article['slug'] ) ) {
+			continue;
+		}
+		$id = wp_insert_post( array(
+			'post_type'    => 'page',
+			'post_status'  => 'publish',
+			'post_title'   => $article['title'],
+			'post_name'    => $article['slug'],
+			'post_parent'  => $parent->ID,
+			'post_author'  => (int) $parent->post_author,
+			'post_content' => '',
+			'post_excerpt' => $article['meta_description'],
+		) );
+		if ( $id && ! is_wp_error( $id ) ) {
+			update_post_meta( $id, '_wp_page_template', 'page-article.php' );
+		}
+	}
+}

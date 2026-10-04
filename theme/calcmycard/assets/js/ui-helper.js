@@ -16,8 +16,17 @@
 	 * field({id,label,type,value,step,min,max,hint,prefix,suffix,options})
 	 * type: 'number' (default), 'select' (needs options: [{value,label}])
 	 */
+	// Values passed in the page URL (from a "Copy link to these results"
+	// link) prefill the matching fields.
+	var urlParams = ( function () {
+		try { return new URLSearchParams( global.location.search ); } catch ( e ) { return null; }
+	}() );
+
 	function field( f ) {
 		var type = f.type || 'number';
+		if ( urlParams && urlParams.has( f.id ) ) {
+			f = Object.assign( {}, f, { value: urlParams.get( f.id ) } );
+		}
 		var wrapAttrs = '';
 		var inputHtml;
 
@@ -124,7 +133,89 @@
 		return isNaN( v ) ? ( fallback || 0 ) : v;
 	}
 
+	function csvCell( v ) {
+		var s = String( v == null ? '' : v );
+		return /[",\n]/.test( s ) ? '"' + s.replace( /"/g, '""' ) + '"' : s;
+	}
+
+	/**
+	 * Buttons to download a table as CSV or print it. getData() returns
+	 * { title, filename, headers, rows } at click time, so the file always
+	 * matches the current inputs.
+	 */
+	function tableActions( root, id, getData ) {
+		var bar = root.querySelector( '#' + id );
+		if ( ! bar ) {
+			return;
+		}
+		bar.innerHTML = '<button type="button" class="cmc-btn cmc-btn-secondary cmc-btn-small" data-act="csv">Download CSV</button> ' +
+			'<button type="button" class="cmc-btn cmc-btn-secondary cmc-btn-small" data-act="print">Print</button>';
+		bar.addEventListener( 'click', function ( e ) {
+			var act = e.target && e.target.getAttribute( 'data-act' );
+			if ( ! act ) {
+				return;
+			}
+			var d = getData();
+			if ( act === 'csv' ) {
+				var csv = [ d.headers ].concat( d.rows ).map( function ( r ) { return r.map( csvCell ).join( ',' ); } ).join( '\r\n' );
+				var a = document.createElement( 'a' );
+				a.href = URL.createObjectURL( new Blob( [ csv ], { type: 'text/csv;charset=utf-8' } ) );
+				a.download = d.filename;
+				document.body.appendChild( a );
+				a.click();
+				setTimeout( function () { URL.revokeObjectURL( a.href ); a.remove(); }, 0 );
+			} else {
+				var w = global.open( '', '_blank' );
+				if ( ! w ) {
+					return;
+				}
+				w.document.write( '<!doctype html><html><head><meta charset="utf-8"><title>' + esc( d.title ) + '</title>' +
+					'<style>body{font:13px/1.4 system-ui,sans-serif;margin:24px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:4px 8px;text-align:right}th:first-child,td:first-child{text-align:left}</style></head><body>' +
+					'<h1 style="font-size:18px">' + esc( d.title ) + '</h1>' + table( d.headers, d.rows ) +
+					'<p style="color:#666">Estimate from ' + esc( global.location.origin + global.location.pathname ) + '. Simplified model; your statement may differ.</p></body></html>' );
+				w.document.close();
+				w.focus();
+				w.print();
+			}
+		} );
+	}
+
+	/**
+	 * "Copy link to these results" under every calculator: the link carries
+	 * the current inputs, and field() reads them back on load.
+	 */
+	function addShareBars() {
+		document.querySelectorAll( '.cmc-calculator' ).forEach( function ( root ) {
+			if ( root.querySelector( '.cmc-share-bar' ) || ! root.querySelector( 'input, select' ) ) {
+				return;
+			}
+			var bar = document.createElement( 'div' );
+			bar.className = 'cmc-share-bar';
+			bar.innerHTML = '<button type="button" class="cmc-btn cmc-btn-secondary cmc-btn-small">Copy link to these results</button><span class="cmc-share-msg" role="status"></span>';
+			root.appendChild( bar );
+			bar.querySelector( 'button' ).addEventListener( 'click', function () {
+				var params = new URLSearchParams();
+				root.querySelectorAll( 'input[id], select[id]' ).forEach( function ( el ) {
+					if ( el.value !== '' ) {
+						params.set( el.id, el.value );
+					}
+				} );
+				var url = global.location.origin + global.location.pathname + '?' + params.toString();
+				var msg = bar.querySelector( '.cmc-share-msg' );
+				var done = function () { msg.textContent = ' Link copied'; };
+				if ( navigator.clipboard && navigator.clipboard.writeText ) {
+					navigator.clipboard.writeText( url ).then( done, function () { global.prompt( 'Copy this link:', url ); } );
+				} else {
+					global.prompt( 'Copy this link:', url );
+				}
+			} );
+		} );
+	}
+	// Calculator scripts load after this file and render on load, so wait.
+	global.addEventListener( 'load', addShareBars );
+
 	global.CMCUI = {
+		tableActions: tableActions,
 		esc: esc,
 		field: field,
 		formGrid: formGrid,
