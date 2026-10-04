@@ -29,7 +29,9 @@
 		'</div>';
 
 	function addMonths( date, months ) {
-		var d = new Date( date );
+		// Work from the 1st of the month so e.g. Jan 31 + 1 month can't
+		// overflow into March.
+		var d = new Date( date.getFullYear(), date.getMonth(), 1 );
 		d.setMonth( d.getMonth() + months );
 		return d;
 	}
@@ -40,12 +42,14 @@
 		var payment = UI.num( root, 'payment' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance < 0 || payment <= 0 ) {
+		if ( balance <= 0 || payment <= 0 ) {
 			err.textContent = 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var result = F.amortize( { balance: balance, apr: apr, payment: payment } );
 

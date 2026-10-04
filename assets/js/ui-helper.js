@@ -85,6 +85,18 @@
 		return '<p class="cmc-calc-error" id="' + esc( id ) + '"></p>';
 	}
 
+	/**
+	 * Show or hide a calculator's results panel. Results are hidden while an
+	 * input error is showing, so stale numbers from the last valid input
+	 * never sit next to the error message.
+	 */
+	function toggleResults( root, visible ) {
+		var results = root.querySelector( '#results' );
+		if ( results ) {
+			results.style.display = visible ? '' : 'none';
+		}
+	}
+
 	function debounce( fn, wait ) {
 		var t;
 		return function () {
@@ -119,6 +131,7 @@
 		statsRow: statsRow,
 		table: table,
 		errorBox: errorBox,
+		toggleResults: toggleResults,
 		debounce: debounce,
 		onAnyChange: onAnyChange,
 		num: num,

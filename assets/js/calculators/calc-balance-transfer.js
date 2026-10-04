@@ -60,12 +60,14 @@
 		var goToApr = UI.num( root, 'goToApr' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance < 0 || payment <= 0 ) {
+		if ( balance <= 0 || payment <= 0 ) {
 			err.textContent = 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var fee = balance * ( feePercent / 100 );
 		var stay = F.amortize( { balance: balance, apr: currentApr, payment: payment } );

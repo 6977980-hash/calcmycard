@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_THEME_VERSION', '1.0.9' );
+define( 'CMC_THEME_VERSION', '1.0.10' );
 define( 'CMC_THEME_DIR', get_template_directory() );
 define( 'CMC_THEME_URI', get_template_directory_uri() );
 
@@ -74,6 +74,7 @@ require_once CMC_THEME_DIR . '/inc/schema.php';
 require_once CMC_THEME_DIR . '/inc/seo-meta.php';
 require_once CMC_THEME_DIR . '/inc/breadcrumbs.php';
 require_once CMC_THEME_DIR . '/inc/helpers.php';
+require_once CMC_THEME_DIR . '/inc/hardening.php';
 
 /**
  * Register the "Calculator Page" and "Article Page" templates so editors can
