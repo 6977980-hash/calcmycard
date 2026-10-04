@@ -41,12 +41,14 @@
 		var floor = UI.num( root, 'floor' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance < 0 ) {
+		if ( balance <= 0 ) {
 			err.textContent = 'Enter a balance greater than 0.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var minPay = F.estimateMinimumPayment( { balance: balance, apr: apr, percent: percent, floor: floor, method: method } );
 		root.querySelector( '#stat-min' ).textContent = F.currency( minPay );
@@ -67,16 +69,21 @@
 		if ( ! sim.neverPaysOff && sim.totalInterest > balance ) {
 			warn.innerHTML = '<span class="cmc-answer-label">Reality check</span><p>Paying only the minimum on this balance costs ' + F.currency( sim.totalInterest ) + ' in interest — more than the original ' + F.currency( balance ) + ' balance — and takes ' + F.monthsToYearsMonths( sim.months ) + '. See the <a href="/calculators/extra-payment-savings-calculator/">Extra Payment Savings Calculator</a> to see how much a bigger payment saves.</p>';
 		} else if ( sim.neverPaysOff ) {
-			warn.innerHTML = '<span class="cmc-answer-label">Reality check</span><p>At this balance and APR, the minimum payment formula you selected doesn\'t outpace interest — the balance would never fully shrink under a pure minimum-payment plan in practice issuers set floors to prevent this, but it signals you need to pay more than the minimum.</p>';
+			warn.innerHTML = '<span class="cmc-answer-label">Reality check</span><p>At this balance and APR, the minimum payment formula you selected doesn\'t outpace interest — the balance would never be paid off under a minimum-only plan. In practice, issuers set a dollar floor partly to prevent this, but it signals you need to pay more than the minimum.</p>';
 		} else {
 			warn.innerHTML = '';
 		}
 
+		var chart = root.querySelector( '#chart-line' );
 		if ( ! sim.neverPaysOff ) {
+			chart.style.display = '';
 			var balances = [ balance ].concat( sim.schedule.map( function ( r ) { return r.balance; } ) );
 			var step = Math.max( 1, Math.ceil( balances.length / 40 ) );
 			var sBalances = balances.filter( function ( _, i ) { return i % step === 0; } );
-			C.drawLineChart( root.querySelector( '#chart-line' ), [ { data: sBalances, color: C.palette.warn } ], [ 'Now', 'Payoff' ] );
+			C.drawLineChart( chart, [ { data: sBalances, color: C.palette.warn } ], [ 'Now', 'Payoff' ] );
+		} else {
+			// Don't leave the previous (paid-off) chart on screen.
+			chart.style.display = 'none';
 		}
 	}
 

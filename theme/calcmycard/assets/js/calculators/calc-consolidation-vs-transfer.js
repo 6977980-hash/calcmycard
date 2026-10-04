@@ -74,9 +74,11 @@
 		if ( balance < 0 || promoMonths < 1 || loanTerm < 1 ) {
 			err.textContent = 'Enter a balance of 0 or more, a promo period of at least 1 month, and a loan term of at least 1 month.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		// Option A: assume the user pays off the transferred balance across
 		// the promo period using a flat payment sized to just clear it,

@@ -33,9 +33,11 @@
 		if ( balance < 0 || apr < 0 ) {
 			err.textContent = 'Enter values of 0 or greater.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var monthlyCost = balance * F.monthlyRate( apr );
 		var dailyCost = balance * F.dailyPeriodicRate( apr );

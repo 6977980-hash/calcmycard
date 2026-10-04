@@ -107,9 +107,11 @@
 		if ( totalLimit <= 0 ) {
 			err.textContent = 'Enter a credit limit greater than 0 for at least one card.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var overallPct = ( totalBalance / totalLimit ) * 100;
 		root.querySelector( '#stat-overall' ).textContent = F.percent( overallPct, 1 );

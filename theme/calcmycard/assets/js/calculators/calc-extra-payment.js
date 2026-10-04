@@ -37,12 +37,14 @@
 		var extra = UI.num( root, 'extra' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance < 0 || payment <= 0 ) {
+		if ( balance <= 0 || payment <= 0 ) {
 			err.textContent = 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var base = F.amortize( { balance: balance, apr: apr, payment: payment } );
 		var withExtra = F.amortize( { balance: balance, apr: apr, payment: payment, extra: extra } );
@@ -60,6 +62,10 @@
 				{ label: 'Interest (current)', value: base.totalInterest, color: C.palette.warn },
 				{ label: 'Interest (with extra)', value: withExtra.totalInterest, color: C.palette.accent },
 			] );
+		} else if ( base.neverPaysOff && ! withExtra.neverPaysOff ) {
+			// The current payment never clears the balance; the extra amount does.
+			root.querySelector( '#stat-months-saved' ).textContent = 'Now pays off';
+			root.querySelector( '#stat-interest-saved' ).textContent = 'Stops the balance growing';
 		} else {
 			root.querySelector( '#stat-months-saved' ).textContent = '—';
 			root.querySelector( '#stat-interest-saved' ).textContent = '—';

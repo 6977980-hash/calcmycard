@@ -33,12 +33,14 @@
 		var goToApr = UI.num( root, 'goToApr' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance < 0 || promoMonths <= 0 ) {
+		if ( balance <= 0 || promoMonths <= 0 ) {
 			err.textContent = 'Enter a balance greater than 0 and at least 1 promotional month.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		// Round UP to the cent so paying the displayed amount always clears the balance.
 		var required = Math.ceil( ( balance / promoMonths ) * 100 - 1e-9 ) / 100;
@@ -55,8 +57,13 @@
 			root.querySelector( '#stat-postpromo-interest' ).textContent = '$0.00';
 			answer.innerHTML = '<span class="cmc-answer-label">You\'re on track</span><p>At ' + F.currency( plannedPayment ) + '/month, you\'ll pay off the full balance before the promotional period ends — no interest at all, as long as the offer isn\'t a deferred-interest promotion (check your card\'s terms).</p>';
 		} else {
-			var afterResult = F.amortize( { balance: remainder, apr: goToApr, payment: Math.max( plannedPayment, remainder * F.monthlyRate( goToApr ) + 1 ) } );
-			root.querySelector( '#stat-postpromo-interest' ).textContent = afterResult.neverPaysOff ? 'Payment too low' : F.currency( afterResult.totalInterest );
+			// If the planned payment can't cover post-promo interest, assume the
+			// smallest payment that still makes progress, and say so in the label.
+			var minAfter = remainder * F.monthlyRate( goToApr ) + 1;
+			var afterPayment = Math.max( plannedPayment, minAfter );
+			var afterResult = F.amortize( { balance: remainder, apr: goToApr, payment: afterPayment } );
+			root.querySelector( '#stat-postpromo-interest' ).textContent = afterResult.neverPaysOff ? 'Payment too low' :
+				F.currency( afterResult.totalInterest ) + ( afterPayment > plannedPayment ? ' (at ' + F.currency( afterPayment ) + '/mo)' : '' );
 			answer.innerHTML = '<span class="cmc-answer-label">You\'ll fall short</span><p>At ' + F.currency( plannedPayment ) + '/month you\'ll still owe about ' + F.currency( remainder ) + ' when the promo ends. That remainder starts accruing interest at ' + F.percent( goToApr ) + ' — increase your payment to at least ' + F.currency( required ) + '/month to avoid this entirely.</p>';
 		}
 	}

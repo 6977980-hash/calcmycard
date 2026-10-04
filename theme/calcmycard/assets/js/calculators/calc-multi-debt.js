@@ -1,8 +1,7 @@
 /**
  * Multi-Card Debt Payoff Calculator — snowball vs. avalanche, with a
- * dynamic add/remove card list. The only calculator on the site (and one
- * Expedition CU's tools don't have at all) that handles more than one card
- * at once.
+ * dynamic add/remove card list. The only calculator on the site that
+ * handles more than one card at once.
  */
 (function () {
 	'use strict';
@@ -106,9 +105,11 @@
 		if ( ! cards.length ) {
 			err.textContent = 'Add at least one card with a balance greater than 0.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var snow = F.simulateMultiCardPayoff( cards, extra, 'snowball' );
 		var aval = F.simulateMultiCardPayoff( cards, extra, 'avalanche' );

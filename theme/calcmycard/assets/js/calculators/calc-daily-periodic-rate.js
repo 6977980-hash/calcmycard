@@ -40,9 +40,11 @@
 		if ( apr < 0 || balance < 0 || days <= 0 ) {
 			err.textContent = 'Enter a valid APR, balance, and number of days.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
 		var dpr = ( apr / 100 ) / basis;
 		var dailyCost = balance * dpr;

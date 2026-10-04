@@ -35,14 +35,18 @@
 		var payment = UI.num( root, 'payment' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance < 0 || apr < 0 || payment <= 0 ) {
+		if ( balance <= 0 || apr < 0 || payment <= 0 ) {
 			err.textContent = 'Enter a balance greater than 0 and a monthly payment greater than 0.';
 			err.style.display = 'block';
+			UI.toggleResults( root, false );
 			return;
 		}
 		err.style.display = 'none';
+		UI.toggleResults( root, true );
 
-		var monthlyInterest = balance * F.monthlyRate( apr );
+		// Round this month's interest to the cent before splitting the payment,
+		// so the two displayed parts always add back up to the payment.
+		var monthlyInterest = Math.round( balance * F.monthlyRate( apr ) * 100 ) / 100;
 		var principalPortion = Math.max( 0, payment - monthlyInterest );
 
 		root.querySelector( '#stat-interest-portion' ).textContent = F.currency( Math.min( monthlyInterest, payment ) );
