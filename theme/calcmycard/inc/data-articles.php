@@ -52,7 +52,7 @@ function cmc_articles() {
 		'how-to-calculate-credit-card-interest' => array(
 			'slug'             => 'how-to-calculate-credit-card-interest',
 			'title'            => 'How to Calculate Credit Card Interest by Hand',
-			'seo_title'        => 'How to Calculate Credit Card Interest by Hand (Formula + Steps)',
+			'seo_title'        => 'How to Calculate Credit Card Interest (Formula + Steps)',
 			'meta_description' => 'A practical formula for estimating credit card interest, broken into simple steps you can follow with a calculator or spreadsheet.',
 			'target_keyword'   => 'how to calculate credit card interest',
 			'sources'          => array( 'cfpb-grace' ),
@@ -62,7 +62,7 @@ function cmc_articles() {
 		'credit-card-grace-period-explained' => array(
 			'slug'             => 'credit-card-grace-period-explained',
 			'title'            => 'Credit Card Grace Period, Explained',
-			'seo_title'        => 'Credit Card Grace Period Explained (How to Avoid Interest on Purchases)',
+			'seo_title'        => 'Credit Card Grace Period Explained: How to Avoid Interest',
 			'meta_description' => 'What a credit card grace period is, how it works, and the rule that usually keeps it: paying your full statement balance by the due date.',
 			'target_keyword'   => 'credit card grace period explained',
 			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'cfpb-cash-advance', 'cfpb-deferred' ),
@@ -114,7 +114,7 @@ function cmc_articles() {
 		'balance-transfer-fees-explained' => array(
 			'slug'             => 'balance-transfer-fees-explained',
 			'title'            => 'Balance Transfer Fees, Explained (And When They\'re Worth It)',
-			'seo_title'        => 'Balance Transfer Fees Explained: How They Work and When They Pay Off',
+			'seo_title'        => 'Balance Transfer Fees Explained: When Do They Pay Off?',
 			'meta_description' => 'How balance transfer fees work, typical rates, and the simple math for deciding whether a transfer still saves you money after the fee.',
 			'target_keyword'   => 'balance transfer fee',
 			'sources'          => array( 'cfpb-bt-fee', 'cfpb-deferred', 'regz-1026-55' ),
@@ -124,7 +124,7 @@ function cmc_articles() {
 		'credit-card-interest-calculator-excel-template' => array(
 			'slug'             => 'credit-card-interest-calculator-excel-template',
 			'title'            => 'Credit Card Interest Formula in Excel or Google Sheets',
-			'seo_title'        => 'Credit Card Interest Formula in Excel or Google Sheets (Step by Step)',
+			'seo_title'        => 'Credit Card Interest Excel Template + Formulas (Free)',
 			'meta_description' => 'The Excel formula for calculating credit card interest, why most people get it wrong, and when a free online calculator is simply faster.',
 			'target_keyword'   => 'credit card interest formula excel',
 			'sources'          => array( 'cfpb-grace' ),
@@ -144,7 +144,7 @@ function cmc_articles() {
 		'student-credit-card-interest-guide' => array(
 			'slug'             => 'student-credit-card-interest-guide',
 			'title'            => 'A Student\'s Guide to Credit Card Interest',
-			'seo_title'        => 'Student Credit Card Interest Guide: What to Know Before You Swipe',
+			'seo_title'        => 'Student Credit Card Interest: What to Know Before You Swipe',
 			'meta_description' => 'A beginner-friendly guide to how credit card interest works for students, common first-card mistakes, and how to build credit without paying interest.',
 			'target_keyword'   => 'student credit card interest',
 			'sources'          => array( 'cfpb-grace', 'myfico-util' ),
@@ -154,7 +154,7 @@ function cmc_articles() {
 		'apr-vs-interest-rate-difference' => array(
 			'slug'             => 'apr-vs-interest-rate-difference',
 			'title'            => 'APR vs. Interest Rate: What\'s the Difference on a Credit Card?',
-			'seo_title'        => 'APR vs. Interest Rate on a Credit Card: What\'s the Difference?',
+			'seo_title'        => 'APR vs. Interest Rate on Credit Cards: What\'s the Difference',
 			'meta_description' => 'Why APR and interest rate mean almost the same thing on a credit card (but not on a mortgage), explained simply.',
 			'target_keyword'   => 'apr vs interest rate credit card',
 			'sources'          => array( 'cfpb-cash-advance', 'regz-1026-55', 'fed-g19' ),

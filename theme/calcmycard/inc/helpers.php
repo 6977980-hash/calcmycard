@@ -126,6 +126,20 @@ function cmc_articles_related_to_calculator( $calc_slug, $limit = 3 ) {
  * the author box, the About page anchor, and the Article/WebPage schema.
  * No credentials are claimed beyond what's stated here.
  */
+/**
+ * How many calculators the site has, as a number and as a capitalized word
+ * ("Thirteen"), so copy that mentions the count stays right as tools are added.
+ */
+function cmc_calculator_count() {
+	return count( cmc_calculators() );
+}
+
+function cmc_calculator_count_word() {
+	$words = array( 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty' );
+	$n     = cmc_calculator_count();
+	return isset( $words[ $n ] ) ? $words[ $n ] : (string) $n;
+}
+
 function cmc_site_author() {
 	return apply_filters( 'cmc_site_author', array(
 		'name'     => 'Ali Ahmad',
@@ -273,7 +287,9 @@ function cmc_render_calc_method_note( $calc_id ) {
 		return;
 	}
 
-	if ( 'dpr' === $calc_id ) {
+	if ( 'cashadvance' === $calc_id ) {
+		$text = 'This calculator applies simple daily interest (cash advance APR &divide; 365) from the day you take the cash, with no grace period and no compounding. Issuers\' exact methods vary (daily compounding, how the fee is billed, payment allocation), so your actual statement may differ.';
+	} elseif ( 'dpr' === $calc_id ) {
 		$text = 'This calculator applies a daily periodic rate (APR &divide; 365, or 360 if selected) to the average daily balance you enter. Issuers\' exact methods vary (compounding, grace periods, fees), so your actual statement may differ.';
 	} else {
 		$text = 'This calculator uses a simplified monthly-interest model (APR &divide; 12). Credit-card issuers may calculate interest using daily periodic rates and average daily balances, so your actual statement may differ.';
