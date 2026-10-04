@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-04.5' );
+define( 'CMC_CONTENT_SYNC', '2026-10-04.6' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -127,6 +127,7 @@ function cmc_content_sync_replacements() {
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
 			'Every calculator is checked with an automated test suite that loads' => 'The original calculators are checked with an automated test suite that loads',
 			'The suite has 66 test cases covering the original 12 calculators,' => 'Calculators added since launch (Cash Advance, Bi-Weekly Payment and Interest Charge Checker) are checked against the hand-worked examples on their own pages. The suite has 66 test cases covering the site\'s original 12 calculators (Payoff Time has since been merged into the Payoff Calculator),',
+			'(Cash Advance, Bi-Weekly Payment and Interest Charge Checker) are checked' => '(Cash Advance, Bi-Weekly Payment, Interest Charge Checker and Fed Rate Change) are checked',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
