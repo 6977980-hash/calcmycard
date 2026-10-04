@@ -1,0 +1,57 @@
+<div class="cmc-answer-box">
+<span class="cmc-answer-label">Quick Answer</span>
+<p>Your estimated payoff date depends on three things: your balance, your APR, and your fixed monthly payment. The calculator above projects the month you'd reach zero, your total interest, and how much sooner an extra $50 a month would get you there.</p>
+</div>
+
+<p>"How long is this going to take?" is the question most people carrying card debt want answered &mdash; not an abstract rate, but a date on the calendar. This calculator estimates that date, plus the total cost of getting there.</p>
+
+<h2>How the Calculator Works</h2>
+<p>Enter your current balance, APR, and the fixed amount you plan to pay every month. The calculator runs a month-by-month simulation: each month it adds interest on the remaining balance (APR &divide; 12), applies your payment, and carries the new balance forward. It stops when the balance hits zero and reports:</p>
+<ul>
+<li>Your estimated payoff date and number of months</li>
+<li>Total interest and total amount paid</li>
+<li>A chart of your balance declining over time</li>
+<li>An automatic comparison showing what adding $50 a month would change</li>
+</ul>
+
+<h2>Formula</h2>
+<div class="cmc-formula">Monthly Interest = Balance &times; (APR &divide; 12)<br>
+New Balance = Balance + Monthly Interest &minus; Payment<br>
+Repeat until New Balance &le; 0 &rarr; months to payoff</div>
+<p class="cmc-formula-note">This is a simplified estimate, not an issuer-specific statement calculation. A closed-form version is n = &minus;ln(1 &minus; B&middot;r &divide; P) &divide; ln(1 + r), where r = APR &divide; 12, B = balance, and P = payment.</p>
+
+<h2>Example: $5,000 at 22.99% APR, paying $175 a month</h2>
+<div class="cmc-example-wrap"><table>
+<caption>Selected months, simplified monthly model.</caption>
+<thead><tr><th scope="col">Month</th><th scope="col">Payment</th><th scope="col">Interest</th><th scope="col">Principal</th><th scope="col">Balance</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>$175.00</td><td>$95.79</td><td>$79.21</td><td>$4,920.79</td></tr>
+<tr><td>2</td><td>$175.00</td><td>$94.27</td><td>$80.73</td><td>$4,840.07</td></tr>
+<tr><td>3</td><td>$175.00</td><td>$92.73</td><td>$82.27</td><td>$4,757.79</td></tr>
+<tr><td>12</td><td>$175.00</td><td>$77.40</td><td>$97.60</td><td>$3,942.66</td></tr>
+<tr><td>24</td><td>$175.00</td><td>$52.45</td><td>$122.55</td><td>$2,614.93</td></tr>
+<tr><td>36</td><td>$175.00</td><td>$21.10</td><td>$153.90</td><td>$947.63</td></tr>
+<tr><td>42 (final)</td><td>$135.32</td><td>$2.54</td><td>$132.78</td><td>$0.00</td></tr>
+</tbody>
+</table></div>
+
+<p>At $175 a month, payoff takes about 42 months (3 years, 6 months) and roughly $2,310 in interest. Adding $50 (a $225 payment) cuts that to about 30 months and $1,577 in interest &mdash; 12 months sooner and about $734 saved.</p>
+
+<h2>Why Payoff Isn't a Straight Line</h2>
+<p>Because interest is charged on whatever balance remains, early payments are mostly interest and later payments are mostly principal. That's why a balance can feel stuck for the first year before it starts dropping visibly &mdash; the table above shows the principal share growing each month.</p>
+
+<h2>When the Result May Differ</h2>
+<p>Treat the results as a planning estimate. Your real numbers can differ because of:</p>
+<ul>
+<li><strong>Daily periodic rate:</strong> many issuers apply APR &divide; 365 (or 360) each day instead of APR &divide; 12 once a month, which can produce different interest.</li>
+<li><strong>Average daily balance:</strong> your balance moves during the cycle as purchases post and payments arrive; this calculator uses a single month-start balance.</li>
+<li><strong>Fees:</strong> annual, late, foreign-transaction, cash-advance, and balance-transfer fees aren't included unless the calculator asks for them.</li>
+<li><strong>New purchases:</strong> the estimate assumes you stop adding charges. Any new spending lengthens payoff and raises interest.</li>
+<li><strong>Grace period:</strong> whether new purchases accrue interest depends on whether you pay your statement balance in full and on your card's terms.</li>
+<li><strong>Different APR categories:</strong> purchases, balance transfers, cash advances, and penalty APRs can carry different rates on the same card, and how payments are allocated between them affects the total.</li>
+<li><strong>Payment changes:</strong> the calculator assumes the same payment every month. Skipped, late, or larger payments change the date.</li>
+</ul>
+<p>Your statement and cardholder agreement are the final word. See our <a href="/methodology/">methodology</a> for how every calculator on this site works.</p>
+
+<h2>Carrying More Than One Card?</h2>
+<p>This calculator handles a single balance. If you're juggling several cards, the order you pay them in affects total cost &mdash; compare strategies with the <a href="/calculators/debt-payoff-snowball-avalanche/">Multi-Card Debt Payoff Calculator</a>, or test different extra amounts with the <a href="/calculators/extra-payment-savings-calculator/">Extra Payment Savings Calculator</a>.</p>

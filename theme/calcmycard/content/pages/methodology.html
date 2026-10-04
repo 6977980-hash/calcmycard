@@ -1,0 +1,26 @@
+<p>This page explains the math behind every calculator on CalcMyCard, in full detail, so you can verify our results and understand where each number comes from.</p>
+
+<h2>Interest calculation method</h2>
+<p><strong>Calculation method:</strong> Our payoff and interest calculators use a simplified monthly-interest model (APR &divide; 12). Credit-card issuers may calculate interest using daily periodic rates and average daily balances, so your actual statement may differ.</p>
+<p>In practice, each calculator takes a monthly rate equal to your card's APR divided by 12, applies it to the balance remaining at the start of each month, and iterates forward month by month until the balance reaches zero. This is a common simplification for payoff planning; because it ignores mid-cycle purchases and payments, day counts, and issuer-specific compounding, results are estimates rather than statement-exact figures. The same disclosure appears above every interest and payoff calculator on the site. Our dedicated <a href="/calculators/daily-periodic-rate-calculator/">Daily Periodic Rate Calculator</a> applies a daily periodic rate (APR &divide; 365, or 360) to an average daily balance you enter, for anyone who wants that more granular figure.</p>
+
+<h2>Minimum payment formulas</h2>
+<p>Our <a href="/calculators/minimum-payment-calculator/">Minimum Payment Calculator</a> supports two common issuer formulas: a flat percentage of balance, and interest-plus-one-percent-of-principal (whichever is greater), both subject to a configurable dollar floor. These mirror the two most common minimum payment structures disclosed in major card issuers' cardholder agreements.</p>
+
+<h2>Snowball and avalanche simulation</h2>
+<p>Our <a href="/calculators/debt-payoff-snowball-avalanche/">Multi-Card Debt Payoff Calculator</a> keeps your total monthly budget fixed: the sum of every card&rsquo;s starting minimum plus the extra amount you enter. Each month, interest accrues on every open card (APR &divide; 12), each open card receives its minimum, and whatever is left goes to the current target (smallest balance for snowball, highest APR for avalanche; ties go in the order you entered the cards). When a card is paid off, its old minimum rolls over to the next target, and if the money left in a month is more than the target owes, the rest goes to the next target in the same month.</p>
+
+<h2>Balance transfer and consolidation comparisons</h2>
+<p>Our transfer and consolidation calculators model a one-time fee added to principal, a blended interest rate schedule (promotional rate during the promo window, standard rate after), and a fixed installment-loan payment formula for consolidation loans, to produce an apples-to-apples total cost comparison.</p>
+
+<h2>How we test the calculators</h2>
+<p>An automated test suite loads each calculator&rsquo;s live code in a real browser, enters inputs, and checks the displayed results against hand-worked examples and a separate reference implementation of these formulas. It covers all 12 calculators with 66 test cases, including edge cases such as $0 balances, 0% and 100% APR, payments equal to or below the monthly interest, minimum-payment floors, 0% promos and fees, equal APRs or balances, and $0 credit limits. It also fails if a result shows &ldquo;NaN&rdquo; or &ldquo;Infinity.&rdquo; Last full run: September 25, 2026 (66 of 66 passed). See the <a href="/about/">About</a> page for what that run found and fixed.</p>
+
+<h2>What our calculators don't account for</h2>
+<p>Our tools don't model card-specific quirks like exact grace period rules, promotional deferred-interest structures, or fees beyond what you explicitly enter. They're built for clear, general-purpose estimation &mdash; always confirm exact figures against your official statement or cardholder agreement before making a financial decision.</p>
+
+<h2>Privacy of your inputs</h2>
+<p>Every calculation runs entirely in your browser using JavaScript. The numbers you enter are never transmitted to our servers, stored, or shared with any third party.</p>
+
+<h2>Last reviewed</h2>
+<p>This methodology was last reviewed by <a href="/about/#ali-ahmad">Ali Ahmad</a> on September 25, 2026.</p>

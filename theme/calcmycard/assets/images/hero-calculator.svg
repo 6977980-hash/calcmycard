@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" width="480" height="400">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46d3e6" stop-opacity=".35"/><stop offset="1" stop-color="#46d3e6" stop-opacity="0"/></linearGradient></defs>
+<g transform="translate(292,196) scale(0.6,1)">
+<line x1="0" y1="150" x2="290" y2="150" stroke="#2c3750" vector-effect="non-scaling-stroke"/>
+<polygon points="0,20 15,23.7 30,27.5 45,31.7 60,36.1 75,40.8 90,45.7 105,51 120,56.7 135,62.6 150,69 165,75.8 180,83 195,90.7 210,98.8 225,107.5 240,116.8 255,126.6 270,137 285,148.2 290,150 290,150 0,150" fill="url(#g)"/>
+<polyline points="0,20 15,23.7 30,27.5 45,31.7 60,36.1 75,40.8 90,45.7 105,51 120,56.7 135,62.6 150,69 165,75.8 180,83 195,90.7 210,98.8 225,107.5 240,116.8 255,126.6 270,137 285,148.2 290,150" fill="none" stroke="#46d3e6" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+<polyline points="0,20 15,31.6 30,44 45,57.1 60,71.1 75,86 90,101.8 105,118.6 120,136.6 135,150" fill="none" stroke="#ffb547" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+</g>
+<g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="10"><text x="292" y="200" fill="#7f8aa3">BALANCE $5,000 → $0</text>
+<text x="380" y="330" fill="#ffb547">27 mo</text><text x="466" y="334" fill="#46d3e6" text-anchor="end">58 mo</text>
+<text x="292" y="364" fill="#ffb547">■ $250/mo</text><text x="380" y="364" fill="#46d3e6">■ $150/mo</text></g>
+<g transform="translate(24,26)">
+<rect width="250" height="350" rx="22" fill="#1c2538" stroke="#2c3750"/>
+<rect x="18" y="18" width="214" height="96" rx="10" fill="#0a0f1a" stroke="#2c3750"/>
+<text x="32" y="44" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="11" fill="#7f8aa3">APR ÷ 12</text>
+<text x="32" y="66" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="13" fill="#cfd6e6">24.99% ÷ 12 =</text>
+<text x="218" y="98" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="26" font-weight="700" fill="#ffb547" text-anchor="end">2.0825%</text>
+<g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="15" font-weight="700" text-anchor="middle"><rect x="18" y="132" width="46" height="42" rx="9" fill="#253049"/><text x="41" y="159" fill="#dfe4ef">7</text><rect x="73" y="132" width="46" height="42" rx="9" fill="#253049"/><text x="96" y="159" fill="#dfe4ef">8</text><rect x="128" y="132" width="46" height="42" rx="9" fill="#253049"/><text x="151" y="159" fill="#dfe4ef">9</text><rect x="183" y="132" width="46" height="42" rx="9" fill="#2a3857"/><text x="206" y="159" fill="#dfe4ef">÷</text><rect x="18" y="184" width="46" height="42" rx="9" fill="#253049"/><text x="41" y="211" fill="#dfe4ef">4</text><rect x="73" y="184" width="46" height="42" rx="9" fill="#253049"/><text x="96" y="211" fill="#dfe4ef">5</text><rect x="128" y="184" width="46" height="42" rx="9" fill="#253049"/><text x="151" y="211" fill="#dfe4ef">6</text><rect x="183" y="184" width="46" height="42" rx="9" fill="#2a3857"/><text x="206" y="211" fill="#dfe4ef">×</text><rect x="18" y="236" width="46" height="42" rx="9" fill="#253049"/><text x="41" y="263" fill="#dfe4ef">1</text><rect x="73" y="236" width="46" height="42" rx="9" fill="#253049"/><text x="96" y="263" fill="#dfe4ef">2</text><rect x="128" y="236" width="46" height="42" rx="9" fill="#253049"/><text x="151" y="263" fill="#dfe4ef">3</text><rect x="183" y="236" width="46" height="42" rx="9" fill="#2a3857"/><text x="206" y="263" fill="#dfe4ef">−</text><rect x="18" y="288" width="46" height="42" rx="9" fill="#253049"/><text x="41" y="315" fill="#dfe4ef">0</text><rect x="73" y="288" width="46" height="42" rx="9" fill="#253049"/><text x="96" y="315" fill="#dfe4ef">.</text><rect x="128" y="288" width="46" height="42" rx="9" fill="#253049"/><text x="151" y="315" fill="#dfe4ef">%</text><rect x="183" y="288" width="46" height="42" rx="9" fill="#ffb547"/><text x="206" y="315" fill="#0e1320">=</text></g>
+</g>
+<g transform="translate(300,40)"><rect width="164" height="74" rx="12" fill="#161d2e" stroke="#46d3e6" stroke-opacity=".5"/>
+<text x="14" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="10" fill="#7f8aa3">MONTH 1 INTEREST</text>
+<text x="14" y="56" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#46d3e6">$104.13</text></g>
+<text x="300" y="138" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="10" fill="#7f8aa3">on a $5,000 balance</text>
+</svg>

@@ -1,0 +1,32 @@
+<div class="cmc-answer-box">
+<span class="cmc-answer-label">Quick Answer</span>
+<p>You can calculate credit card interest in a spreadsheet using a simple formula: =Balance*(APR/12), applied month by month with the previous month's ending balance carried forward. A free online calculator does the same math instantly, without the setup or risk of formula errors.</p>
+</div>
+
+<p>If you're comfortable in a spreadsheet, building your own credit card interest formula is entirely doable &mdash; here's exactly how, along with the common mistakes that throw off the results.</p>
+
+<h2>The basic monthly formula</h2>
+<p>In a new sheet, set up columns for Month, Starting Balance, Interest, Payment, Principal, and Ending Balance. Your interest formula for each row is simply <code>=StartingBalance*(APR/12)</code>. Principal is <code>=Payment-Interest</code>, and Ending Balance is <code>=StartingBalance-Principal</code>. Each new row's Starting Balance references the previous row's Ending Balance, and you drag the formulas down until the balance reaches zero.</p>
+
+<h2>Where spreadsheet formulas commonly go wrong</h2>
+<p>The most frequent error is using a flat annual formula (Balance &times; APR) without dividing by 12, which dramatically overstates monthly interest. The second most common mistake is forgetting to carry the previous month's <em>ending</em> balance into the next month's <em>starting</em> balance, which produces a payoff timeline that never actually finishes.</p>
+
+<h2>Adding an amortization table</h2>
+<p>Once the basic formula works, extending it into a full amortization table just means continuing the row-by-row calculation until the balance hits zero, then using a COUNT or MATCH function to find your payoff month automatically, and a SUM function to total your interest column for the total interest paid.</p>
+
+<h2>Handling a payment that changes month to month</h2>
+<p>If you're modeling a minimum payment that recalculates as your balance shrinks (rather than a fixed payment), your Payment column needs its own formula &mdash; for example, <code>=MAX(StartingBalance*MinPercent, Interest+StartingBalance*1%, FloorAmount)</code> &mdash; which is exactly the kind of formula that's easy to get subtly wrong in a spreadsheet.</p>
+
+<h2>When a spreadsheet is worth building anyway</h2>
+<p>A spreadsheet is genuinely useful if you want to model unusual scenarios &mdash; irregular extra payments on specific months, a rate that changes partway through, or a custom minimum payment formula matching your exact issuer. For a standard payoff projection, though, an online calculator gets you the same answer instantly, with charts and a payoff date already built in.</p>
+
+<h2>Skip the spreadsheet setup</h2>
+<p>Try the <a href="/calculators/credit-card-interest-calculator/">Credit Card Interest Calculator</a> for an instant version of the same month-by-month math, including a full amortization table and chart.</p>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Will a spreadsheet match my actual statement exactly?</h3>
+<p>Not necessarily &mdash; a monthly spreadsheet model is a planning estimate. Issuers may use daily periodic rates, average daily balances, fees, and card-specific terms (see our <a href="/guides/how-to-calculate-credit-card-interest/">guide to calculating interest by hand</a>), so your statement can differ, sometimes materially.</p>
+
+<h3>Is there a downloadable template I can use?</h3>
+<p>The formulas above are enough to rebuild the table from scratch in any spreadsheet program in a few minutes &mdash; simply create the six columns described and copy the formulas down.</p>

@@ -1,0 +1,56 @@
+<div class="cmc-answer-box">
+<span class="cmc-answer-label">Quick Answer</span>
+<p>A credit card interest calculator estimates how much of each payment goes to interest versus principal, your total interest cost, and how long payoff will take. It uses your balance, APR, and a fixed monthly payment, with a simplified monthly-interest model (APR &divide; 12).</p>
+</div>
+
+<p>If you carry a balance, most people only see the final interest figure on their statement, without understanding why so little of each payment seems to move the balance. This calculator estimates that breakdown so you can see where your money is going.</p>
+
+<h2>How the Calculator Works</h2>
+<p>You enter three numbers: your current balance, your card's APR (annual percentage rate), and the fixed monthly payment you plan to make. The calculator then:</p>
+<ol>
+<li>Converts your APR into a monthly rate by dividing it by 12.</li>
+<li>Multiplies that rate by the balance at the start of the month to estimate that month's interest.</li>
+<li>Subtracts the interest from your payment; whatever is left reduces the principal.</li>
+<li>Repeats month by month until the balance reaches zero (or flags it if your payment doesn't cover the interest).</li>
+</ol>
+<p>The results show how much of your <em>next</em> payment is interest, your total interest if you keep paying the same amount, and the number of months to a zero balance.</p>
+
+<h2>Formula</h2>
+<div class="cmc-formula">Monthly Interest = Balance &times; (APR &divide; 12)<br>
+Principal Paid = Payment &minus; Monthly Interest<br>
+New Balance = Balance &minus; Principal Paid</div>
+<p class="cmc-formula-note">This is a simplified estimate, not an issuer-specific statement calculation. Many issuers instead apply a daily periodic rate (APR &divide; 365) to your average daily balance.</p>
+
+<h2>Example: $5,000 at 24.99% APR, paying $150 a month</h2>
+<p>The monthly rate is 24.99% &divide; 12 &asymp; 2.08%. In month one, interest is $5,000 &times; 0.020825 &asymp; $104.13, so only $45.87 of the $150 payment reduces the balance. As the balance shrinks, the interest share falls and the principal share grows.</p>
+<div class="cmc-example-wrap"><table>
+<caption>Selected months, simplified monthly model. Figures rounded to the cent.</caption>
+<thead><tr><th scope="col">Month</th><th scope="col">Payment</th><th scope="col">Interest</th><th scope="col">Principal</th><th scope="col">Balance</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>$150.00</td><td>$104.13</td><td>$45.87</td><td>$4,954.13</td></tr>
+<tr><td>2</td><td>$150.00</td><td>$103.17</td><td>$46.83</td><td>$4,907.29</td></tr>
+<tr><td>3</td><td>$150.00</td><td>$102.19</td><td>$47.81</td><td>$4,859.49</td></tr>
+<tr><td>12</td><td>$150.00</td><td>$92.45</td><td>$57.55</td><td>$4,381.86</td></tr>
+<tr><td>24</td><td>$150.00</td><td>$76.30</td><td>$73.70</td><td>$3,590.26</td></tr>
+<tr><td>36</td><td>$150.00</td><td>$55.62</td><td>$94.38</td><td>$2,576.54</td></tr>
+<tr><td>48</td><td>$150.00</td><td>$29.14</td><td>$120.86</td><td>$1,278.36</td></tr>
+<tr><td>58 (final)</td><td>$72.30</td><td>$1.47</td><td>$70.82</td><td>$0.00</td></tr>
+</tbody>
+</table></div>
+
+<p>At this payment, the balance reaches zero in about 58 months (4 years, 10 months), with roughly $3,622 in total interest on top of the original $5,000.</p>
+
+<h2>When the Result May Differ</h2>
+<p>Treat the results as a planning estimate. Your real numbers can differ because of:</p>
+<ul>
+<li><strong>Daily periodic rate:</strong> many issuers apply APR &divide; 365 (or 360) each day instead of APR &divide; 12 once a month, which can produce different interest.</li>
+<li><strong>Average daily balance:</strong> your balance moves during the cycle as purchases post and payments arrive; this calculator uses a single month-start balance.</li>
+<li><strong>Fees:</strong> annual, late, foreign-transaction, cash-advance, and balance-transfer fees aren't included unless the calculator asks for them.</li>
+<li><strong>New purchases:</strong> the estimate assumes you stop adding charges. Any new spending lengthens payoff and raises interest.</li>
+<li><strong>Grace period:</strong> whether new purchases accrue interest depends on whether you pay your statement balance in full and on your card's terms.</li>
+<li><strong>Different APR categories:</strong> purchases, balance transfers, cash advances, and penalty APRs can carry different rates on the same card, and how payments are allocated between them affects the total.</li>
+</ul>
+<p>Your statement and cardholder agreement are the final word. See our <a href="/methodology/">methodology</a> for how every calculator on this site works.</p>
+
+<h2>How to Lower Your Interest Cost</h2>
+<p>Three moves usually make the biggest difference: raising your monthly payment even slightly (try the <a href="/calculators/extra-payment-savings-calculator/">Extra Payment Savings Calculator</a>), moving the balance to a 0% or low-APR offer (see the <a href="/calculators/balance-transfer-calculator/">Balance Transfer Calculator</a>), or paying multiple cards in the most efficient order (see the <a href="/calculators/debt-payoff-snowball-avalanche/">Snowball vs. Avalanche Calculator</a>). For the daily-rate view, use the <a href="/calculators/daily-periodic-rate-calculator/">Daily Periodic Rate Calculator</a>.</p>

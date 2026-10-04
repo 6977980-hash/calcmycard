@@ -1,0 +1,49 @@
+<div class="cmc-answer-box">
+<span class="cmc-answer-label">Quick Answer</span>
+<p>The number of months to pay off a credit card depends on your balance, APR, and payment. The calculator above estimates the month count and shows milestones for when you'd reach 25%, 50%, 75%, and 90% paid off.</p>
+</div>
+
+<p>Sometimes you don't need a chart or a date &mdash; you just want the number of months. This calculator answers that directly, with milestones along the way.</p>
+
+<h2>How the Calculator Works</h2>
+<p>Enter your balance, APR, and a fixed monthly payment. The calculator first checks that your payment is larger than one month's interest (balance &times; APR &divide; 12) &mdash; if it isn't, the balance would never go down. It then simulates payoff month by month and reports the number of months, the equivalent in years, and the month you'd cross each milestone.</p>
+
+<h2>Formula</h2>
+<div class="cmc-formula">Months = &minus;ln(1 &minus; (Balance &times; r) &divide; Payment) &divide; ln(1 + r), where r = APR &divide; 12<br>
+Payment must be greater than Balance &times; r, or the balance never shrinks</div>
+<p class="cmc-formula-note">This is a simplified estimate, not an issuer-specific statement calculation.</p>
+
+<h2>Example: $4,200 at 23.49% APR, paying $160 a month</h2>
+<p>One month's interest is about $82.21, so a $160 payment makes progress. Payoff takes about 38 months (3 years, 2 months), with roughly $1,753 in interest.</p>
+<div class="cmc-example-wrap"><table>
+<caption>Simplified monthly model; no new purchases.</caption>
+<thead><tr><th scope="col">Milestone</th><th scope="col">Reached in</th><th scope="col">Balance remaining</th></tr></thead>
+<tbody>
+<tr><td>25% paid off</td><td>Month 13</td><td>$3,061</td></tr>
+<tr><td>50% paid off</td><td>Month 22</td><td>$2,087</td></tr>
+<tr><td>75% paid off</td><td>Month 31</td><td>$926</td></tr>
+<tr><td>90% paid off</td><td>Month 35</td><td>$342</td></tr>
+<tr><td>100% paid off</td><td>Month 38</td><td>$0</td></tr>
+</tbody>
+</table></div>
+
+<p>Notice how the gaps shrink: reaching 25% takes 13 months, but each later quarter comes faster because less of each payment goes to interest.</p>
+
+<h2>If the Answer Is "Never"</h2>
+<p>If your payment doesn't cover the monthly interest, the calculator says so and shows the minimum needed to start making progress. Raising your payment above that threshold is the only way to reach zero.</p>
+
+<h2>When the Result May Differ</h2>
+<p>Treat the results as a planning estimate. Your real numbers can differ because of:</p>
+<ul>
+<li><strong>Daily periodic rate:</strong> many issuers apply APR &divide; 365 (or 360) each day instead of APR &divide; 12 once a month, which can produce different interest.</li>
+<li><strong>Average daily balance:</strong> your balance moves during the cycle as purchases post and payments arrive; this calculator uses a single month-start balance.</li>
+<li><strong>Fees:</strong> annual, late, foreign-transaction, cash-advance, and balance-transfer fees aren't included unless the calculator asks for them.</li>
+<li><strong>New purchases:</strong> the estimate assumes you stop adding charges. Any new spending lengthens payoff and raises interest.</li>
+<li><strong>Grace period:</strong> whether new purchases accrue interest depends on whether you pay your statement balance in full and on your card's terms.</li>
+<li><strong>Different APR categories:</strong> purchases, balance transfers, cash advances, and penalty APRs can carry different rates on the same card, and how payments are allocated between them affects the total.</li>
+<li><strong>Payment changes:</strong> the estimate assumes the same payment every month.</li>
+</ul>
+<p>Your statement and cardholder agreement are the final word. See our <a href="/methodology/">methodology</a> for how every calculator on this site works.</p>
+
+<h2>Compare a Bigger Payment</h2>
+<p>To see how much a higher payment would shorten your timeline and cut interest, use the <a href="/calculators/extra-payment-savings-calculator/">Extra Payment Savings Calculator</a>. For a calendar payoff date, try the <a href="/calculators/credit-card-payoff-calculator/">Credit Card Payoff Calculator</a>.</p>
