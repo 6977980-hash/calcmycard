@@ -1,7 +1,8 @@
 /**
  * Credit Card Payoff Calculator — headline output is a real calendar
- * payoff date, plus an automatic "add $50/mo" comparison and a balance
- * decline chart.
+ * payoff date and month count, plus an automatic "add $50/mo" comparison,
+ * a balance decline chart, and a milestone table (25%/50%/75%/90%/100%
+ * paid down). It absorbed the former Payoff Time Calculator.
  */
 (function () {
 	'use strict';
@@ -25,7 +26,9 @@
 				{ id: 'stat-total', label: 'Total amount paid', value: '' },
 			] ) +
 			'<div class="cmc-chart-wrap"><canvas id="chart-line" height="220"></canvas></div>' +
+			'<div class="cmc-answer-box" id="answer"></div>' +
 			'<div class="cmc-answer-box" id="whatif" style="display:none;"></div>' +
+			'<div id="milestones"><h3>Milestones along the way</h3><div id="table-wrap"></div></div>' +
 		'</div>';
 
 	function addMonths( date, months ) {
@@ -52,6 +55,9 @@
 		UI.toggleResults( root, true );
 
 		var result = F.amortize( { balance: balance, apr: apr, payment: payment } );
+		var minRequired = balance * F.monthlyRate( apr );
+		var answer = root.querySelector( '#answer' );
+		var chart = root.querySelector( '#chart-line' ).parentNode;
 
 		if ( result.neverPaysOff ) {
 			root.querySelector( '#stat-date' ).textContent = 'Never at this payment';
@@ -59,8 +65,13 @@
 			root.querySelector( '#stat-interest' ).textContent = '—';
 			root.querySelector( '#stat-total' ).textContent = '—';
 			root.querySelector( '#whatif' ).style.display = 'none';
+			root.querySelector( '#milestones' ).style.display = 'none';
+			chart.style.display = 'none';
+			answer.innerHTML = '<span class="cmc-answer-label">Payment too low</span><p>Your payment of ' + F.currency( payment ) + ' doesn\'t cover the ' + F.currency( minRequired ) + ' in monthly interest, so the balance will never go down. You need to pay more than ' + F.currency( minRequired ) + ' per month just to make progress.</p>';
 			return;
 		}
+		root.querySelector( '#milestones' ).style.display = '';
+		chart.style.display = '';
 
 		var payoffDate = addMonths( new Date(), result.months );
 		var dateStr = payoffDate.toLocaleDateString( 'en-US', { month: 'long', year: 'numeric' } );
@@ -69,6 +80,19 @@
 		root.querySelector( '#stat-months' ).textContent = F.monthsToYearsMonths( result.months );
 		root.querySelector( '#stat-interest' ).textContent = F.currency( result.totalInterest );
 		root.querySelector( '#stat-total' ).textContent = F.currency( result.totalPaid );
+		answer.innerHTML = '<span class="cmc-answer-label">How long it takes</span><p>At ' + F.currency( payment ) + '/month on a ' + F.currency( balance ) + ' balance at ' + F.percent( apr ) + ' APR, it takes <strong>' + result.months + ' month' + ( result.months === 1 ? '' : 's' ) + ' (' + F.monthsToYearsMonths( result.months ) + ')</strong> to reach a zero balance, and you\'ll pay ' + F.currency( result.totalInterest ) + ' in interest. Your payment must stay above ' + F.currency( minRequired ) + ' (one month\'s interest) to make progress.</p>';
+
+		var milestones = [ 0.25, 0.5, 0.75, 0.9, 1.0 ];
+		var rows = [];
+		var targetIdx = 0;
+		result.schedule.forEach( function ( row ) {
+			var paidDownFraction = 1 - ( row.balance / balance );
+			while ( targetIdx < milestones.length && paidDownFraction >= milestones[ targetIdx ] - 0.0001 ) {
+				rows.push( [ Math.round( milestones[ targetIdx ] * 100 ) + '% paid off', 'Month ' + row.month, F.currencyRounded( row.balance ) + ' remaining' ] );
+				targetIdx++;
+			}
+		} );
+		root.querySelector( '#table-wrap' ).innerHTML = UI.table( [ 'Milestone', 'Reached at', 'Balance Remaining' ], rows );
 
 		var withExtra = F.amortize( { balance: balance, apr: apr, payment: payment, extra: 50 } );
 		var whatif = root.querySelector( '#whatif' );

@@ -10,10 +10,30 @@
 
 	var F = window.CMCFinance, UI = window.CMCUI, C = window.CMCChart;
 
+	// Standard formulas from each issuer's published cardmember agreement
+	// (most common consumer cards; late fees and past-due amounts left out).
+	// Keep in sync with the issuer table in content/calculators/minimum-payment-calculator.html.
+	var ISSUERS = {
+		chase:      { label: 'Chase',            method: 'percent_plus_interest', percent: 0, floor: 40, plusPercent: 1, plusFixed: 0 },
+		citi:       { label: 'Citi',             method: 'percent_plus_interest', percent: 0, floor: 41, plusPercent: 1, plusFixed: 0 },
+		capitalone: { label: 'Capital One',      method: 'percent_plus_interest', percent: 0, floor: 25, plusPercent: 1, plusFixed: 0 },
+		discover:   { label: 'Discover',         method: 'percent_plus_interest', percent: 2, floor: 35, plusPercent: 0, plusFixed: 20 },
+		amex:       { label: 'American Express', method: 'percent_plus_interest', percent: 2, floor: 40, plusPercent: 1, plusFixed: 0 },
+	};
+	var plusPercent = 1, plusFixed = 0;
+
 	root.innerHTML =
 		UI.formGrid( [
 			UI.field( { id: 'balance', label: 'Current balance', value: 3500, min: 0, step: '0.01' } ),
 			UI.field( { id: 'apr', label: 'Interest rate (APR %)', value: 23.99, min: 0, step: '0.01' } ),
+			UI.field( { id: 'issuer', label: 'Card issuer formula', type: 'select', value: 'custom', options: [
+				{ value: 'custom', label: 'Custom (set the formula below)' },
+				{ value: 'chase', label: 'Chase' },
+				{ value: 'citi', label: 'Citi' },
+				{ value: 'discover', label: 'Discover' },
+				{ value: 'capitalone', label: 'Capital One' },
+				{ value: 'amex', label: 'American Express' },
+			], hint: 'Fills in that issuer\'s standard formula; your card\'s agreement is the final word' } ),
 			UI.field( { id: 'method', label: 'Minimum payment formula', type: 'select', value: 'percent_plus_interest', options: [
 				{ value: 'percent_plus_interest', label: 'Interest + 1% of balance (a common formula)' },
 				{ value: 'percent', label: 'Flat % of balance only' },
@@ -33,6 +53,30 @@
 			'<div class="cmc-chart-wrap"><canvas id="chart-line" height="220"></canvas></div>' +
 		'</div>';
 
+	function applyIssuer() {
+		var preset = ISSUERS[ root.querySelector( '#issuer' ).value ];
+		if ( ! preset ) {
+			plusPercent = 1;
+			plusFixed = 0;
+			return;
+		}
+		root.querySelector( '#method' ).value = preset.method;
+		root.querySelector( '#percent' ).value = preset.percent;
+		root.querySelector( '#floor' ).value = preset.floor;
+		plusPercent = preset.plusPercent;
+		plusFixed = preset.plusFixed;
+	}
+
+	root.querySelector( '#issuer' ).addEventListener( 'change', applyIssuer );
+	[ 'method', 'percent', 'floor' ].forEach( function ( id ) {
+		// Editing the formula by hand means it's no longer the issuer's.
+		root.querySelector( '#' + id ).addEventListener( 'input', function () {
+			root.querySelector( '#issuer' ).value = 'custom';
+			plusPercent = 1;
+			plusFixed = 0;
+		} );
+	} );
+
 	function calc() {
 		var balance = UI.num( root, 'balance' );
 		var apr = UI.num( root, 'apr' );
@@ -50,10 +94,10 @@
 		err.style.display = 'none';
 		UI.toggleResults( root, true );
 
-		var minPay = F.estimateMinimumPayment( { balance: balance, apr: apr, percent: percent, floor: floor, method: method } );
+		var minPay = F.estimateMinimumPayment( { balance: balance, apr: apr, percent: percent, floor: floor, method: method, interestPlusPercent: plusPercent, interestPlusFixed: plusFixed } );
 		root.querySelector( '#stat-min' ).textContent = F.currency( minPay );
 
-		var sim = F.simulateMinimumOnly( { balance: balance, apr: apr, percent: percent, floor: floor, method: method } );
+		var sim = F.simulateMinimumOnly( { balance: balance, apr: apr, percent: percent, floor: floor, method: method, interestPlusPercent: plusPercent, interestPlusFixed: plusFixed } );
 
 		if ( sim.neverPaysOff ) {
 			root.querySelector( '#stat-months' ).textContent = 'Never at this rate';

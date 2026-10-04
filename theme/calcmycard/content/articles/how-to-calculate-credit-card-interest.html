@@ -1,32 +1,61 @@
 <div class="cmc-answer-box">
 <span class="cmc-answer-label">Quick Answer</span>
-<p>To calculate credit card interest by hand: divide your APR by 365 to get the daily periodic rate, multiply by your average daily balance, then multiply by the number of days in your billing cycle. The result is an estimate of the interest for that cycle &mdash; your issuer's statement calculation may differ.</p>
+<p>To calculate credit card interest: divide your APR by 365 to get the daily periodic rate, multiply it by your average daily balance, then multiply by the number of days in your billing cycle. For example, $2,000 at 24.99% APR for a 30-day cycle is $2,000 &times; (0.2499 &divide; 365) &times; 30 &asymp; $41.08. For a quick estimate, use balance &times; APR &divide; 12 instead.</p>
 </div>
 
-<p>You don't need special software to calculate credit card interest &mdash; just three numbers and a calculator (or this one). Here's a practical way to estimate credit card interest using the daily periodic rate and average daily balance, broken into steps you can follow yourself. Your issuer's actual method is set out in your cardholder agreement.</p>
+<p>You don't need special software to calculate credit card interest &mdash; just three numbers and the calculator below. Here is the same method most issuers use (daily periodic rate and average daily balance), step by step, plus the quicker monthly shortcut. Your issuer's exact method is set out in your cardholder agreement.</p>
+
+<h2>The credit card interest formula</h2>
+<div class="cmc-formula">Daily periodic rate = APR &divide; 365<br>
+Interest for the cycle = Daily periodic rate &times; Average daily balance &times; Days in the cycle</div>
+<p class="cmc-formula-note">Some issuers divide by 360 instead of 365, and most compound daily, which adds a few cents. Quick monthly estimate: Balance &times; APR &divide; 12.</p>
+
+<h2>Calculate yours now</h2>
+<p>Enter your APR, average daily balance, and the days in your billing cycle. If you don't know your average daily balance, enter your statement balance for a close estimate.</p>
+<div id="cmc-calc-dpr" class="cmc-calculator" data-calc="dpr" role="region" aria-label="Credit card interest calculator (daily rate)"><noscript>This calculator requires JavaScript.</noscript></div>
 
 <h2>Step 1: Find your daily periodic rate</h2>
-<p>Take your card's APR (as a decimal) and divide by 365 &mdash; the number of days many issuers use per year (some use 360; check your cardholder agreement if you want an exact match). A 22% APR becomes a daily rate of about 0.0603%.</p>
+<p>Take your card's APR (as a decimal) and divide by 365 &mdash; the number of days many issuers use per year (some use 360; check your cardholder agreement if you want an exact match). A 22% APR becomes a daily rate of about 0.0603%; 24.99% becomes about 0.0685%.</p>
 
 <h2>Step 2: Find your average daily balance</h2>
-<p>Add up your balance for every single day in the billing cycle, then divide by the number of days. If your balance was $1,000 for the first 15 days and $1,500 for the remaining 15 days of a 30-day cycle: (15 &times; $1,000 + 15 &times; $1,500) &divide; 30 = $1,250 average daily balance.</p>
+<p>Add up your balance for every day in the billing cycle, then divide by the number of days. If your balance was $1,000 for the first 15 days and $1,500 for the remaining 15 days of a 30-day cycle: (15 &times; $1,000 + 15 &times; $1,500) &divide; 30 = $1,250 average daily balance.</p>
 
 <h2>Step 3: Multiply it all together</h2>
-<p>Estimated interest = daily periodic rate &times; average daily balance &times; number of days in the cycle. Using the numbers above: 0.0603% &times; $1,250 &times; 30 days &asymp; $22.61 in estimated interest for that cycle. Some issuers compound interest daily or treat certain balances differently, so this hand calculation is an estimate, and your statement may differ.</p>
+<p>Interest = daily periodic rate &times; average daily balance &times; days in the cycle. Using the numbers above at 22% APR: 0.0603% &times; $1,250 &times; 30 days &asymp; $22.60 for that cycle. The monthly shortcut ($1,250 &times; 22% &divide; 12) gives $22.92, close enough for planning.</p>
+
+<h2>Worked example: a purchase and a payment in the same cycle</h2>
+<p>Your card has a 24.99% APR and a 30-day cycle. You start with a $2,000 balance, buy something for $300 on day 11, and pay $500 on day 21.</p>
+<div class="cmc-example-wrap"><table>
+<caption>Average daily balance method at 24.99% APR, 365-day year, simple daily interest.</caption>
+<thead><tr><th scope="col">Days</th><th scope="col">Balance</th><th scope="col">Days &times; balance</th></tr></thead>
+<tbody>
+<tr><td>1&ndash;10</td><td>$2,000</td><td>$20,000</td></tr>
+<tr><td>11&ndash;20</td><td>$2,300</td><td>$23,000</td></tr>
+<tr><td>21&ndash;30</td><td>$1,800</td><td>$18,000</td></tr>
+<tr><td><strong>Total &divide; 30</strong></td><td colspan="2"><strong>$2,033.33 average daily balance</strong></td></tr>
+</tbody>
+</table></div>
+<p>Interest = 0.0685% &times; $2,033.33 &times; 30 &asymp; <strong>$41.76</strong>. If you had made the same $500 payment on day 5 instead of day 21, the average daily balance would drop to $1,766.67 and the interest to about $36.29 &mdash; $5.47 less for paying earlier in the cycle.</p>
+
+<h2>Is credit card interest charged daily or monthly?</h2>
+<p>Most issuers calculate it daily and bill it monthly: interest builds every day at the daily periodic rate and shows up as one charge on your statement. Many also compound daily, adding each day's interest to the balance, so the next day's interest is charged on a slightly higher amount. On the $2,033 example, daily compounding adds about 42 cents for the month ($42.18 instead of $41.76).</p>
 
 <h2>Where people usually get it wrong</h2>
-<p>The most common mistake is using your <em>current</em> balance instead of your <em>average daily</em> balance, which produces the wrong number whenever your balance changed during the cycle (which it almost always does). The second most common mistake is dividing by 12 instead of 365 &mdash; that gives you a rough monthly estimate rather than a daily-rate calculation.</p>
+<p>The most common mistake is using your <em>current</em> balance instead of your <em>average daily</em> balance, which gives the wrong number whenever your balance changed during the cycle. The second is multiplying the balance by the full APR without dividing by 365 (or by 12), which overstates a month's interest about twelvefold. The third is forgetting that if you didn't pay last month's statement in full, new purchases may start accruing interest right away, because you can lose the <a href="/guides/credit-card-grace-period-explained/">grace period</a>.</p>
 
-<h2>When the "simple" monthly method is good enough</h2>
-<p>For planning and comparison purposes &mdash; deciding whether to pay extra, compare a balance transfer, or budget for a payoff &mdash; a simplified monthly rate (APR &divide; 12) applied to your current balance gives an easy-to-follow estimate. That's the method most of our calculators use because it's simple to check by hand. This monthly method is useful for planning, but it can differ materially from an issuer's actual statement calculation, since issuers can use daily periodic rates, average daily balances, fees, and card-specific terms.</p>
+<h2>When the monthly shortcut is good enough</h2>
+<p>For planning &mdash; deciding whether to pay extra, comparing a balance transfer, or budgeting for payoff &mdash; balance &times; APR &divide; 12 is easy to check by hand and lands close to the daily method. That's what the <a href="/calculators/credit-card-interest-calculator/">Credit Card Interest Calculator</a> uses to project your full payoff, month by month. It can still differ from your statement, since issuers use daily rates, average daily balances, fees, and card-specific terms.</p>
 
-<h2>Skip the manual math</h2>
-<p>For the daily-rate calculation on your own numbers, use the <a href="/calculators/daily-periodic-rate-calculator/">Daily Periodic Rate Calculator</a>. For a full payoff projection using the simplified monthly method, use the <a href="/calculators/credit-card-interest-calculator/">Credit Card Interest Calculator</a>.</p>
+<h2>Calculate it in a spreadsheet</h2>
+<p>Prefer Excel or Google Sheets? Download our free <a href="/guides/credit-card-interest-calculator-excel-template/">credit card interest Excel template</a>, which has the monthly formula and a full payoff schedule already built in.</p>
 
 <h2>Frequently Asked Questions</h2>
 
-<h3>Can I calculate this in a spreadsheet?</h3>
-<p>Yes &mdash; see our guide on <a href="/guides/credit-card-interest-calculator-excel-template/">building a credit card interest formula in a spreadsheet</a> for a ready-to-use approach.</p>
+<h3>How do I calculate monthly interest on a credit card?</h3>
+<p>Multiply your balance by your APR and divide by 12. A $3,000 balance at 21% APR is about $3,000 &times; 0.21 &divide; 12 = $52.50 a month. For the exact figure your issuer charges, use the daily method above with your average daily balance and the number of days in the cycle.</p>
+
+<h3>Does credit card interest compound?</h3>
+<p>Usually yes. Most issuers compound daily, and unpaid interest becomes part of the balance that next month's interest is charged on. That's why a balance you don't pay down keeps growing even without new purchases.</p>
 
 <h3>Why doesn't my manual calculation match my statement exactly?</h3>
 <p>A hand calculation is an estimate. Differences can come from daily compounding, a different day-count convention (360 vs. 365), the timing of purchases and payments within the cycle, fees included in the balance, grace-period rules, balances with different APRs, and rounding. Your statement and cardholder agreement describe how your issuer actually calculates interest.</p>
