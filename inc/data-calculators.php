@@ -593,6 +593,38 @@ function cmc_calculators() {
 			),
 		),
 
+		'fed-rate-change-credit-card-calculator' => array(
+			'slug'             => 'fed-rate-change-credit-card-calculator',
+			'title'            => 'Fed Rate Change Credit Card Calculator',
+			'seo_title'        => 'Fed Rate Hike or Cut: Credit Card Interest Calculator',
+			'meta_description' => 'What does a Fed rate hike or cut do to your credit card? Enter your balance, APR, and payment to see your new APR, monthly interest, and total cost.',
+			'h1'               => 'Fed Rate Hike or Cut: What It Means for Your Credit Card',
+			'dek'              => 'See how a Federal Reserve rate change moves your card\'s APR, this month\'s interest, and the total cost of paying off your balance.',
+			'target_keyword'   => 'fed rate cut credit card interest',
+			'calc_id'          => 'fedrate',
+			'js'               => 'calc-fed-rate.js',
+			'sources'          => array( 'fed-fomc', 'fed-g19', 'regz-1026-9' ),
+			'related'          => array( 'credit-card-interest-calculator', 'balance-transfer-calculator', 'extra-payment-savings-calculator' ),
+			'faqs'             => array(
+				array(
+					'q' => 'Does a Fed rate cut lower my credit card interest?',
+					'a' => 'Yes, if your card has a variable APR, which most do. Your APR is the prime rate plus a margin, and the prime rate moves with the Fed, so a 0.25-point cut lowers your APR by 0.25 point, usually within one or two billing cycles. On a $5,000 balance that saves about $1.04 a month.',
+				),
+				array(
+					'q' => 'How soon does a Fed rate change affect my credit card?',
+					'a' => 'Banks usually change the prime rate the day after a Fed decision. Your card\'s APR then changes on the date your cardholder agreement sets, often the start of the next billing cycle, so you will usually see it on your next statement or the one after.',
+				),
+				array(
+					'q' => 'Will my card issuer tell me before my APR changes?',
+					'a' => 'Not necessarily. Federal rules don\'t require advance notice when a variable APR changes because the index it follows, such as the prime rate, changed. The new rate appears on your statement.',
+				),
+				array(
+					'q' => 'Is it worth waiting for a Fed cut before paying off my card?',
+					'a' => 'No. A 0.25-point cut saves about $1 a month on $5,000, while every dollar you pay now stops costing you your full APR. Paying even $10 more a month saves more than a quarter-point cut.',
+				),
+			),
+		),
+
 	);
 
 	return $calculators;

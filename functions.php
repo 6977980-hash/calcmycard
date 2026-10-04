@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_THEME_VERSION', '1.0.14' );
+define( 'CMC_THEME_VERSION', '1.0.15' );
 define( 'CMC_THEME_DIR', get_template_directory() );
 define( 'CMC_THEME_URI', get_template_directory_uri() );
 

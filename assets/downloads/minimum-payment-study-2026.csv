@@ -1,0 +1,24 @@
+issuer,balance,apr_percent,first_minimum,months_minimum_only,total_interest_minimum_only,total_paid_minimum_only,months_fixed_first_minimum,total_interest_fixed_first_minimum
+"Chase",1000,22.15,40.00,34,353.55,1353.55,34,353.55
+"Citi",1000,22.15,41.00,33,341.05,1341.05,33,341.05
+"Capital One",1000,22.15,28.46,71,775.37,1775.37,58,627.33
+"Discover",1000,22.15,38.46,40,416.67,1416.67,36,374.90
+"American Express",1000,22.15,40.00,34,353.55,1353.55,34,353.55
+"Chase",2000,22.15,56.92,93,1978.98,3978.98,58,1254.67
+"Citi",2000,22.15,56.92,90,1936.09,3936.09,58,1254.67
+"Capital One",2000,22.15,56.92,140,2621.19,4621.19,58,1254.67
+"Discover",2000,22.15,56.92,90,1810.28,3810.28,58,1254.67
+"American Express",2000,22.15,56.92,93,1978.98,3978.98,58,1254.67
+"Chase",5000,22.15,142.29,184,7516.45,12516.45,58,3136.67
+"Citi",5000,22.15,142.29,181,7473.56,12473.56,58,3136.67
+"Capital One",5000,22.15,142.29,231,8158.74,13158.74,58,3136.67
+"Discover",5000,22.15,112.29,240,11528.59,16528.59,95,5593.11
+"American Express",5000,22.15,142.29,184,7516.45,12516.45,58,3136.67
+"Chase",10000,22.15,284.58,253,16745.63,26745.63,58,6273.35
+"Citi",10000,22.15,284.58,250,16702.73,26702.73,58,6273.35
+"Capital One",10000,22.15,284.58,300,17387.91,27387.91,58,6273.35
+"Discover",10000,22.15,204.58,490,46184.11,56184.11,128,16009.22
+"American Express",10000,22.15,284.58,253,16745.63,26745.63,58,6273.35
+
+# Source: CalcMyCard minimum payment study, October 2026 - https://calcmycard.com/guides/credit-card-minimum-payment-study-2026/
+# Model: APR/12 monthly interest, minimum recalculated monthly from each issuer's standard published formula, no new purchases or fees.

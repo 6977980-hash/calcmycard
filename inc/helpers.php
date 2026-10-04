@@ -160,7 +160,7 @@ function cmc_qa_status() {
 		'last_run' => '2026-09-25',
 		// Calculators added after that run: checked against the worked
 		// examples on their pages, not yet part of the automated suite.
-		'not_in_suite' => array( 'cash-advance-calculator', 'biweekly-payment-calculator', 'credit-card-interest-charge-checker' ),
+		'not_in_suite' => array( 'cash-advance-calculator', 'biweekly-payment-calculator', 'credit-card-interest-charge-checker', 'fed-rate-change-credit-card-calculator' ),
 	);
 }
 
@@ -334,6 +334,12 @@ function cmc_sources() {
 			'url'       => 'https://www.federalreserve.gov/releases/g19/current/default.htm',
 			'checked'   => '2026-09-25',
 		),
+		'fed-fomc'          => array(
+			'title'     => 'Federal Open Market Committee meeting calendars and statements (September 16, 2026 decision)',
+			'publisher' => 'Federal Reserve Board',
+			'url'       => 'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
+			'checked'   => '2026-10-04',
+		),
 		'cfpb-grace'        => array(
 			'title'     => 'What is a grace period for a credit card?',
 			'publisher' => 'Consumer Financial Protection Bureau',
@@ -369,6 +375,12 @@ function cmc_sources() {
 			'publisher' => 'Consumer Financial Protection Bureau',
 			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/7/',
 			'checked'   => '2026-09-25',
+		),
+		'regz-1026-9'       => array(
+			'title'     => 'Regulation Z § 1026.9(c) – no advance notice needed when a variable APR changes with its index',
+			'publisher' => 'Consumer Financial Protection Bureau',
+			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/9/',
+			'checked'   => '2026-10-04',
 		),
 		'regz-1026-53'      => array(
 			'title'     => 'Regulation Z § 1026.53 – payments above the minimum go to the highest-APR balance first',

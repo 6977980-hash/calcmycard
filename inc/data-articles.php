@@ -1,6 +1,6 @@
 <?php
 /**
- * Metadata for the 15 supporting long-tail SEO/AEO articles. Body copy
+ * Metadata for the supporting long-tail SEO/AEO articles. Body copy
  * lives in /content/articles/{slug}.html. Each article links back to 1-3
  * calculators (internal linking) and targets one primary long-tail keyword
  * from the keyword research plan.
@@ -181,6 +181,17 @@ function cmc_articles() {
 			'target_keyword'   => 'credit card terms glossary',
 			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'regz-1026-53', 'regz-1026-55' ),
 			'related_calculators' => array( 'credit-card-interest-calculator', 'daily-periodic-rate-calculator', 'minimum-payment-calculator' ),
+		),
+
+		'credit-card-minimum-payment-study-2026' => array(
+			'slug'             => 'credit-card-minimum-payment-study-2026',
+			'title'            => 'The Minimum Payment Trap: How Long Each Big Issuer\'s Minimum Takes (2026 Study)',
+			'breadcrumb'       => 'Minimum Payment Study 2026',
+			'seo_title'        => 'Minimum Payments by Issuer: Chase, Citi, Discover & More (2026 Study)',
+			'meta_description' => 'We ran Chase, Citi, Capital One, Discover and Amex minimum payment formulas on the same balance: 15 to 20 years and up to $11,529 interest on $5,000.',
+			'target_keyword'   => 'credit card minimum payment by issuer',
+			'sources'          => array( 'fed-g19', 'regz-1026-7' ),
+			'related_calculators' => array( 'minimum-payment-calculator', 'credit-card-payoff-calculator' ),
 		),
 
 	);
