@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-04.4' );
+define( 'CMC_CONTENT_SYNC', '2026-10-04.5' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -263,6 +263,10 @@ function cmc_sync_calculator_count_text() {
 		$desc = get_post_meta( $page->ID, 'rank_math_description', true );
 		if ( $desc && $fix( $desc ) !== $desc ) {
 			update_post_meta( $page->ID, 'rank_math_description', $fix( $desc ) );
+		}
+		// Rank Math falls back to the excerpt when a page has no description.
+		if ( $page->post_excerpt && $fix( $page->post_excerpt ) !== $page->post_excerpt ) {
+			wp_update_post( array( 'ID' => $page->ID, 'post_excerpt' => $fix( $page->post_excerpt ) ) );
 		}
 	}
 }
