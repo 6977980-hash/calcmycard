@@ -1,0 +1,6 @@
+AddType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet .xlsx
+<IfModule mod_headers.c>
+  <FilesMatch "\.xlsx$">
+    Header set Content-Disposition "attachment"
+  </FilesMatch>
+</IfModule>
