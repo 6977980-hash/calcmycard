@@ -295,12 +295,12 @@ function cmc_calculators() {
 
 		'daily-periodic-rate-calculator' => array(
 			'slug'             => 'daily-periodic-rate-calculator',
-			'title'            => 'Daily Periodic Rate Calculator',
-			'seo_title'        => 'Daily Periodic Rate Calculator — Convert APR to Daily Rate',
-			'meta_description' => 'Convert your credit card APR into a daily periodic rate and estimate how much interest accrues on your balance each day.',
-			'h1'               => 'Daily Periodic Rate Calculator',
+			'title'            => 'Credit Card Daily Interest Calculator',
+			'seo_title'        => 'Credit Card Daily Interest Calculator (Daily Periodic Rate)',
+			'meta_description' => 'How to calculate daily interest on a credit card: turn your APR into a daily periodic rate and see the interest per day and per billing cycle.',
+			'h1'               => 'Credit Card Daily Interest Calculator (Daily Periodic Rate)',
 			'dek'              => 'See the daily periodic rate typically derived from your APR, and how many dollars that adds up to per day and per billing cycle.',
-			'target_keyword'   => 'daily periodic rate calculator',
+			'target_keyword'   => 'how to calculate daily interest on credit card',
 			'calc_id'          => 'dpr',
 			'js'               => 'calc-daily-periodic-rate.js',
 			'sources'          => array( 'cfpb-grace' ),

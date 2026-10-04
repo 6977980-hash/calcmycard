@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-04.7' );
+define( 'CMC_CONTENT_SYNC', '2026-10-04.8' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -118,11 +118,33 @@ function cmc_sync_seo_meta() {
 			if ( ! empty( $item['meta_description'] ) ) {
 				update_post_meta( $page->ID, 'rank_math_description', $item['meta_description'] );
 			}
-			if ( ! empty( $item['target_keyword'] ) && ! get_post_meta( $page->ID, 'rank_math_focus_keyword', true ) ) {
+			// Set the focus keyword when empty, or when it still holds the old
+			// target of a page we deliberately retargeted (a hand-set keyword
+			// is left alone).
+			$focus   = get_post_meta( $page->ID, 'rank_math_focus_keyword', true );
+			$retired = cmc_retired_keywords();
+			if ( ! empty( $item['target_keyword'] ) && ( ! $focus || in_array( $focus, $retired, true ) ) && $focus !== $item['target_keyword'] ) {
 				update_post_meta( $page->ID, 'rank_math_focus_keyword', $item['target_keyword'] );
+			}
+			// Keep the WordPress page title (admin lists, fallbacks) in step
+			// with the data file's title.
+			if ( in_array( $item['slug'], array_keys( $retired ), true ) && $page->post_title !== $item['title'] ) {
+				wp_update_post( array( 'ID' => $page->ID, 'post_title' => $item['title'] ) );
 			}
 		}
 	}
+}
+
+/**
+ * Pages retargeted after the GSC review of 2026-10-04: slug => old target
+ * keyword. Their focus keyword and page title follow the data files.
+ */
+function cmc_retired_keywords() {
+	return array(
+		'daily-periodic-rate-calculator'     => 'daily periodic rate calculator',
+		'how-does-credit-card-interest-work' => 'how does credit card interest work example',
+		'credit-card-grace-period-explained' => 'credit card grace period explained',
+	);
 }
 
 /**
