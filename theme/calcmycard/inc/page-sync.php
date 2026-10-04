@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-04.6' );
+define( 'CMC_CONTENT_SYNC', '2026-10-04.7' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -43,8 +43,25 @@ function cmc_maybe_sync_content() {
 	update_option( 'cmc_content_sync', CMC_CONTENT_SYNC );
 	delete_transient( 'cmc_content_sync_lock' );
 
-	// Purge LiteSpeed so the new titles and pages show at once.
-	do_action( 'litespeed_purge_all' );
+	cmc_purge_page_cache();
+}
+
+/**
+ * Purge LiteSpeed's cached copy of every published page so new titles and
+ * text show at once. Deliberately not 'litespeed_purge_all': that also
+ * flushes the object cache, which logged Rank Math out after every deploy.
+ */
+function cmc_purge_page_cache() {
+	$ids = get_posts( array(
+		'post_type'      => array( 'page', 'post' ),
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'fields'         => 'ids',
+	) );
+	foreach ( $ids as $id ) {
+		do_action( 'litespeed_purge_post', $id );
+	}
+	do_action( 'litespeed_purge_url', home_url( '/' ) );
 }
 add_action( 'init', 'cmc_maybe_sync_content', 99 );
 
