@@ -1,6 +1,6 @@
 <?php
 /**
- * Single source of truth for all 12 calculators: metadata, SEO fields,
+ * Single source of truth for all calculators: metadata, SEO fields,
  * FAQ content (also used to emit FAQPage schema), and internal-linking
  * relationships. Both the theme (page templates) and the WP-CLI content
  * importer (import/import-content.php) read this same file, so title,
@@ -200,7 +200,7 @@ function cmc_calculators() {
 		'debt-payoff-snowball-avalanche' => array(
 			'slug'             => 'debt-payoff-snowball-avalanche',
 			'title'            => 'Multi-Card Debt Payoff Calculator (Snowball vs. Avalanche)',
-			'seo_title'        => 'Snowball vs. Avalanche Calculator — Pay Off Multiple Cards Faster',
+			'seo_title'        => 'Snowball vs. Avalanche Calculator — Pay Off Cards Faster',
 			'meta_description' => 'Compare the debt snowball and debt avalanche methods across all your credit cards. See which strategy gets you debt-free faster and cheaper.',
 			'h1'               => 'Multi-Card Debt Payoff Calculator: Snowball vs. Avalanche',
 			'dek'              => 'Add every card you\'re carrying a balance on and see, side by side, which order of payoff — smallest balance first or highest APR first — saves you more.',
@@ -248,7 +248,7 @@ function cmc_calculators() {
 			'calc_id'          => 'apr',
 			'js'               => 'calc-apr.js',
 			'sources'          => array( 'fed-g19', 'cfpb-cash-advance', 'regz-1026-55' ),
-			'related'          => array( 'daily-periodic-rate-calculator', 'credit-card-interest-calculator', 'intro-apr-calculator' ),
+			'related'          => array( 'daily-periodic-rate-calculator', 'credit-card-interest-calculator', 'intro-apr-calculator', 'cash-advance-calculator' ),
 			'faqs'             => array(
 				array(
 					'q' => 'What does APR stand for and what does it mean?',
@@ -396,7 +396,7 @@ function cmc_calculators() {
 		'payoff-time-calculator' => array(
 			'slug'             => 'payoff-time-calculator',
 			'title'            => 'Credit Card Payoff Time Calculator',
-			'seo_title'        => 'Payoff Time Calculator — How Many Months to Pay Off a Credit Card?',
+			'seo_title'        => 'Payoff Time Calculator — Months to Pay Off a Credit Card',
 			'meta_description' => 'Estimate how many months or years it will take to pay off your credit card balance at your current payment amount and APR.',
 			'h1'               => 'Credit Card Payoff Time Calculator',
 			'dek'              => 'Answer the question "how long will this actually take?" — enter your balance, APR, and payment for an estimated month-by-month countdown.',
@@ -505,6 +505,46 @@ function cmc_calculators() {
 				array(
 					'q' => 'Can I pay off a consolidation loan early?',
 					'a' => 'Many personal loans allow early payoff without a penalty, but check the loan agreement. Paying early reduces the total interest compared with this calculator\'s full-term estimate.',
+				),
+			),
+		),
+
+		'cash-advance-calculator' => array(
+			'slug'             => 'cash-advance-calculator',
+			'title'            => 'Cash Advance Calculator',
+			'seo_title'        => 'Cash Advance Calculator — Fee, Interest & True Cost',
+			'meta_description' => 'Estimate what a credit card cash advance really costs: the up-front fee, interest from day one at the cash advance APR, and the annualized cost.',
+			'h1'               => 'Credit Card Cash Advance Calculator',
+			'dek'              => 'See the full cost of a credit card cash advance: the fee, interest that starts the same day, and what it works out to per year.',
+			'target_keyword'   => 'cash advance calculator',
+			'calc_id'          => 'cashadvance',
+			'js'               => 'calc-cash-advance.js',
+			'sources'          => array( 'cfpb-cash-advance', 'regz-1026-53' ),
+			'related'          => array( 'credit-card-apr-calculator', 'daily-periodic-rate-calculator', 'credit-card-interest-calculator' ),
+			'faqs'             => array(
+				array(
+					'q' => 'How much does a credit card cash advance cost?',
+					'a' => 'Usually a fee of about 3-5% of the amount (often with a $10 minimum), plus interest at the cash advance APR from the day you take the money, plus any ATM operator fee. In this calculator\'s example, $500 repaid after 30 days costs about $40.94 in total.',
+				),
+				array(
+					'q' => 'Is there a grace period on a cash advance?',
+					'a' => 'Generally no. According to the CFPB, interest on a cash advance usually starts as soon as you take the money out, unlike purchases, which often have a grace period if you pay your statement balance in full.',
+				),
+				array(
+					'q' => 'Why is the annualized cost so much higher than the APR?',
+					'a' => 'Because the one-time fee is charged up front. A 5% fee on money you repay in 30 days works out to roughly 60% a year on its own, before any interest. The shorter the time you keep the cash, the higher the annualized cost of the fee.',
+				),
+				array(
+					'q' => 'Does paying it back quickly help?',
+					'a' => 'Yes, but only for the interest. Interest stops growing once the cash advance is repaid, but the fee is already charged and doesn\'t shrink.',
+				),
+				array(
+					'q' => 'How are payments applied if I also have purchases on the card?',
+					'a' => 'In the U.S., the amount you pay above the minimum generally must go to the balance with the highest APR first, which is often the cash advance. The minimum payment itself can be applied as the issuer chooses.',
+				),
+				array(
+					'q' => 'Do convenience checks and cash-like purchases count as cash advances?',
+					'a' => 'Often yes. Convenience checks, some money transfers, and buying gift cards or cryptocurrency can be treated as cash advances, with the same fee and APR. Check your cardholder agreement.',
 				),
 			),
 		),

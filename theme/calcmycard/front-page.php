@@ -1,6 +1,6 @@
 <?php
 /**
- * Homepage: hub for all 12 calculators. Targets the broad "credit card
+ * Homepage: hub for all calculators. Targets the broad "credit card
  * calculators" intent while each individual calculator page targets its own
  * specific primary/long-tail keyword (see inc/data-calculators.php).
  */
@@ -19,7 +19,7 @@ $articles    = cmc_articles();
 		<div class="cmc-hero-copy">
 			<span class="cmc-eyebrow">12 Free Tools &middot; No Sign-Up</span>
 			<h1>Credit Card Interest &amp; Payoff Calculators</h1>
-			<p class="cmc-dek">Twelve free calculators to help you estimate what your credit card costs — and how to pay it off faster. Built by Ali Ahmad, with every calculator checked against an automated test suite and every rule linked to its CFPB, Federal Reserve, or Regulation Z source.</p>
+			<p class="cmc-dek"><?php echo esc_html( cmc_calculator_count_word() ); ?> free calculators to help you estimate what your credit card costs — and how to pay it off faster. Built by Ali Ahmad, with every calculator checked against an automated test suite and every rule linked to its CFPB, Federal Reserve, or Regulation Z source.</p>
 		</div>
 		<div class="cmc-hero-art" aria-hidden="true">
 			<img src="<?php echo esc_url( CMC_THEME_URI . '/assets/images/hero-calculator.svg' ); ?>" width="480" height="400" alt="" decoding="async" fetchpriority="high" />
@@ -41,7 +41,7 @@ $articles    = cmc_articles();
 	);
 	?>
 
-	<h2>All 12 Calculators</h2>
+	<h2>All <?php echo (int) cmc_calculator_count(); ?> Calculators</h2>
 	<div class="cmc-hub-grid">
 		<?php foreach ( $calculators as $calc ) : ?>
 			<div class="cmc-hub-card">

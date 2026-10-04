@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<li><a href="<?php echo esc_url( home_url( '/calculators/credit-card-interest-calculator/' ) ); ?>">Interest Calculator</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/calculators/credit-card-payoff-calculator/' ) ); ?>">Payoff Calculator</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/calculators/minimum-payment-calculator/' ) ); ?>">Minimum Payment</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/calculators/' ) ); ?>">All 12 Calculators &rarr;</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/calculators/' ) ); ?>">All <?php echo (int) cmc_calculator_count(); ?> Calculators &rarr;</a></li>
 				</ul>
 			</div>
 			<div>

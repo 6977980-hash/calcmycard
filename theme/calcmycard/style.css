@@ -4,7 +4,7 @@ Theme URI: https://calcmycard.com
 Author: Ali Ahmad
 Author URI: https://calcmycard.com/about/
 Description: A fast, lightweight, SEO/AEO-optimized WordPress theme purpose-built for a credit card calculator authority site. Built for Core Web Vitals, schema markup, and AdSense-ready layout.
-Version: 1.0.10
+Version: 1.0.11
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.6
@@ -229,6 +229,19 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-example-wrap td:not(:first-child), .cmc-example-wrap th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
 .cmc-example-wrap caption { caption-side: bottom; text-align: left; font-size: 0.84rem; color: var(--cmc-text-muted); padding-top: 6px; }
 .cmc-method-note { margin-top: 0; }
+
+/* Phones: keep the calculator hero compact so the calculator itself starts
+   on the first screen instead of below the fold. */
+@media (max-width: 640px) {
+  .cmc-page-hero--calc { padding: 18px 0 16px; margin-bottom: 0; }
+  .cmc-page-hero--calc .cmc-breadcrumbs { margin-bottom: 6px; font-size: 0.74rem; }
+  .cmc-page-hero--calc .cmc-eyebrow { display: none; }
+  .cmc-page-hero--calc h1 { font-size: 1.6rem; line-height: 1.2; margin: 4px 0 6px; }
+  .cmc-page-hero--calc .cmc-dek { display: none; }
+  .cmc-page-hero--calc .cmc-updated { font-size: 0.76rem; margin: 0; }
+  .cmc-page-hero--calc + .cmc-layout { padding-top: 14px; }
+  .cmc-method-note { font-size: 0.8rem; line-height: 1.45; padding: 10px 12px; margin-bottom: 12px; }
+}
 .cmc-disclaimer { font-size: 0.8rem; color: var(--cmc-text-muted); border-top: 1px solid var(--cmc-border); margin-top: 26px; padding-top: 14px; }
 
 /* FAQ */

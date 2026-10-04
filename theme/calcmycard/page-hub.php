@@ -22,7 +22,7 @@ $is_guides = ( 'guides' === $slug );
 		<p class="cmc-dek">
 			<?php echo $is_guides
 				? 'Plain-English answers to the questions people search most about credit card interest, payoff strategy, and APR.'
-				: 'Twelve free calculators covering every stage of paying down (or avoiding) credit card interest.'; ?>
+				: cmc_calculator_count_word() . ' free calculators covering every stage of paying down (or avoiding) credit card interest.'; ?>
 		</p>
 	</div>
 </div>

@@ -2,7 +2,7 @@
 /**
  * Template Name: Calculator Page
  *
- * Renders any of the 12 calculator pages. Which calculator, its copy, and
+ * Renders any of the calculator pages. Which calculator, its copy, and
  * its FAQs all come from cmc_calculators() (inc/data-calculators.php),
  * matched by the page's slug — so adding a 13th calculator later only
  * requires a new data entry + JS file, never a new template.
@@ -35,7 +35,7 @@ $body           = cmc_get_calculator_body( $slug );
 $related_guides = cmc_articles_related_to_calculator( $slug, 3 );
 ?>
 
-<div class="cmc-page-hero">
+<div class="cmc-page-hero cmc-page-hero--calc">
 	<div class="cmc-container">
 		<?php cmc_render_breadcrumbs(); ?>
 		<span class="cmc-eyebrow">Free Calculator</span>
@@ -51,7 +51,7 @@ $related_guides = cmc_articles_related_to_calculator( $slug, 3 );
 
 		<?php
 		/*
-		 * Page structure (same for all 12 calculators):
+		 * Page structure (same for every calculator):
 		 *   H1 (hero) -> calculation-method note -> calculator ->
 		 *   Quick Answer -> How the Calculator Works -> Formula -> Example ->
 		 *   When the Result May Differ -> next steps (all from the
@@ -102,7 +102,7 @@ $related_guides = cmc_articles_related_to_calculator( $slug, 3 );
 	<aside class="cmc-sidebar">
 		<?php cmc_render_ad_slot( 'rectangle', 'Advertisement' ); ?>
 		<div class="cmc-related-card">
-			<h4 style="margin-top:0;">All 12 Calculators</h4>
+			<h4 style="margin-top:0;">All <?php echo (int) cmc_calculator_count(); ?> Calculators</h4>
 			<p class="cmc-muted" style="font-size:0.85rem;">Explore the full CalcMyCard toolkit.</p>
 			<a href="<?php echo esc_url( home_url( '/calculators/' ) ); ?>">Browse all calculators &rarr;</a>
 		</div>
