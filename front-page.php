@@ -17,9 +17,9 @@ $articles    = cmc_articles();
 <div class="cmc-page-hero cmc-page-hero--home">
 	<div class="cmc-container cmc-hero-grid">
 		<div class="cmc-hero-copy">
-			<span class="cmc-eyebrow">12 Free Tools &middot; No Sign-Up</span>
+			<span class="cmc-eyebrow"><?php echo (int) cmc_calculator_count(); ?> Free Tools &middot; No Sign-Up</span>
 			<h1>Credit Card Interest &amp; Payoff Calculators</h1>
-			<p class="cmc-dek"><?php echo esc_html( cmc_calculator_count_word() ); ?> free calculators to help you estimate what your credit card costs — and how to pay it off faster. Built by Ali Ahmad, with every calculator checked against an automated test suite and every rule linked to its CFPB, Federal Reserve, or Regulation Z source.</p>
+			<p class="cmc-dek"><?php echo esc_html( cmc_calculator_count_word() ); ?> free calculators to help you estimate what your credit card costs — and how to pay it off faster. Built by Ali Ahmad, with every calculator checked against hand-worked examples and every rule linked to its CFPB, Federal Reserve, or Regulation Z source.</p>
 		</div>
 		<div class="cmc-hero-art" aria-hidden="true">
 			<img src="<?php echo esc_url( CMC_THEME_URI . '/assets/images/hero-calculator.svg' ); ?>" width="480" height="400" alt="" decoding="async" fetchpriority="high" />
@@ -37,7 +37,7 @@ $articles    = cmc_articles();
 	// Flagship answer box for the site's primary target keyword.
 	cmc_render_answer_box(
 		'Quick Answer',
-		'A credit card interest calculator shows how much of your payment goes to interest versus principal, based on your balance, APR, and payment amount. Many issuers apply a daily periodic rate (your APR &divide; 365) to your average daily balance; our calculators use a simplified monthly model (APR &divide; 12), so your statement may differ. Use the <a href="' . esc_url( home_url( '/calculators/credit-card-interest-calculator/' ) ) . '">Credit Card Interest Calculator</a> below to see your estimated interest and payoff results.'
+		'A credit card interest calculator shows how much of your payment goes to interest versus principal, based on your balance, APR, and payment amount. Many issuers apply a daily periodic rate (your APR &divide; 365) to your average daily balance; most of our calculators use a simplified monthly model (APR &divide; 12), so your statement may differ. Use the <a href="' . esc_url( home_url( '/calculators/credit-card-interest-calculator/' ) ) . '">Credit Card Interest Calculator</a> below to see your estimated interest and payoff results.'
 	);
 	?>
 
@@ -68,7 +68,7 @@ $articles    = cmc_articles();
 			</div>
 		<?php endforeach; ?>
 	</div>
-	<p><a href="<?php echo esc_url( home_url( '/guides/' ) ); ?>">See all 15 guides &rarr;</a></p>
+	<p><a href="<?php echo esc_url( home_url( '/guides/' ) ); ?>">See all <?php echo (int) count( cmc_articles() ); ?> guides &rarr;</a></p>
 
 	<?php
 	cmc_render_faqs( array(

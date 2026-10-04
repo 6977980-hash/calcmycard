@@ -79,7 +79,7 @@ function cmc_llms_txt() {
 	$lines   = array();
 	$lines[] = '# ' . get_bloginfo( 'name' );
 	$lines[] = '';
-	$lines[] = '> Free credit card calculators and plain-English guides for U.S. cardholders: interest, payoff time, minimum payments, balance transfers, utilization, and snowball vs. avalanche. Calculators use a disclosed simplified monthly model (APR / 12); a separate calculator gives the daily periodic rate (APR / 365 or 360). Built and maintained by Ali Ahmad. Educational estimates, not financial advice.';
+	$lines[] = '> Free credit card calculators and plain-English guides for U.S. cardholders: interest, payoff time, minimum payments, balance transfers, utilization, and snowball vs. avalanche. Most calculators use a disclosed simplified monthly model (APR / 12); the Daily Periodic Rate, Cash Advance and Interest Charge Checker tools use daily interest (APR / 365 or 360). Built and maintained by Ali Ahmad. Educational estimates, not financial advice.';
 	$lines[] = '';
 	$lines[] = '## Calculators';
 	$lines[] = '';

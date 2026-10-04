@@ -3,7 +3,7 @@
  * Template Name: Calculators Hub
  *
  * Reused for both the /calculators/ index (lists all 12 tools) and the
- * /guides/ index (lists all 15 articles), decided by the page slug.
+ * /guides/ index (lists every article), decided by the page slug.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
