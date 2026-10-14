@@ -109,12 +109,14 @@ function cmc_llms_txt() {
 add_action( 'parse_request', 'cmc_llms_txt', 0 );
 
 /**
- * Bing Webmaster Tools site verification (added 2026-10-04 at the owner's
- * request). Front page only; Bing checks the home URL.
+ * Bing Webmaster Tools and Google Search Console site verification, added at
+ * the owner's request. Front page only; both check the home URL.
  */
 function cmc_bing_site_verification() {
 	if ( is_front_page() ) {
 		echo '<meta name="msvalidate.01" content="3CA5D5A38222486BA11B6778E763417C" />' . "\n";
+		// Google Search Console site verification (added 2026-10-14 at the owner's request).
+		echo '<meta name="google-site-verification" content="ed5NfE-f6g0xgeK3YhxfCjW4C0QlU5jSj_OP-yeIbY8" />' . "\n";
 	}
 }
 add_action( 'wp_head', 'cmc_bing_site_verification', 1 );
