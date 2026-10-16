@@ -540,7 +540,7 @@ function cmc_clean_rank_math_graph( $data ) {
 	}
 	return $data;
 }
-add_filter( 'rank_math/json_ld', 'cmc_clean_rank_math_graph', 100 );
+add_filter( 'rank_math/json_ld', 'cmc_clean_rank_math_graph', PHP_INT_MAX );
 
 // Rank Math builds the WebPage name and description from its title and
 // description (with the HTML-escaped site tagline in them) after the
@@ -548,6 +548,13 @@ add_filter( 'rank_math/json_ld', 'cmc_clean_rank_math_graph', 100 );
 // both again when printing the <title> and meta tags.
 add_filter( 'rank_math/frontend/title', 'cmc_decode_schema_text', 99 );
 add_filter( 'rank_math/frontend/description', 'cmc_decode_schema_text', 99 );
+
+// WordPress stores the tagline HTML-escaped ("Interest &amp; Payoff"), and
+// Rank Math copies the raw value into the JSON-LD. Hand out plain text on
+// the front end; every place that prints it in HTML escapes it again.
+add_filter( 'option_blogdescription', function ( $value ) {
+	return is_admin() ? $value : cmc_decode_schema_text( $value );
+} );
 
 /**
  * Keep RankMath's breadcrumb labels (visible + BreadcrumbList schema) in
