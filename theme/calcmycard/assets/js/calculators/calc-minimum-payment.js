@@ -48,7 +48,10 @@
 				{ id: 'stat-months', label: 'Time to pay off (minimum only)', value: '' },
 				{ id: 'stat-interest', label: 'Total interest (minimum only)', value: '' },
 				{ id: 'stat-total', label: 'Total paid (minimum only)', value: '' },
+				{ id: 'stat-fixed-months', label: "Time if you keep paying this month's minimum", value: '' },
+				{ id: 'stat-fixed-interest', label: "Interest if you keep paying this month's minimum", value: '' },
 			] ) +
+			'<div class="cmc-answer-box" id="fixedbox"></div>' +
 			'<div class="cmc-answer-box" id="warnbox"></div>' +
 			'<div class="cmc-chart-wrap"><canvas id="chart-line" height="220"></canvas></div>' +
 		'</div>';
@@ -117,6 +120,26 @@
 			root.querySelector( '#stat-months' ).textContent = F.monthsToYearsMonths( sim.months );
 			root.querySelector( '#stat-interest' ).textContent = F.currency( sim.totalInterest );
 			root.querySelector( '#stat-total' ).textContent = F.currency( sim.totalPaid );
+		}
+
+		// Audit FIX-035: the same balance paid with this month's minimum held
+		// fixed, instead of letting it shrink with the balance.
+		var fixed = F.amortize( { balance: balance, apr: apr, payment: minPay } );
+		var fixedBox = root.querySelector( '#fixedbox' );
+		if ( fixed.neverPaysOff ) {
+			root.querySelector( '#stat-fixed-months' ).textContent = F.neverText( fixed );
+			root.querySelector( '#stat-fixed-interest' ).textContent = '—';
+		} else {
+			root.querySelector( '#stat-fixed-months' ).textContent = F.monthsToYearsMonths( fixed.months );
+			root.querySelector( '#stat-fixed-interest' ).textContent = F.currency( fixed.totalInterest );
+		}
+		if ( ! fixed.neverPaysOff && ( sim.neverPaysOff || fixed.months < sim.months ) ) {
+			fixedBox.style.display = '';
+			fixedBox.innerHTML = '<span class="cmc-answer-label">Keep paying ' + F.currency( minPay ) + '</span><p>If you keep paying this month\'s minimum of ' + F.currency( minPay ) + ' every month instead of letting it shrink, you\'d be debt-free in ' + F.monthsToYearsMonths( fixed.months ) + ' and pay ' + F.currency( fixed.totalInterest ) + ' in interest' +
+				( sim.neverPaysOff ? '.' : ': ' + ( sim.months - fixed.months ) + ' months sooner, saving ' + F.currency( sim.totalInterest - fixed.totalInterest ) + '.' ) + '</p>';
+		} else {
+			fixedBox.style.display = 'none';
+			fixedBox.innerHTML = '';
 		}
 
 		var warn = root.querySelector( '#warnbox' );

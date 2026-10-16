@@ -157,7 +157,7 @@ function cmc_site_author() {
  */
 function cmc_qa_status() {
 	return array(
-		'cases'    => 92,
+		'cases'    => 98,
 		'last_run' => '2026-10-16',
 		// Calculators not covered by the automated suite (none since
 		// Oct 16, 2026: all 15 are).
@@ -388,6 +388,12 @@ function cmc_sources() {
 			'publisher' => 'Consumer Financial Protection Bureau',
 			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/53/',
 			'checked'   => '2026-09-25',
+		),
+		'regz-1026-54'      => array(
+			'title'     => 'Regulation Z § 1026.54 – no interest on earlier cycles\' balances or on grace-period balances repaid on time',
+			'publisher' => 'Consumer Financial Protection Bureau',
+			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/54/',
+			'checked'   => '2026-10-16',
 		),
 		'regz-1026-55'      => array(
 			'title'     => 'Regulation Z § 1026.55 – limits on raising APRs, including the 60-days-late rule',
