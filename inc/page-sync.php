@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-16.6' );
+define( 'CMC_CONTENT_SYNC', '2026-10-16.7' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -309,6 +309,9 @@ function cmc_content_sync_replacements() {
 			// Oct 16, 2026 (Phase 6): Deferred Interest Calculator added.
 			'It covers all 15 calculators with 98 test cases,' => 'It covers all 16 calculators with 105 test cases,',
 			'Last full run: October 16, 2026 (98 of 98 passed).' => 'Last full run: October 16, 2026 (105 of 105 passed).',
+			// Oct 16, 2026 (Phase 7): layout (CLS) and internal link tests added.
+			'It covers all 16 calculators with 105 test cases,' => 'It covers all 16 calculators with 126 test cases,',
+			'Last full run: October 16, 2026 (105 of 105 passed).' => 'Last full run: October 16, 2026 (126 of 126 passed).',
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
@@ -326,6 +329,9 @@ function cmc_content_sync_replacements() {
 			'All 15 calculators are tested by an automated test suite' => 'All 16 calculators are tested by an automated test suite',
 			'The suite has 98 test cases covering all 15 calculators,' => 'The suite has 105 test cases covering all 16 calculators,',
 			'October 16, 2026 &mdash; all 98 cases passed.' => 'October 16, 2026 &mdash; all 105 cases passed.',
+			// Oct 16, 2026 (Phase 7): layout (CLS) and internal link tests added.
+			'The suite has 105 test cases covering all 16 calculators,' => 'The suite has 126 test cases covering all 16 calculators,',
+			'October 16, 2026 &mdash; all 105 cases passed.' => 'October 16, 2026 &mdash; all 126 cases passed.',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
@@ -342,7 +348,7 @@ function cmc_content_sync_replacements() {
  */
 function cmc_page_bodies() {
 	return array(
-		'methodology'    => '2026-10-16.3',
+		'methodology'    => '2026-10-16.4',
 		'privacy-policy' => '2026-10-16',
 	);
 }
