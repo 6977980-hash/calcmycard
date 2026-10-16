@@ -11,7 +11,10 @@
  *   yet (published under /calculators/ with the Calculator Page template);
  * - copies seo_title / meta_description / target_keyword from the data
  *   files into each calculator and guide page's Rank Math fields;
+ * - replaces the body of the plain pages in cmc_page_bodies() with
+ *   /content/pages/{path}.html when that page's version changes;
  * - applies the text replacements listed in cmc_content_sync_replacements();
+ * - sets the Rank Math descriptions in cmc_page_seo_descriptions();
  * - renames or unpublishes pages listed in cmc_moved_pages(), whose old
  *   URLs then 301 to the new ones (cmc_redirect_moved_pages()).
  *
@@ -22,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-16.3' );
+define( 'CMC_CONTENT_SYNC', '2026-10-16.4' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -37,7 +40,9 @@ function cmc_maybe_sync_content() {
 	cmc_sync_calculator_pages();
 	cmc_sync_guide_pages();
 	cmc_sync_seo_meta();
+	cmc_sync_page_bodies();
 	cmc_sync_page_text();
+	cmc_sync_page_seo();
 	cmc_sync_calculator_count_text();
 	if ( function_exists( 'cmc_maintain_root_files' ) ) {
 		cmc_maintain_root_files( true );
@@ -315,6 +320,68 @@ function cmc_content_sync_replacements() {
 			'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,' => 'an automated test suite checks all 15 calculators in a real browser against hand-worked examples, and the shared formulas against an independent reference implementation,',
 		),
 	);
+}
+
+/**
+ * Plain pages whose whole body comes from /content/pages/{path}.html, by
+ * page path => version. Bump a version to copy that file to the database
+ * again (it replaces any edit made in the dashboard).
+ */
+function cmc_page_bodies() {
+	return array(
+		'methodology'    => '2026-10-16',
+		'privacy-policy' => '2026-10-16',
+	);
+}
+
+function cmc_sync_page_bodies() {
+	foreach ( cmc_page_bodies() as $path => $version ) {
+		$page = get_page_by_path( $path );
+		$file = CMC_THEME_DIR . '/content/pages/' . $path . '.html';
+		if ( ! $page || ! is_readable( $file ) || get_post_meta( $page->ID, '_cmc_body_version', true ) === $version ) {
+			continue;
+		}
+		kses_remove_filters();
+		wp_update_post( array( 'ID' => $page->ID, 'post_content' => trim( file_get_contents( $file ) ) ) );
+		kses_init();
+		update_post_meta( $page->ID, '_cmc_body_version', $version );
+	}
+}
+
+/**
+ * Rank Math descriptions for plain pages, by page path. Without one, Rank
+ * Math cuts the first paragraph off mid-sentence.
+ */
+function cmc_page_seo_descriptions() {
+	return array(
+		'about'          => 'About CalcMyCard: who builds the free credit card calculators and guides, how every calculator is tested, and how errors are corrected.',
+		'contact'        => 'Contact CalcMyCard to report a calculator error, send a content correction, ask a question or suggest a new calculator or guide.',
+		'methodology'    => 'How each CalcMyCard calculator works: the formulas, assumptions and limits behind all 15 tools, the issuer formulas we use, and how we test them.',
+		'privacy-policy' => 'How CalcMyCard handles your data: calculator inputs stay in your browser, and the site uses no analytics, ads or tracking cookies.',
+	);
+}
+
+function cmc_sync_page_seo() {
+	foreach ( cmc_page_seo_descriptions() as $path => $desc ) {
+		$page = get_page_by_path( $path );
+		if ( $page && get_post_meta( $page->ID, 'rank_math_description', true ) !== $desc ) {
+			update_post_meta( $page->ID, 'rank_math_description', $desc );
+		}
+	}
+
+	// Homepage description was 163 characters; Google cuts it off at about 160.
+	$titles = get_option( 'rank-math-options-titles' );
+	if ( is_array( $titles ) && ! empty( $titles['homepage_description'] ) ) {
+		$new = str_replace(
+			array( ' — see exactly what your debt costs', ' &mdash; see exactly what your debt costs' ),
+			'. See what your debt costs',
+			$titles['homepage_description']
+		);
+		if ( $new !== $titles['homepage_description'] ) {
+			$titles['homepage_description'] = $new;
+			update_option( 'rank-math-options-titles', $titles );
+		}
+	}
 }
 
 function cmc_sync_page_text() {
