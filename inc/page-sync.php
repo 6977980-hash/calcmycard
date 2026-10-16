@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-16.4' );
+define( 'CMC_CONTENT_SYNC', '2026-10-16.5' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -303,6 +303,9 @@ function cmc_content_sync_replacements() {
 			// Oct 16, 2026 (Phase 3): accessibility and listener tests added.
 			'It covers all 15 calculators with 89 test cases,' => 'It covers all 15 calculators with 92 test cases,',
 			'Last full run: October 16, 2026 (89 of 89 passed).' => 'Last full run: October 16, 2026 (92 of 92 passed).',
+			// Oct 16, 2026 (Phase 5): tests for the new tool options.
+			'It covers all 15 calculators with 92 test cases,' => 'It covers all 15 calculators with 98 test cases,',
+			'Last full run: October 16, 2026 (92 of 92 passed).' => 'Last full run: October 16, 2026 (98 of 98 passed).',
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
@@ -314,6 +317,8 @@ function cmc_content_sync_replacements() {
 			'September 25, 2026 &mdash; all 66 cases passed. That run found and fixed these problems:' => 'October 16, 2026 &mdash; all 89 cases passed. That run found and fixed these problems: a shared link to the Minimum Payment Calculator with an issuer preset (such as Discover) used the wrong formula; shared links to the multi-card and utilization calculators dropped or restored cards; several calculators accepted negative rates or amounts; payoffs longer than 50 years were described as payments too low; and the payoff and minimum payment charts could stop short of the final month. An earlier run on September 25, 2026 found and fixed these problems:',
 			'The suite has 89 test cases covering all 15 calculators,' => 'The suite has 92 test cases covering all 15 calculators,',
 			'October 16, 2026 &mdash; all 89 cases passed.' => 'October 16, 2026 &mdash; all 92 cases passed.',
+			'The suite has 92 test cases covering all 15 calculators,' => 'The suite has 98 test cases covering all 15 calculators,',
+			'October 16, 2026 &mdash; all 92 cases passed.' => 'October 16, 2026 &mdash; all 98 cases passed.',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
@@ -329,7 +334,7 @@ function cmc_content_sync_replacements() {
  */
 function cmc_page_bodies() {
 	return array(
-		'methodology'    => '2026-10-16',
+		'methodology'    => '2026-10-16.2',
 		'privacy-policy' => '2026-10-16',
 	);
 }

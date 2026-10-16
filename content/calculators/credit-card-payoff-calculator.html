@@ -15,12 +15,13 @@
 <li>Milestones: the month you reach 25%, 50%, 75%, 90% and 100% paid off</li>
 <li>A month-by-month schedule you can download as a CSV file or print</li>
 </ul>
+<p>Still using the card? Enter the purchases you expect to keep making in <strong>New charges each month</strong>. The calculator adds them to the balance at the start of every month, before interest, until the card is paid off. Leave it at $0 if you've stopped using the card.</p>
 
 <h2>Formula</h2>
-<div class="cmc-formula">Monthly Interest = Balance &times; (APR &divide; 12)<br>
-New Balance = Balance + Monthly Interest &minus; Payment<br>
+<div class="cmc-formula">Monthly Interest = (Balance + New Charges) &times; (APR &divide; 12)<br>
+New Balance = Balance + New Charges + Monthly Interest &minus; Payment<br>
 Repeat until New Balance &le; 0 &rarr; months to payoff</div>
-<p class="cmc-formula-note">This is a simplified estimate, not an issuer-specific statement calculation. A closed-form version is n = &minus;ln(1 &minus; B&middot;r &divide; P) &divide; ln(1 + r), where r = APR &divide; 12, B = balance, and P = payment.</p>
+<p class="cmc-formula-note">This is a simplified estimate, not an issuer-specific statement calculation. A closed-form version is n = &minus;ln(1 &minus; B&middot;r &divide; P) &divide; ln(1 + r), where r = APR &divide; 12, B = balance, and P = payment, with no new charges.</p>
 
 <h2>Example: $5,000 at 22.99% APR, paying $175 a month</h2>
 <div class="cmc-example-wrap"><table>
@@ -66,6 +67,18 @@ Repeat until New Balance &le; 0 &rarr; months to payoff</div>
 </table></div>
 <p>The first quarter takes 14 months, but the last quarter takes only 7, because less of each payment goes to interest as the balance falls.</p>
 
+<h2>What New Charges Do to the Payoff Date</h2>
+<p>Keep spending $50 a month on the same card and the same $175 payment takes 78 months instead of 42, with about $4,745 in interest instead of $2,310. In month 1, the $50 is added first ($5,050), interest is $96.75, and the balance after the $175 payment is $4,971.75. At $100 a month of new charges, $175 no longer covers the charges plus interest, so the balance never reaches zero.</p>
+<div class="cmc-example-wrap"><table>
+<caption>$5,000 at 22.99% APR, paying $175 a month. Simplified monthly model; figures rounded.</caption>
+<thead><tr><th scope="col">New charges each month</th><th scope="col">Time to pay off</th><th scope="col">Total interest</th></tr></thead>
+<tbody>
+<tr><td>$0</td><td>42 months</td><td>$2,310</td></tr>
+<tr><td>$50</td><td>78 months</td><td>$4,745</td></tr>
+<tr><td>$100</td><td>Never</td><td>&mdash;</td></tr>
+</tbody>
+</table></div>
+
 <h2>If the Answer Is "Never"</h2>
 <p>If your payment doesn't cover the monthly interest (balance &times; APR &divide; 12, about $96 in this example), the balance never goes down. The calculator says so and shows the payment you need to start making progress.</p>
 
@@ -78,7 +91,7 @@ Repeat until New Balance &le; 0 &rarr; months to payoff</div>
 <li><strong>Daily periodic rate:</strong> many issuers apply APR &divide; 365 (or 360) each day instead of APR &divide; 12 once a month, which can produce different interest.</li>
 <li><strong>Average daily balance:</strong> your balance moves during the cycle as purchases post and payments arrive; this calculator uses a single month-start balance.</li>
 <li><strong>Fees:</strong> annual, late, foreign-transaction, cash-advance, and balance-transfer fees aren't included unless the calculator asks for them.</li>
-<li><strong>New purchases:</strong> the estimate assumes you stop adding charges. Any new spending lengthens payoff and raises interest.</li>
+<li><strong>New purchases:</strong> the estimate assumes you stop adding charges unless you enter them under New charges each month, and then it assumes the same amount every month.</li>
 <li><strong>Grace period:</strong> whether new purchases accrue interest depends on whether you pay your statement balance in full and on your card's terms.</li>
 <li><strong>Different APR categories:</strong> purchases, balance transfers, cash advances, and penalty APRs can carry different rates on the same card, and how payments are allocated between them affects the total.</li>
 <li><strong>Payment changes:</strong> the calculator assumes the same payment every month. Skipped, late, or larger payments change the date.</li>

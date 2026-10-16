@@ -9,6 +9,15 @@
 <p><a class="cmc-btn" href="/wp-content/themes/calcmycard/assets/downloads/credit-card-interest-calculator-template.xlsx" download>Download the Excel template (.xlsx)</a></p>
 <p>The template opens in Excel, Google Sheets (File &gt; Import), Numbers, and LibreOffice. Enter your balance, APR, monthly payment, and any extra payment in the yellow cells, and it builds a 600-month payoff schedule with the months to pay off, total interest, and total paid. With the sample numbers ($5,000 at 24.99% APR, $150 a month) it shows 58 months and $3,622.26 of interest. If your payment doesn't cover the monthly interest, it warns you instead of showing a payoff date. The sections below explain each formula so you can check or adapt it.</p>
 
+<h2>Use it in Google Sheets</h2>
+<p>The template uses only formulas that Google Sheets supports (IF, MIN, ROUND, SUM and COUNTIF), so it works the same there:</p>
+<ol>
+<li>Download the .xlsx file above.</li>
+<li>In Google Sheets, open a blank spreadsheet and choose <strong>File &gt; Import &gt; Upload</strong>, then pick the file. (Or upload it to Google Drive and choose <strong>Open with &gt; Google Sheets</strong>.)</li>
+<li>Choose <strong>Replace spreadsheet</strong> when asked, then type your own numbers into the yellow cells.</li>
+</ol>
+<p>Your copy lives in your own Google Drive, so the numbers you enter stay private to you.</p>
+
 <h2>The basic monthly formula</h2>
 <p>In a new sheet, set up columns for Month, Starting Balance, Interest, Payment, Principal, and Ending Balance. Your interest formula for each row is simply <code>=StartingBalance*(APR/12)</code>. Principal is <code>=Payment-Interest</code>, and Ending Balance is <code>=StartingBalance-Principal</code>. Each new row's Starting Balance references the previous row's Ending Balance, and you drag the formulas down until the balance reaches zero.</p>
 

@@ -27,6 +27,12 @@
 	 * paid down with a fixed payment (optionally plus a fixed extra
 	 * amount). Stops when the balance reaches zero or maxMonths is hit.
 	 *
+	 * opts.charges (optional, audit FIX-036): new purchases added to the
+	 * balance at the start of each month, before interest, for as long as
+	 * a balance remains. Each row's `charges` is that amount; `principal`
+	 * is the payment minus interest (what comes off the balance after the
+	 * new charges are added).
+	 *
 	 * @return {
 	 *   months, totalInterest, totalPaid, schedule: [...],
 	 *   neverPaysOff: bool, capped: bool
@@ -43,6 +49,7 @@
 		var apr       = Number( opts.apr ) || 0;
 		var payment   = Math.max( 0, Number( opts.payment ) || 0 );
 		var extra     = Math.max( 0, Number( opts.extra ) || 0 );
+		var charges   = Math.max( 0, Number( opts.charges ) || 0 );
 		var maxMonths = opts.maxMonths || 600; // 50-year hard stop
 		var r         = monthlyRate( apr );
 
@@ -61,25 +68,27 @@
 
 		while ( balance > 0.005 && month < maxMonths ) {
 			month++;
-			var interest = balance * r;
-			var thisPayment = Math.min( fullPayment, balance + interest );
+			var start = balance + charges;
+			var interest = start * r;
+			var thisPayment = Math.min( fullPayment, start + interest );
 			var principal = thisPayment - interest;
 
-			// A payment that only matches the interest (to floating-point
-			// noise) counts as not covering it.
-			if ( principal <= 1e-9 ) {
+			// A payment that only matches the interest (plus any new
+			// charges), to floating-point noise, counts as not covering it.
+			if ( principal - charges <= 1e-9 ) {
 				// Payment doesn't even cover interest — balance will never shrink.
 				neverPaysOff = true;
 				break;
 			}
 
-			balance = Math.max( 0, balance - principal );
+			balance = Math.max( 0, start - principal );
 			totalInterest += interest;
 			totalPaid += thisPayment;
 
 			schedule.push( {
 				month: month,
 				payment: thisPayment,
+				charges: charges,
 				interest: interest,
 				principal: principal,
 				balance: balance,
@@ -220,8 +229,22 @@
 	 * (2) each open card gets its minimum (capped at its balance);
 	 * (3) whatever is left of the budget goes to the target card, and any
 	 * remainder after clearing it goes to the next target in the same month.
+	 *
+	 * opts.shrink (optional, audit FIX-040): { floor }. Each card's minimum
+	 * then shrinks with its balance, the way issuers recompute it from each
+	 * statement: the entered minimum is taken as a share of the starting
+	 * balance (e.g. $95 on $4,500 = 2.11%), and every month the minimum is
+	 * max(floor, that share × the month-start balance), capped at what the
+	 * card owes. Month 1 therefore matches the entered minimums. The budget
+	 * is no longer fixed: each month it is the open cards' current minimums
+	 * + the extra amount + the last minimum (before the cap) of every card
+	 * already paid off (the rollover). monthlyBudget is the first month's
+	 * total.
 	 */
-	function simulateMultiCardPayoff( cards, extraPerMonth, order ) {
+	function simulateMultiCardPayoff( cards, extraPerMonth, order, opts ) {
+		var shrink = opts && opts.shrink ? {
+			floor: Math.max( 0, Number( opts.shrink.floor ) || 0 ),
+		} : null;
 		// Deep copy so repeated calls (snowball vs avalanche) don't interfere.
 		var working = cards.map( function ( c, i ) {
 			return {
@@ -232,9 +255,12 @@
 				minPayment: Math.max( 0, Number( c.minPayment ) || 0 ),
 			};
 		} ).filter( function ( c ) { return c.balance > 0; } );
+		working.forEach( function ( c ) { c.share = c.minPayment / c.balance; } );
 
 		extraPerMonth = Math.max( 0, Number( extraPerMonth ) || 0 );
 		var budget = working.reduce( function ( s, c ) { return s + c.minPayment; }, 0 ) + extraPerMonth;
+		var firstBudget = null;
+		var rolled = 0; // shrink mode: last minimums of cards already paid off
 
 		var totalInterest = 0;
 		var month = 0;
@@ -248,6 +274,20 @@
 		while ( working.some( isOpen ) && month < maxMonths ) {
 			month++;
 			var before = owed();
+
+			if ( shrink ) {
+				budget = extraPerMonth + rolled;
+				working.forEach( function ( c ) {
+					if ( isOpen( c ) ) {
+						c.fullMin = Math.max( shrink.floor, c.share * c.balance );
+						c.minPayment = c.fullMin;
+						budget += Math.min( c.fullMin, c.balance * ( 1 + monthlyRate( c.apr ) ) );
+					}
+				} );
+			}
+			if ( firstBudget === null ) {
+				firstBudget = budget;
+			}
 
 			working.forEach( function ( c ) {
 				if ( isOpen( c ) ) {
@@ -283,6 +323,7 @@
 				if ( ! isOpen( c ) && ! c.done ) {
 					c.done = true;
 					c.balance = 0;
+					rolled += shrink ? c.fullMin : 0;
 					payoffOrder.push( { name: c.name, month: month } );
 				}
 			} );
@@ -297,7 +338,7 @@
 			totalInterest: totalInterest,
 			payoffOrder: payoffOrder,
 			neverPaysOff: never,
-			monthlyBudget: budget,
+			monthlyBudget: firstBudget === null ? budget : firstBudget,
 		};
 	}
 

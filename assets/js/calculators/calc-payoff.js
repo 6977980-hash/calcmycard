@@ -8,6 +8,10 @@
  * (what payment pays it off in N months?). The goal payment is the
  * standard amortizing payment, B × r ÷ (1 − (1 + r)^−n), rounded up to
  * the cent, then run through the same schedule.
+ *
+ * Optional "new charges each month" (audit FIX-036) are added to the
+ * balance before interest every month until it is paid off; the goal
+ * payment then adds charges × (1 + r) on top.
  */
 (function () {
 	'use strict';
@@ -26,6 +30,7 @@
 			UI.field( { id: 'apr', label: 'Interest rate (APR %)', value: 22.99, min: 0, step: '0.01' } ),
 			UI.field( { id: 'payment', label: 'Monthly payment', value: 175, min: 0, step: '0.01' } ),
 			UI.field( { id: 'months', label: 'Pay it off in (months)', value: 24, min: 1, max: 600, step: '1', hint: '12 = 1 year, 24 = 2 years, 36 = 3 years' } ),
+			UI.field( { id: 'charges', label: 'New charges each month (optional)', value: 0, min: 0, step: '0.01', hint: 'Purchases you expect to keep adding; leave 0 if you\'ve stopped using the card' } ),
 		] ) +
 		UI.errorBox( 'err' ) +
 		'<div class="cmc-results is-visible" id="results">' +
@@ -45,14 +50,14 @@
 			'</div>' +
 		'</div>';
 
-	var lastSchedule = [];
+	var lastSchedule = [], lastCharges = 0;
 	UI.tableActions( root, 'table-actions', function () {
 		return {
 			title: 'Credit card payoff schedule',
 			filename: 'credit-card-payoff-schedule.csv',
-			headers: [ 'Month', 'Payment', 'Interest', 'Principal', 'Ending balance' ],
+			headers: [ 'Month' ].concat( lastCharges > 0 ? [ 'New charges' ] : [], [ 'Payment', 'Interest', 'Principal', 'Ending balance' ] ),
 			rows: lastSchedule.map( function ( r ) {
-				return [ r.month, r.payment.toFixed( 2 ), r.interest.toFixed( 2 ), r.principal.toFixed( 2 ), r.balance.toFixed( 2 ) ];
+				return [ r.month ].concat( lastCharges > 0 ? [ r.charges.toFixed( 2 ) ] : [], [ r.payment.toFixed( 2 ), r.interest.toFixed( 2 ), r.principal.toFixed( 2 ), r.balance.toFixed( 2 ) ] );
 			} ),
 		};
 	} );
@@ -61,9 +66,10 @@
 		root.querySelector( '#' + id ).closest( '.cmc-field' ).style.display = visible ? '' : 'none';
 	}
 
-	function goalPayment( balance, apr, months ) {
+	function goalPayment( balance, apr, months, charges ) {
 		var r = F.monthlyRate( apr );
 		var p = r === 0 ? balance / months : balance * r / ( 1 - Math.pow( 1 + r, -months ) );
+		p += charges * ( 1 + r );
 		return Math.ceil( p * 100 - 1e-9 ) / 100;
 	}
 
@@ -80,12 +86,13 @@
 		var apr = UI.num( root, 'apr' );
 		var goal = root.querySelector( '#mode' ).value === 'goal';
 		var months = Math.round( UI.num( root, 'months' ) );
+		var charges = UI.num( root, 'charges' );
 		show( 'payment', ! goal );
 		show( 'months', goal );
-		var payment = goal ? ( balance > 0 && months >= 1 ? goalPayment( balance, apr, months ) : 0 ) : UI.num( root, 'payment' );
+		var payment = goal ? ( balance > 0 && months >= 1 ? goalPayment( balance, apr, months, charges ) : 0 ) : UI.num( root, 'payment' );
 		var err = root.querySelector( '#err' );
 
-		var negative = UI.hasNegative( root, goal ? [ 'balance', 'apr' ] : [ 'balance', 'apr', 'payment' ] );
+		var negative = UI.hasNegative( root, goal ? [ 'balance', 'apr', 'charges' ] : [ 'balance', 'apr', 'payment', 'charges' ] );
 		if ( negative || balance <= 0 || payment <= 0 || ( goal && ( months < 1 || months > 600 ) ) ) {
 			err.textContent = negative ? UI.NEGATIVE_MSG : goal ? 'Enter a balance greater than 0 and a payoff time between 1 and 600 months.' : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
@@ -95,9 +102,12 @@
 		err.style.display = 'none';
 		UI.toggleResults( root, true );
 
-		var result = F.amortize( { balance: balance, apr: apr, payment: payment } );
+		var result = F.amortize( { balance: balance, apr: apr, payment: payment, charges: charges } );
 		root.querySelector( '#stat-payment' ).textContent = F.currency( payment );
-		var minRequired = balance * F.monthlyRate( apr );
+		// One month's interest, plus that month's new charges if any.
+		var minRequired = ( balance + charges ) * F.monthlyRate( apr ) + charges;
+		var chargesNote = charges > 0 ? ' plus ' + F.currency( charges ) + ' of new charges each month' : '';
+		var minWhat = charges > 0 ? 'one month\'s interest plus new charges' : 'one month\'s interest';
 		var answer = root.querySelector( '#answer' );
 		var chart = root.querySelector( '#chart-line' ).parentNode;
 
@@ -111,8 +121,8 @@
 			lastSchedule = [];
 			chart.style.display = 'none';
 			answer.innerHTML = result.capped ?
-				'<span class="cmc-answer-label">More than 50 years</span><p>Your payment of ' + F.currency( payment ) + ' covers the ' + F.currency( minRequired ) + ' in monthly interest, but only just: at this rate the balance takes more than 50 years (600 months) to pay off. A larger payment shortens that a lot.</p>' :
-				'<span class="cmc-answer-label">Payment too low</span><p>Your payment of ' + F.currency( payment ) + ' doesn\'t cover the ' + F.currency( minRequired ) + ' in monthly interest, so the balance will never go down. You need to pay more than ' + F.currency( minRequired ) + ' per month just to make progress.</p>';
+				'<span class="cmc-answer-label">More than 50 years</span><p>Your payment of ' + F.currency( payment ) + ' covers the ' + F.currency( minRequired ) + ' in ' + minWhat + ', but only just: at this rate the balance takes more than 50 years (600 months) to pay off. A larger payment shortens that a lot.</p>' :
+				'<span class="cmc-answer-label">Payment too low</span><p>Your payment of ' + F.currency( payment ) + ' doesn\'t cover the ' + F.currency( minRequired ) + ' in ' + minWhat + ', so the balance will never go down. You need to pay more than ' + F.currency( minRequired ) + ' per month just to make progress.</p>';
 			return;
 		}
 		root.querySelector( '#milestones' ).style.display = '';
@@ -126,12 +136,13 @@
 		root.querySelector( '#stat-interest' ).textContent = F.currency( result.totalInterest );
 		root.querySelector( '#stat-total' ).textContent = F.currency( result.totalPaid );
 		lastSchedule = result.schedule;
-		root.querySelector( '#schedule-wrap' ).innerHTML = UI.table( [ 'Month', 'Payment', 'Interest', 'Principal', 'Balance' ], result.schedule.map( function ( r ) {
-			return [ r.month, F.currency( r.payment ), F.currency( r.interest ), F.currency( r.principal ), F.currency( r.balance ) ];
+		lastCharges = charges;
+		root.querySelector( '#schedule-wrap' ).innerHTML = UI.table( [ 'Month' ].concat( charges > 0 ? [ 'New charges' ] : [], [ 'Payment', 'Interest', 'Principal', 'Balance' ] ), result.schedule.map( function ( r ) {
+			return [ r.month ].concat( charges > 0 ? [ F.currency( r.charges ) ] : [], [ F.currency( r.payment ), F.currency( r.interest ), F.currency( r.principal ), F.currency( r.balance ) ] );
 		} ) );
 		if ( goal ) {
-			answer.innerHTML = '<span class="cmc-answer-label">Payment you need</span><p>To pay off ' + F.currency( balance ) + ' at ' + F.percent( apr ) + ' APR in ' + months + ' month' + ( months === 1 ? '' : 's' ) + ', pay <strong>' + F.currency( payment ) + ' a month</strong>. You\'d pay ' + F.currency( result.totalInterest ) + ' in interest and be debt-free in ' + dateStr + ', assuming no new charges.</p>';
-		} else answer.innerHTML = '<span class="cmc-answer-label">How long it takes</span><p>At ' + F.currency( payment ) + '/month on a ' + F.currency( balance ) + ' balance at ' + F.percent( apr ) + ' APR, it takes <strong>' + result.months + ' month' + ( result.months === 1 ? '' : 's' ) + ' (' + F.monthsToYearsMonths( result.months ) + ')</strong> to reach a zero balance, and you\'ll pay ' + F.currency( result.totalInterest ) + ' in interest. Your payment must stay above ' + F.currency( minRequired ) + ' (one month\'s interest) to make progress.</p>';
+			answer.innerHTML = '<span class="cmc-answer-label">Payment you need</span><p>To pay off ' + F.currency( balance ) + ' at ' + F.percent( apr ) + ' APR in ' + months + ' month' + ( months === 1 ? '' : 's' ) + ', pay <strong>' + F.currency( payment ) + ' a month</strong>. You\'d pay ' + F.currency( result.totalInterest ) + ' in interest and be debt-free in ' + dateStr + ( charges > 0 ? ', even while adding ' + F.currency( charges ) + ' of new charges each month.</p>' : ', assuming no new charges.</p>' );
+		} else answer.innerHTML = '<span class="cmc-answer-label">How long it takes</span><p>At ' + F.currency( payment ) + '/month on a ' + F.currency( balance ) + ' balance at ' + F.percent( apr ) + ' APR' + chargesNote + ', it takes <strong>' + result.months + ' month' + ( result.months === 1 ? '' : 's' ) + ' (' + F.monthsToYearsMonths( result.months ) + ')</strong> to reach a zero balance, and you\'ll pay ' + F.currency( result.totalInterest ) + ' in interest. Your payment must stay above ' + F.currency( minRequired ) + ' (' + minWhat + ') to make progress.</p>';
 
 		var milestones = [ 0.25, 0.5, 0.75, 0.9, 1.0 ];
 		var rows = [];
@@ -145,7 +156,7 @@
 		} );
 		root.querySelector( '#table-wrap' ).innerHTML = UI.table( [ 'Milestone', 'Reached at', 'Balance Remaining' ], rows );
 
-		var withExtra = F.amortize( { balance: balance, apr: apr, payment: payment, extra: 50 } );
+		var withExtra = F.amortize( { balance: balance, apr: apr, payment: payment, extra: 50, charges: charges } );
 		var whatif = root.querySelector( '#whatif' );
 		if ( ! withExtra.neverPaysOff && withExtra.months < result.months ) {
 			var monthsSaved = result.months - withExtra.months;
