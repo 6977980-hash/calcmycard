@@ -37,8 +37,9 @@
 		var extra = UI.num( root, 'extra' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance <= 0 || payment <= 0 ) {
-			err.textContent = 'Enter a balance and monthly payment greater than 0.';
+		var negative = UI.hasNegative( root, [ 'balance', 'apr', 'payment', 'extra' ] );
+		if ( negative || balance <= 0 || payment <= 0 ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -49,8 +50,13 @@
 		var base = F.amortize( { balance: balance, apr: apr, payment: payment } );
 		var withExtra = F.amortize( { balance: balance, apr: apr, payment: payment, extra: extra } );
 
-		root.querySelector( '#stat-old-payoff' ).textContent = base.neverPaysOff ? 'Never' : F.monthsToYearsMonths( base.months );
-		root.querySelector( '#stat-new-payoff' ).textContent = withExtra.neverPaysOff ? 'Never' : F.monthsToYearsMonths( withExtra.months );
+		root.querySelector( '#stat-old-payoff' ).textContent = base.neverPaysOff ? ( base.capped ? 'More than 50 years' : 'Never' ) : F.monthsToYearsMonths( base.months );
+		root.querySelector( '#stat-new-payoff' ).textContent = withExtra.neverPaysOff ? ( withExtra.capped ? 'More than 50 years' : 'Never' ) : F.monthsToYearsMonths( withExtra.months );
+
+		// The interest bar chart only makes sense when both scenarios pay off;
+		// otherwise hide it so the previous inputs' bars don't linger.
+		var chartWrap = root.querySelector( '#chart-bar' ).parentNode;
+		chartWrap.style.display = ( ! base.neverPaysOff && ! withExtra.neverPaysOff ) ? '' : 'none';
 
 		if ( ! base.neverPaysOff && ! withExtra.neverPaysOff ) {
 			var monthsSaved = base.months - withExtra.months;
@@ -64,8 +70,8 @@
 			] );
 		} else if ( base.neverPaysOff && ! withExtra.neverPaysOff ) {
 			// The current payment never clears the balance; the extra amount does.
-			root.querySelector( '#stat-months-saved' ).textContent = 'Now pays off';
-			root.querySelector( '#stat-interest-saved' ).textContent = 'Stops the balance growing';
+			root.querySelector( '#stat-months-saved' ).textContent = base.capped ? 'Under 50 years now' : 'Now pays off';
+			root.querySelector( '#stat-interest-saved' ).textContent = base.capped ? '—' : 'Stops the balance growing';
 		} else {
 			root.querySelector( '#stat-months-saved' ).textContent = '—';
 			root.querySelector( '#stat-interest-saved' ).textContent = '—';

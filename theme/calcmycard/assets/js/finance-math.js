@@ -29,8 +29,14 @@
 	 *
 	 * @return {
 	 *   months, totalInterest, totalPaid, schedule: [...],
-	 *   neverPaysOff: bool, finalPayment
+	 *   neverPaysOff: bool, capped: bool
 	 * }
+	 *
+	 * neverPaysOff is true in two different cases, told apart by `capped`:
+	 * capped === false: the payment doesn't cover the interest, so the
+	 *   balance never shrinks;
+	 * capped === true: the balance does shrink, but it isn't paid off
+	 *   within maxMonths (50 years by default).
 	 */
 	function amortize( opts ) {
 		var balance   = Math.max( 0, Number( opts.balance ) || 0 );
@@ -45,9 +51,10 @@
 		var totalPaid = 0;
 		var month = 0;
 		var neverPaysOff = false;
+		var capped = false;
 
 		if ( balance <= 0 ) {
-			return { months: 0, totalInterest: 0, totalPaid: 0, schedule: [], neverPaysOff: false };
+			return { months: 0, totalInterest: 0, totalPaid: 0, schedule: [], neverPaysOff: false, capped: false };
 		}
 
 		var fullPayment = payment + extra;
@@ -58,7 +65,9 @@
 			var thisPayment = Math.min( fullPayment, balance + interest );
 			var principal = thisPayment - interest;
 
-			if ( principal <= 0 ) {
+			// A payment that only matches the interest (to floating-point
+			// noise) counts as not covering it.
+			if ( principal <= 1e-9 ) {
 				// Payment doesn't even cover interest — balance will never shrink.
 				neverPaysOff = true;
 				break;
@@ -77,8 +86,9 @@
 			} );
 		}
 
-		if ( month >= maxMonths && balance > 0.005 ) {
+		if ( ! neverPaysOff && month >= maxMonths && balance > 0.005 ) {
 			neverPaysOff = true;
+			capped = true;
 		}
 
 		return {
@@ -87,6 +97,7 @@
 			totalPaid: totalPaid,
 			schedule: schedule,
 			neverPaysOff: neverPaysOff,
+			capped: capped,
 		};
 	}
 
@@ -159,6 +170,7 @@
 		var totalInterest = 0, totalPaid = 0, month = 0;
 		var schedule = [];
 		var neverPaysOff = false;
+		var capped = false;
 
 		while ( balance > 0.005 && month < maxMonths ) {
 			month++;
@@ -171,7 +183,7 @@
 			var payment = Math.min( minPay, balance + interest );
 			var principal = payment - interest;
 
-			if ( principal <= 0 ) {
+			if ( principal <= 1e-9 ) {
 				neverPaysOff = true;
 				break;
 			}
@@ -182,8 +194,9 @@
 			schedule.push( { month: month, payment: payment, interest: interest, principal: principal, balance: balance } );
 		}
 
-		if ( month >= maxMonths && balance > 0.005 ) {
+		if ( ! neverPaysOff && month >= maxMonths && balance > 0.005 ) {
 			neverPaysOff = true;
+			capped = true;
 		}
 
 		return {
@@ -192,6 +205,7 @@
 			totalPaid: totalPaid,
 			schedule: schedule,
 			neverPaysOff: neverPaysOff,
+			capped: capped,
 		};
 	}
 
@@ -228,9 +242,12 @@
 		var payoffOrder = [];
 
 		function isOpen( c ) { return c.balance > 0.005; }
+		function owed() { return working.reduce( function ( s, c ) { return s + c.balance; }, 0 ); }
+		var shrinking = true;
 
 		while ( working.some( isOpen ) && month < maxMonths ) {
 			month++;
+			var before = owed();
 
 			working.forEach( function ( c ) {
 				if ( isOpen( c ) ) {
@@ -260,6 +277,8 @@
 				left -= extraPay;
 			}
 
+			shrinking = owed() < before - 1e-9;
+
 			working.forEach( function ( c ) {
 				if ( ! isOpen( c ) && ! c.done ) {
 					c.done = true;
@@ -272,6 +291,9 @@
 		var never = working.some( isOpen );
 		return {
 			months: never ? null : month,
+			// Still paying the total down at the 600-month cap: the budget
+			// covers the interest, it just takes longer than 50 years.
+			capped: never && shrinking,
 			totalInterest: totalInterest,
 			payoffOrder: payoffOrder,
 			neverPaysOff: never,
@@ -317,6 +339,15 @@
 		return ( Number( num ) || 0 ).toFixed( decimals ) + '%';
 	}
 
+	/**
+	 * Short text for a result that never reaches zero: "more than 50
+	 * years" when the 600-month cap was hit, otherwise the payment is too
+	 * low to cover interest.
+	 */
+	function neverText( result ) {
+		return result && result.capped ? 'More than 50 years' : 'Never (payment too low)';
+	}
+
 	function monthsToYearsMonths( totalMonths ) {
 		if ( totalMonths == null ) {
 			return 'Never (payment too low)';
@@ -346,6 +377,7 @@
 		currencyRounded: currencyRounded,
 		percent: percent,
 		monthsToYearsMonths: monthsToYearsMonths,
+		neverText: neverText,
 	};
 
 }( window ));

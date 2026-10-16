@@ -1,0 +1,33 @@
+# Calculator tests: unit tests for the shared math (tests/unit) and
+# browser tests for every calculator in Chromium (tests/e2e). Runs on every
+# pull request, and sync-theme-live.yml runs it before each theme deploy.
+name: Calculator tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Browser tests
+        run: npm run test:e2e

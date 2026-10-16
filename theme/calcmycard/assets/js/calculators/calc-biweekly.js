@@ -45,7 +45,9 @@
 			interestTotal += interest;
 			balance = Math.max( 0, balance + interest - payment );
 		}
-		return { never: balance > 0.005, periods: periods, interest: interestTotal };
+		// Balance shrinking but still owed at the cap: more than 50 years.
+		var never = balance > 0.005;
+		return { never: never, capped: never, periods: periods, interest: interestTotal };
 	}
 
 	function calc() {
@@ -55,7 +57,7 @@
 		var err = root.querySelector( '#err' );
 
 		if ( balance <= 0 || payment <= 0 || apr < 0 ) {
-			err.textContent = 'Enter a balance and monthly payment greater than 0.';
+			err.textContent = apr < 0 ? UI.NEGATIVE_MSG : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -65,7 +67,9 @@
 		var biweekly = simulate( balance, apr / 100 * 14 / 365, payment / 2, 1300 );
 
 		if ( monthly.never ) {
-			err.textContent = 'This monthly payment doesn\'t cover the interest (' + F.currency( balance * F.monthlyRate( apr ) ) + ' a month), so the balance never goes down. Enter a larger payment.';
+			err.textContent = monthly.capped ?
+				'At this monthly payment the balance takes more than 50 years to pay off. Enter a larger payment to compare the two plans.' :
+				'This monthly payment doesn\'t cover the interest (' + F.currency( balance * F.monthlyRate( apr ) ) + ' a month), so the balance never goes down. Enter a larger payment.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;

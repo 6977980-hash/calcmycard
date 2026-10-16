@@ -151,16 +151,17 @@ function cmc_site_author() {
 
 /**
  * Calculator QA status shown in the author box and on the About /
- * Methodology pages. Update both values whenever the test suite
- * (calcmycard-qa/run.js) is re-run before a release.
+ * Methodology pages. Update both values (and the About / Methodology
+ * text in inc/page-sync.php) when tests are added to the suite in tests/
+ * (`npm test`; CI runs it before every theme deploy).
  */
 function cmc_qa_status() {
 	return array(
-		'cases'    => 66,
-		'last_run' => '2026-09-25',
-		// Calculators added after that run: checked against the worked
-		// examples on their pages, not yet part of the automated suite.
-		'not_in_suite' => array( 'cash-advance-calculator', 'biweekly-payment-calculator', 'credit-card-interest-charge-checker', 'fed-rate-change-credit-card-calculator' ),
+		'cases'    => 89,
+		'last_run' => '2026-10-16',
+		// Calculators not covered by the automated suite (none since
+		// Oct 16, 2026: all 15 are).
+		'not_in_suite' => array(),
 	);
 }
 
@@ -220,7 +221,7 @@ function cmc_render_author_box( $kind = 'guide' ) {
 	} elseif ( 'guide' === $kind ) {
 		echo 'Facts about credit card rules and rates are checked against the primary sources listed on this page. ';
 	} else {
-		echo 'Every calculator is checked against hand-worked examples (most also by an automated test suite), and facts in the guides link to their primary sources. ';
+		echo 'Every calculator is checked against hand-worked examples and by an automated test suite, and facts in the guides link to their primary sources. ';
 	}
 	echo 'CalcMyCard is not a lender or financial adviser, and this page is educational, not personalized advice.</p>';
 	echo '<p><a href="' . esc_url( $author['linkedin'] ) . '" target="_blank" rel="noopener me">' . esc_html( $author['name'] ) . ' on LinkedIn</a> &middot; <a href="' . esc_url( home_url( '/methodology/' ) ) . '">Methodology</a> &middot; <a href="' . esc_url( home_url( '/editorial-policy/' ) ) . '">Editorial policy</a> ' . ( $date ? '&middot; Last updated ' . esc_html( $date ) . '.' : '' ) . '</p>';

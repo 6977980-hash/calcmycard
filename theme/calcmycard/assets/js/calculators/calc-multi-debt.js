@@ -28,11 +28,37 @@
 		);
 	}
 
+
+	// Rows to show on load. A shared link carries each row's fields with
+	// the row's index (e.g. name-4, balance-4), so rebuild exactly those rows, keeping
+	// their indexes, instead of the default list.
+	function rowsFromUrl( fallback, blank ) {
+		var params;
+		try { params = new URLSearchParams( window.location.search ); } catch ( e ) { params = null; }
+		var re = /^(?:name|balance|apr|minpay)-(\d+)$/;
+		var seen = {};
+		if ( params ) {
+			params.forEach( function ( _, key ) {
+				var m = key.match( re );
+				if ( m ) { seen[ m[1] ] = true; }
+			} );
+		}
+		var idx = Object.keys( seen ).map( Number ).sort( function ( a, b ) { return a - b; } );
+		if ( ! idx.length ) {
+			return fallback.map( function ( c, i ) { return { index: i, card: c }; } );
+		}
+		return idx.map( function ( i ) { return { index: i, card: fallback[ i ] || blank( i ) }; } );
+	}
+
+	function newCard( i ) {
+		return { name: 'Card ' + ( i + 1 ), balance: 1000, apr: 20, minPayment: 30 };
+	}
+
 	var rowCount = 0;
-	function renderCards( cards ) {
-		var html = cards.map( function ( c, i ) {
-			rowCount = i + 1;
-			return cardRowHtml( c, i );
+	function renderCards( rows ) {
+		var html = rows.map( function ( r ) {
+			rowCount = Math.max( rowCount, r.index + 1 );
+			return cardRowHtml( r.card, r.index );
 		} ).join( '' );
 		root.querySelector( '#cards-container' ).innerHTML = html;
 	}
@@ -57,12 +83,12 @@
 			'<div id="order-tables"></div>' +
 		'</div>';
 
-	renderCards( defaultCards );
+	renderCards( rowsFromUrl( defaultCards, newCard ) );
 
 	root.querySelector( '#add-card' ).addEventListener( 'click', function () {
 		var container = root.querySelector( '#cards-container' );
 		var idx = rowCount;
-		container.insertAdjacentHTML( 'beforeend', cardRowHtml( { name: 'Card ' + ( idx + 1 ), balance: 1000, apr: 20, minPayment: 30 }, idx ) );
+		container.insertAdjacentHTML( 'beforeend', cardRowHtml( newCard( idx ), idx ) );
 		rowCount++;
 		bindRowEvents();
 		calc();
@@ -79,6 +105,15 @@
 			};
 		} );
 		UI.onAnyChange( root, '#cards-container input', calc );
+	}
+
+	function rowFieldIds() {
+		var ids = [ 'extra' ];
+		root.querySelectorAll( '.cmc-card-row' ).forEach( function ( row ) {
+			var idx = row.getAttribute( 'data-row' );
+			ids.push( 'balance-' + idx, 'apr-' + idx, 'minpay-' + idx );
+		} );
+		return ids;
 	}
 
 	function readCards() {
@@ -102,8 +137,9 @@
 		var extra = UI.num( root, 'extra' );
 		var err = root.querySelector( '#err' );
 
-		if ( ! cards.length ) {
-			err.textContent = 'Add at least one card with a balance greater than 0.';
+		var negative = UI.hasNegative( root, rowFieldIds() );
+		if ( negative || ! cards.length ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : 'Add at least one card with a balance greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -114,13 +150,13 @@
 		var snow = F.simulateMultiCardPayoff( cards, extra, 'snowball' );
 		var aval = F.simulateMultiCardPayoff( cards, extra, 'avalanche' );
 
-		root.querySelector( '#stat-snow-months' ).textContent = snow.neverPaysOff ? 'Never' : F.monthsToYearsMonths( snow.months );
+		root.querySelector( '#stat-snow-months' ).textContent = snow.neverPaysOff ? ( snow.capped ? 'More than 50 years' : 'Never' ) : F.monthsToYearsMonths( snow.months );
 		root.querySelector( '#stat-snow-interest' ).textContent = snow.neverPaysOff ? '—' : F.currency( snow.totalInterest );
-		root.querySelector( '#stat-aval-months' ).textContent = aval.neverPaysOff ? 'Never' : F.monthsToYearsMonths( aval.months );
+		root.querySelector( '#stat-aval-months' ).textContent = aval.neverPaysOff ? ( aval.capped ? 'More than 50 years' : 'Never' ) : F.monthsToYearsMonths( aval.months );
 		root.querySelector( '#stat-aval-interest' ).textContent = aval.neverPaysOff ? '—' : F.currency( aval.totalInterest );
 
 		if ( snow.neverPaysOff && aval.neverPaysOff ) {
-			root.querySelector( '#answer' ).innerHTML = '<span class="cmc-answer-label">Payments too low</span><p>Your total monthly payment of ' + F.currency( snow.monthlyBudget ) + ' (all minimums plus your extra amount) doesn\'t outpace the interest on these cards, so neither method reaches a zero balance within 50 years. Increase the extra amount to see a payoff plan.</p>';
+			root.querySelector( '#answer' ).innerHTML = '<span class="cmc-answer-label">Payments too low</span><p>Your total monthly payment of ' + F.currency( snow.monthlyBudget ) + ' (all minimums plus your extra amount) doesn\'t pay down these cards fast enough for either method to reach a zero balance within 50 years. Increase the extra amount to see a payoff plan.</p>';
 			root.querySelector( '#order-tables' ).innerHTML = '';
 			C.drawBarChart( root.querySelector( '#chart-bar' ), [] );
 			return;
