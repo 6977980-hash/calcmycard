@@ -4,7 +4,7 @@ Theme URI: https://calcmycard.com
 Author: Ali Ahmad
 Author URI: https://calcmycard.com/about/
 Description: A fast, lightweight, SEO/AEO-optimized WordPress theme purpose-built for a credit card calculator authority site. Built for Core Web Vitals, schema markup, and AdSense-ready layout.
-Version: 1.0.24
+Version: 1.0.25
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.6
@@ -32,6 +32,25 @@ Text Domain: calcmycard
   src: url("assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations"), url("assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* Fallback faces sized to match Sora and JetBrains Mono (audit FIX-026), so
+   text doesn't reflow and push the page down when the web fonts arrive.
+   Metrics measured in Chromium against Arial / Courier New, Oct 16, 2026. */
+@font-face {
+  font-family: "Sora Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Helvetica");
+  size-adjust: 112.47%;
+  ascent-override: 86.2%;
+  descent-override: 25.8%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "JetBrains Mono Fallback";
+  src: local("Courier New"), local("Liberation Mono"), local("Courier");
+  size-adjust: 100%;
+  ascent-override: 102%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
 
 /* ==========================================================================
    1. Design tokens — "Night Terminal"
@@ -57,8 +76,8 @@ Text Domain: calcmycard
   --cmc-warning-border: #f2c94c;
   --cmc-radius: 12px;
   --cmc-shadow: 0 1px 2px rgba(14, 19, 32, 0.06), 0 1px 3px rgba(14, 19, 32, 0.05);
-  --cmc-font: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --cmc-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --cmc-font: "Sora", "Sora Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --cmc-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --cmc-max: 1180px;
   --cmc-content-max: 760px;
   font-size: 100%;
@@ -321,3 +340,61 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-share-bar { margin: 16px 0 0; padding-top: 12px; border-top: 1px dashed var(--cmc-border); font-size: 0.85rem; }
 .cmc-share-msg { color: var(--cmc-text-muted); margin-left: 8px; }
 .cmc-rate-chart { margin: 0 0 12px; padding: 12px; background: var(--cmc-surface); border: 1px solid var(--cmc-border); border-radius: 10px; }
+
+/* --------------------------------------------------------------------------
+   Reserved calculator height (audit FIX-022). The calculator is built by
+   JavaScript after the page loads, so without this the content below it
+   jumped down (lab CLS up to 0.69). Heights are the rendered calculator with
+   its default inputs, measured at each layout width (Oct 16, 2026); use the
+   smallest height in each range so there is no extra white space.
+   Re-measure when a calculator's default layout changes.
+   -------------------------------------------------------------------------- */
+.cmc-calculator[data-calc="interest"] { min-height: 1154px; }
+.cmc-calculator[data-calc="payoff"] { min-height: 1543px; }
+.cmc-calculator[data-calc="minpayment"] { min-height: 1090px; }
+.cmc-calculator[data-calc="balancetransfer"] { min-height: 1065px; }
+.cmc-calculator[data-calc="multidebt"] { min-height: 1970px; }
+.cmc-calculator[data-calc="apr"] { min-height: 873px; }
+.cmc-calculator[data-calc="dpr"] { min-height: 458px; }
+.cmc-calculator[data-calc="extrapayment"] { min-height: 1102px; }
+.cmc-calculator[data-calc="introapr"] { min-height: 572px; }
+.cmc-calculator[data-calc="utilization"] { min-height: 1233px; }
+.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1282px; }
+.cmc-calculator[data-calc="cashadvance"] { min-height: 1084px; }
+.cmc-calculator[data-calc="biweekly"] { min-height: 1042px; }
+.cmc-calculator[data-calc="interestcheck"] { min-height: 683px; }
+.cmc-calculator[data-calc="fedrate"] { min-height: 1045px; }
+@media (max-width: 960px) {
+.cmc-calculator[data-calc="interest"] { min-height: 1154px; }
+.cmc-calculator[data-calc="payoff"] { min-height: 1570px; }
+.cmc-calculator[data-calc="minpayment"] { min-height: 1117px; }
+.cmc-calculator[data-calc="balancetransfer"] { min-height: 1085px; }
+.cmc-calculator[data-calc="multidebt"] { min-height: 1997px; }
+.cmc-calculator[data-calc="apr"] { min-height: 892px; }
+.cmc-calculator[data-calc="dpr"] { min-height: 478px; }
+.cmc-calculator[data-calc="extrapayment"] { min-height: 1121px; }
+.cmc-calculator[data-calc="introapr"] { min-height: 572px; }
+.cmc-calculator[data-calc="utilization"] { min-height: 1270px; }
+.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1312px; }
+.cmc-calculator[data-calc="cashadvance"] { min-height: 1124px; }
+.cmc-calculator[data-calc="biweekly"] { min-height: 1090px; }
+.cmc-calculator[data-calc="interestcheck"] { min-height: 731px; }
+.cmc-calculator[data-calc="fedrate"] { min-height: 1119px; }
+}
+@media (max-width: 640px) {
+.cmc-calculator[data-calc="interest"] { min-height: 1529px; }
+.cmc-calculator[data-calc="payoff"] { min-height: 2144px; }
+.cmc-calculator[data-calc="minpayment"] { min-height: 1575px; }
+.cmc-calculator[data-calc="balancetransfer"] { min-height: 1514px; }
+.cmc-calculator[data-calc="multidebt"] { min-height: 3000px; }
+.cmc-calculator[data-calc="apr"] { min-height: 1119px; }
+.cmc-calculator[data-calc="dpr"] { min-height: 763px; }
+.cmc-calculator[data-calc="extrapayment"] { min-height: 1531px; }
+.cmc-calculator[data-calc="introapr"] { min-height: 959px; }
+.cmc-calculator[data-calc="utilization"] { min-height: 1746px; }
+.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1822px; }
+.cmc-calculator[data-calc="cashadvance"] { min-height: 1615px; }
+.cmc-calculator[data-calc="biweekly"] { min-height: 1429px; }
+.cmc-calculator[data-calc="interestcheck"] { min-height: 1050px; }
+.cmc-calculator[data-calc="fedrate"] { min-height: 1440px; }
+}
