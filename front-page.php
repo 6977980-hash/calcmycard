@@ -19,7 +19,7 @@ $articles    = cmc_articles();
 		<div class="cmc-hero-copy">
 			<span class="cmc-eyebrow"><?php echo (int) cmc_calculator_count(); ?> Free Tools &middot; No Sign-Up</span>
 			<h1>Credit Card Interest &amp; Payoff Calculators</h1>
-			<p class="cmc-dek"><?php echo esc_html( cmc_calculator_count_word() ); ?> free calculators to help you estimate what your credit card costs — and how to pay it off faster. Built by Ali Ahmad, with every calculator checked against hand-worked examples and every rule linked to its CFPB, Federal Reserve, or Regulation Z source.</p>
+			<p class="cmc-dek"><?php echo esc_html( cmc_calculator_count_word() ); ?> free calculators to help you estimate what your credit card costs — and how to pay it off faster. Built by Ali Ahmad, with every calculator checked against hand-worked examples and an automated test suite, and every rule linked to its CFPB, Federal Reserve, or Regulation Z source.</p>
 		</div>
 		<div class="cmc-hero-art" aria-hidden="true">
 			<img src="<?php echo esc_url( CMC_THEME_URI . '/assets/images/hero-calculator.svg' ); ?>" width="480" height="400" alt="" decoding="async" fetchpriority="high" />

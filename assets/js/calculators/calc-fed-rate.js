@@ -62,7 +62,7 @@
 		var err = root.querySelector( '#err' );
 
 		if ( balance <= 0 || payment <= 0 || apr < 0 ) {
-			err.textContent = 'Enter a balance and monthly payment greater than 0.';
+			err.textContent = apr < 0 ? UI.NEGATIVE_MSG : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -73,7 +73,12 @@
 		var after = F.amortize( { balance: balance, apr: newApr, payment: payment } );
 
 		if ( before.neverPaysOff || after.neverPaysOff ) {
-			err.textContent = 'This payment doesn\'t cover the interest (' + F.currency( balance * F.monthlyRate( Math.max( apr, newApr ) ) ) + ' a month), so the balance never goes down. Enter a larger payment.';
+			// "Too low" wins if either APR leaves the payment below the interest;
+			// otherwise it pays off, just not within 50 years.
+			var tooLow = ( before.neverPaysOff && ! before.capped ) || ( after.neverPaysOff && ! after.capped );
+			err.textContent = ! tooLow ?
+				'At this payment the balance takes more than 50 years to pay off. Enter a larger payment.' :
+				'This payment doesn\'t cover the interest (' + F.currency( balance * F.monthlyRate( Math.max( apr, newApr ) ) ) + ' a month), so the balance never goes down. Enter a larger payment.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;

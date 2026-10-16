@@ -35,7 +35,7 @@
 				{ value: 'amex', label: 'American Express' },
 			], hint: 'Fills in that issuer\'s standard formula; your card\'s agreement is the final word' } ),
 			UI.field( { id: 'method', label: 'Minimum payment formula', type: 'select', value: 'percent_plus_interest', options: [
-				{ value: 'percent_plus_interest', label: 'Interest + 1% of balance (a common formula)' },
+				{ value: 'percent_plus_interest', label: 'Interest + 1% of balance, or the % below if higher' },
 				{ value: 'percent', label: 'Flat % of balance only' },
 			] } ),
 			UI.field( { id: 'percent', label: 'Minimum payment %', value: 2, min: 0, step: '0.1', hint: 'Varies by card; check your cardholder agreement' } ),
@@ -53,19 +53,28 @@
 			'<div class="cmc-chart-wrap"><canvas id="chart-line" height="220"></canvas></div>' +
 		'</div>';
 
-	function applyIssuer() {
+	// The "interest + X" part of the formula (1% of balance, or Discover's
+	// $20) isn't a visible field, so it always follows the issuer field.
+	function syncIssuerFormula() {
 		var preset = ISSUERS[ root.querySelector( '#issuer' ).value ];
+		plusPercent = preset ? preset.plusPercent : 1;
+		plusFixed = preset ? preset.plusFixed : 0;
+		return preset;
+	}
+
+	function applyIssuer() {
+		var preset = syncIssuerFormula();
 		if ( ! preset ) {
-			plusPercent = 1;
-			plusFixed = 0;
 			return;
 		}
 		root.querySelector( '#method' ).value = preset.method;
 		root.querySelector( '#percent' ).value = preset.percent;
 		root.querySelector( '#floor' ).value = preset.floor;
-		plusPercent = preset.plusPercent;
-		plusFixed = preset.plusFixed;
 	}
+
+	// A shared link (?issuer=discover&...) prefills the select without a
+	// change event, so read the issuer's formula once on load too.
+	syncIssuerFormula();
 
 	root.querySelector( '#issuer' ).addEventListener( 'change', applyIssuer );
 	[ 'method', 'percent', 'floor' ].forEach( function ( id ) {
@@ -85,8 +94,9 @@
 		var floor = UI.num( root, 'floor' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance <= 0 ) {
-			err.textContent = 'Enter a balance greater than 0.';
+		var negative = UI.hasNegative( root, [ 'balance', 'apr', 'percent', 'floor' ] );
+		if ( negative || balance <= 0 ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -100,7 +110,7 @@
 		var sim = F.simulateMinimumOnly( { balance: balance, apr: apr, percent: percent, floor: floor, method: method, interestPlusPercent: plusPercent, interestPlusFixed: plusFixed } );
 
 		if ( sim.neverPaysOff ) {
-			root.querySelector( '#stat-months' ).textContent = 'Never at this rate';
+			root.querySelector( '#stat-months' ).textContent = sim.capped ? 'More than 50 years' : 'Never at this rate';
 			root.querySelector( '#stat-interest' ).textContent = '—';
 			root.querySelector( '#stat-total' ).textContent = '—';
 		} else {
@@ -112,6 +122,8 @@
 		var warn = root.querySelector( '#warnbox' );
 		if ( ! sim.neverPaysOff && sim.totalInterest > balance ) {
 			warn.innerHTML = '<span class="cmc-answer-label">Reality check</span><p>Paying only the minimum on this balance costs ' + F.currency( sim.totalInterest ) + ' in interest — more than the original ' + F.currency( balance ) + ' balance — and takes ' + F.monthsToYearsMonths( sim.months ) + '. See the <a href="/calculators/extra-payment-savings-calculator/">Extra Payment Savings Calculator</a> to see how much a bigger payment saves.</p>';
+		} else if ( sim.capped ) {
+			warn.innerHTML = '<span class="cmc-answer-label">Reality check</span><p>Paying only the minimum, this balance would take more than 50 years (600 months) to pay off. Paying more than the minimum each month is the only practical way to clear it.</p>';
 		} else if ( sim.neverPaysOff ) {
 			warn.innerHTML = '<span class="cmc-answer-label">Reality check</span><p>At this balance and APR, the minimum payment formula you selected doesn\'t outpace interest — the balance would never be paid off under a minimum-only plan. In practice, issuers set a dollar floor partly to prevent this, but it signals you need to pay more than the minimum.</p>';
 		} else {
@@ -122,8 +134,7 @@
 		if ( ! sim.neverPaysOff ) {
 			chart.style.display = '';
 			var balances = [ balance ].concat( sim.schedule.map( function ( r ) { return r.balance; } ) );
-			var step = Math.max( 1, Math.ceil( balances.length / 40 ) );
-			var sBalances = balances.filter( function ( _, i ) { return i % step === 0; } );
+			var sBalances = C.downsample( balances, 40 );
 			C.drawLineChart( chart, [ { data: sBalances, color: C.palette.warn } ], [ 'Now', 'Payoff' ] );
 		} else {
 			// Don't leave the previous (paid-off) chart on screen.

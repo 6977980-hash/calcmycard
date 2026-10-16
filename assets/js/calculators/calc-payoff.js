@@ -85,8 +85,9 @@
 		var payment = goal ? ( balance > 0 && months >= 1 ? goalPayment( balance, apr, months ) : 0 ) : UI.num( root, 'payment' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance <= 0 || payment <= 0 || ( goal && ( months < 1 || months > 600 ) ) ) {
-			err.textContent = goal ? 'Enter a balance greater than 0 and a payoff time between 1 and 600 months.' : 'Enter a balance and monthly payment greater than 0.';
+		var negative = UI.hasNegative( root, goal ? [ 'balance', 'apr' ] : [ 'balance', 'apr', 'payment' ] );
+		if ( negative || balance <= 0 || payment <= 0 || ( goal && ( months < 1 || months > 600 ) ) ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : goal ? 'Enter a balance greater than 0 and a payoff time between 1 and 600 months.' : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -101,7 +102,7 @@
 		var chart = root.querySelector( '#chart-line' ).parentNode;
 
 		if ( result.neverPaysOff ) {
-			root.querySelector( '#stat-date' ).textContent = 'Never at this payment';
+			root.querySelector( '#stat-date' ).textContent = result.capped ? 'More than 50 years' : 'Never at this payment';
 			root.querySelector( '#stat-months' ).textContent = '—';
 			root.querySelector( '#stat-interest' ).textContent = '—';
 			root.querySelector( '#stat-total' ).textContent = '—';
@@ -109,7 +110,9 @@
 			root.querySelector( '#milestones' ).style.display = 'none';
 			lastSchedule = [];
 			chart.style.display = 'none';
-			answer.innerHTML = '<span class="cmc-answer-label">Payment too low</span><p>Your payment of ' + F.currency( payment ) + ' doesn\'t cover the ' + F.currency( minRequired ) + ' in monthly interest, so the balance will never go down. You need to pay more than ' + F.currency( minRequired ) + ' per month just to make progress.</p>';
+			answer.innerHTML = result.capped ?
+				'<span class="cmc-answer-label">More than 50 years</span><p>Your payment of ' + F.currency( payment ) + ' covers the ' + F.currency( minRequired ) + ' in monthly interest, but only just: at this rate the balance takes more than 50 years (600 months) to pay off. A larger payment shortens that a lot.</p>' :
+				'<span class="cmc-answer-label">Payment too low</span><p>Your payment of ' + F.currency( payment ) + ' doesn\'t cover the ' + F.currency( minRequired ) + ' in monthly interest, so the balance will never go down. You need to pay more than ' + F.currency( minRequired ) + ' per month just to make progress.</p>';
 			return;
 		}
 		root.querySelector( '#milestones' ).style.display = '';
@@ -159,10 +162,10 @@
 			balances.push( row.balance );
 			labels.push( 'M' + row.month );
 		} );
-		// Downsample to at most ~40 points for a clean line.
-		var step = Math.max( 1, Math.ceil( balances.length / 40 ) );
-		var sBalances = balances.filter( function ( _, i ) { return i % step === 0; } );
-		var sLabels = labels.filter( function ( _, i ) { return i % step === 0; } );
+		// Downsample to at most ~40 points for a clean line, keeping the
+		// payoff month as the last point.
+		var sBalances = C.downsample( balances, 40 );
+		var sLabels = C.downsample( labels, 40 );
 
 		C.drawLineChart( root.querySelector( '#chart-line' ), [
 			{ data: sBalances, color: C.palette.brand },

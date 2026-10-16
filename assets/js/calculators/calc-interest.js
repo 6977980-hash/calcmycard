@@ -49,7 +49,7 @@
 		var err = root.querySelector( '#err' );
 
 		if ( balance <= 0 || apr < 0 || payment <= 0 ) {
-			err.textContent = 'Enter a balance greater than 0 and a monthly payment greater than 0.';
+			err.textContent = apr < 0 ? UI.NEGATIVE_MSG : 'Enter a balance greater than 0 and a monthly payment greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -68,11 +68,13 @@
 		var result = F.amortize( { balance: balance, apr: apr, payment: payment } );
 
 		if ( result.neverPaysOff ) {
-			root.querySelector( '#stat-total-interest' ).textContent = 'Balance never shrinks';
-			root.querySelector( '#stat-months' ).textContent = 'Never (payment too low)';
+			root.querySelector( '#stat-total-interest' ).textContent = result.capped ? '—' : 'Balance never shrinks';
+			root.querySelector( '#stat-months' ).textContent = F.neverText( result );
 			lastSchedule = [];
 			root.querySelector( '#table-actions' ).style.display = 'none';
-			root.querySelector( '#table-wrap' ).innerHTML = '<p class="cmc-muted">Your payment doesn\'t cover the monthly interest (' + F.currency( monthlyInterest ) + '), so the balance will keep growing. Increase your payment to see a payoff timeline.</p>';
+			root.querySelector( '#table-wrap' ).innerHTML = result.capped ?
+				'<p class="cmc-muted">Your payment only just covers the monthly interest (' + F.currency( monthlyInterest ) + '), so the balance takes more than 50 years to pay off. Increase your payment to see a payoff timeline.</p>' :
+				'<p class="cmc-muted">Your payment doesn\'t cover the monthly interest (' + F.currency( monthlyInterest ) + '), so the balance will keep growing. Increase your payment to see a payoff timeline.</p>';
 		} else {
 			lastSchedule = result.schedule;
 			root.querySelector( '#table-actions' ).style.display = '';

@@ -151,8 +151,23 @@
 		} );
 	}
 
+	/**
+	 * Thin a series to at most ~maxPoints values for a clean line, always
+	 * keeping the first and the last value so the line ends where the
+	 * schedule ends (e.g. at a $0 balance on the payoff month).
+	 */
+	function downsample( values, maxPoints ) {
+		var step = Math.max( 1, Math.ceil( values.length / ( maxPoints || 40 ) ) );
+		var out = values.filter( function ( _, i ) { return i % step === 0; } );
+		if ( values.length && ( values.length - 1 ) % step !== 0 ) {
+			out.push( values[ values.length - 1 ] );
+		}
+		return out;
+	}
+
 	global.CMCChart = {
 		palette: PALETTE,
+		downsample: downsample,
 		drawDonut: drawDonut,
 		drawLineChart: drawLineChart,
 		drawBarChart: drawBarChart,
