@@ -1,0 +1,39 @@
+# Live site monitor (audit FIX-046): checks calcmycard.com the way a search
+# engine sees it (sitemap, status codes, noindex, canonicals, downloads,
+# deployed theme version). Runs every morning and again after each theme
+# deploy; a failed run emails the repository owner. The checks live in
+# tests/monitor/live-check.js (`npm run monitor` runs them locally).
+name: Live site monitor
+
+on:
+  schedule:
+    - cron: '30 5 * * *'
+  workflow_run:
+    workflows: [Sync theme-live branch]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Hostinger pulls theme-live a few minutes after the sync, and the CDN
+      # keeps pages for up to 10 minutes.
+      - name: Wait for the Hostinger deploy
+        if: github.event_name == 'workflow_run'
+        run: sleep 720
+
+      - name: Check the live site
+        env:
+          CMC_EXPECT_VERSION: ${{ github.event_name == 'workflow_run' && '1' || '' }}
+        run: node tests/monitor/live-check.js

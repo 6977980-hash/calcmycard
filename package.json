@@ -5,7 +5,8 @@
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "node --test \"tests/unit/*.test.js\"",
-    "test:e2e": "node --test --test-concurrency=1 \"tests/e2e/*.test.js\""
+    "test:e2e": "node --test --test-concurrency=1 \"tests/e2e/*.test.js\"",
+    "monitor": "node tests/monitor/live-check.js"
   },
   "devDependencies": {
     "playwright": "1.56.1"
