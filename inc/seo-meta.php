@@ -98,8 +98,26 @@ add_action( 'wp_head', 'cmc_output_meta_tags', 2 );
  * today, since none have featured images set).
  */
 function cmc_default_social_image() {
+	// One share image everywhere (audit FIX-020): the default og:image set
+	// in Rank Math, so schema and Open Graph name the same file.
+	$rm = get_option( 'rank-math-options-titles' );
+	if ( is_array( $rm ) && ! empty( $rm['open_graph_image'] ) ) {
+		return $rm['open_graph_image'];
+	}
 	return get_template_directory_uri() . '/assets/images/social-share-default.png';
 }
+
+/**
+ * The Calculators and Guides hubs are listing pages, not articles
+ * (audit FIX-020): Rank Math gives every page og:type "article".
+ */
+function cmc_hub_og_type( $type ) {
+	if ( is_page( array( 'calculators', 'guides' ) ) ) {
+		return 'website';
+	}
+	return $type;
+}
+add_filter( 'rank_math/opengraph/type', 'cmc_hub_og_type' );
 
 /**
  * Is the current request an indexable URL?

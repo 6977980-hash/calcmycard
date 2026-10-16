@@ -120,3 +120,98 @@ function cmc_bing_site_verification() {
 	}
 }
 add_action( 'wp_head', 'cmc_bing_site_verification', 1 );
+
+/**
+ * Security headers (audit FIX-015). The host already sends
+ * "Content-Security-Policy: upgrade-insecure-requests"; this adds the rest.
+ * Calculator embeds (?embed=1) must stay frameable by any site, so they
+ * get no frame-ancestors rule. HSTS covers calcmycard.com only (no
+ * includeSubDomains), so it can't affect other hosts.
+ *
+ * Cache-Control (audit FIX-016): without it, Hostinger's CDN kept HTML for
+ * hours after a deploy. s-maxage lets the CDN keep a page for 10 minutes;
+ * LiteSpeed's own page cache still serves the copies it fetches.
+ */
+function cmc_send_security_headers() {
+	if ( is_admin() || headers_sent() ) {
+		return;
+	}
+	header( 'Strict-Transport-Security: max-age=31536000' );
+	header( 'X-Content-Type-Options: nosniff' );
+	header( 'Referrer-Policy: strict-origin-when-cross-origin' );
+	header( 'Permissions-Policy: camera=(), microphone=(), geolocation=()' );
+	if ( ! isset( $_GET['embed'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		header( "Content-Security-Policy: frame-ancestors 'self'" );
+	}
+	$has_cache_control = false;
+	foreach ( headers_list() as $h ) {
+		if ( 0 === stripos( $h, 'Cache-Control:' ) ) {
+			$has_cache_control = true;
+			break;
+		}
+	}
+	if ( ! $has_cache_control && ! is_user_logged_in() && 'GET' === ( isset( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : 'GET' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		header( 'Cache-Control: public, max-age=0, s-maxage=600' );
+	}
+}
+add_action( 'send_headers', 'cmc_send_security_headers' );
+
+/**
+ * Don't announce the WordPress version (audit FIX-019): no generator tag in
+ * <head> or feeds.
+ */
+remove_action( 'wp_head', 'wp_generator' );
+add_filter( 'the_generator', '__return_empty_string' );
+
+/**
+ * One 301 per duplicate URL form (audit FIX-018):
+ * - /page/N/ on the front page and the static Calculators / Guides hubs,
+ *   which have no second page;
+ * - paths with capital letters, which WordPress otherwise serves as 200.
+ */
+function cmc_redirect_duplicate_urls() {
+	if ( is_admin() || ! isset( $_SERVER['REQUEST_URI'] ) ) {
+		return;
+	}
+	$uri   = wp_unslash( $_SERVER['REQUEST_URI'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+	$path  = (string) wp_parse_url( $uri, PHP_URL_PATH );
+	$query = (string) wp_parse_url( $uri, PHP_URL_QUERY );
+
+	if ( preg_match( '#^/(?:(calculators|guides)/)?page/\d+/?$#', $path, $m ) ) {
+		wp_safe_redirect( home_url( empty( $m[1] ) ? '/' : '/' . $m[1] . '/' ), 301 );
+		exit;
+	}
+	if ( preg_match( '/[A-Z]/', $path ) && 0 !== strpos( $path, '/wp-' ) ) {
+		wp_safe_redirect( home_url( strtolower( $path ) ) . ( '' !== $query ? '?' . $query : '' ), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'cmc_redirect_duplicate_urls', 0 );
+
+/**
+ * Root files the theme looks after, checked once a day (and after each
+ * deploy, when the content sync runs):
+ * - /favicon.ico (audit FIX-021): browsers and crawlers request it even
+ *   though the pages link the site icon, and the server returned 404
+ *   because no file existed. Copied from assets/images/favicon.ico.
+ * - readme.html and license.txt (audit FIX-019) name the WordPress
+ *   version. WordPress puts them back on core updates, hence the daily check.
+ */
+function cmc_maintain_root_files( $force = false ) {
+	if ( ! $force && get_transient( 'cmc_root_files_checked' ) ) {
+		return;
+	}
+	set_transient( 'cmc_root_files_checked', 1, DAY_IN_SECONDS );
+
+	$icon = ABSPATH . 'favicon.ico';
+	$src  = CMC_THEME_DIR . '/assets/images/favicon.ico';
+	if ( is_readable( $src ) && ( ! file_exists( $icon ) || md5_file( $icon ) !== md5_file( $src ) ) && is_writable( ABSPATH ) ) {
+		@copy( $src, $icon ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+	}
+	foreach ( array( 'readme.html', 'license.txt' ) as $file ) {
+		if ( file_exists( ABSPATH . $file ) ) {
+			@unlink( ABSPATH . $file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+		}
+	}
+}
+add_action( 'init', 'cmc_maintain_root_files', 100 );
