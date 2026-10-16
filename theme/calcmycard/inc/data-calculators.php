@@ -73,7 +73,7 @@ function cmc_calculators() {
 			'slug'             => 'credit-card-payoff-calculator',
 			'title'            => 'Credit Card Payoff Calculator',
 			'seo_title'        => 'Credit Card Payoff Calculator — Find Your Debt-Free Date',
-			'meta_description' => 'How long will it take to pay off your credit card, or what monthly payment clears it by your deadline? Get your debt-free date, total interest and a payoff schedule.',
+			'meta_description' => 'How long will it take to pay off your credit card, or what payment clears it by your deadline? Get your debt-free date, total interest and a payoff schedule.',
 			'h1'               => 'Credit Card Payoff Calculator',
 			'dek'              => 'Enter your balance, APR, and monthly payment to see your estimated payoff date and total interest cost — then test how extra payments shorten it.',
 			'target_keyword'   => 'credit card payoff calculator',
@@ -548,7 +548,7 @@ function cmc_calculators() {
 				),
 				array(
 					'q' => 'Can I make more than one credit card payment a month?',
-					'a' => 'Most issuers accept multiple payments in a billing cycle. Check how quickly yours posts payments, and make sure at least the minimum is paid by each due date.',
+					'a' => 'Many issuers accept multiple payments in a billing cycle. Check how quickly yours posts payments, and make sure at least the minimum is paid by each due date.',
 				),
 				array(
 					'q' => 'Does paying twice a month help my credit score?',
@@ -576,7 +576,7 @@ function cmc_calculators() {
 			'faqs'             => array(
 				array(
 					'q' => 'How is the interest charge on my credit card statement calculated?',
-					'a' => 'Most issuers multiply your average daily balance by the daily periodic rate (APR ÷ 365) and by the number of days in the billing cycle, often compounding daily. A $2,033.33 average daily balance at 24.99% APR over 30 days comes to about $41.76.',
+					'a' => 'Many issuers multiply your average daily balance by the daily periodic rate (APR ÷ 365) and by the number of days in the billing cycle, often compounding daily. A $2,033.33 average daily balance at 24.99% APR over 30 days comes to about $41.76.',
 				),
 				array(
 					'q' => 'Why was I charged interest after paying my balance in full?',
