@@ -24,6 +24,10 @@ The site theme lives in `theme/calcmycard/`. On every push to `main` that touche
 `theme-live` branch, which Hostinger deploys to `public_html/wp-content/themes/calcmycard`.
 If the tests fail, nothing is deployed.
 
+A calculator or guide page's "Updated" date (and its schema `dateModified` and sitemap `lastmod`)
+moves to the deploy time only when its file in `content/` or its entry in `inc/data-*.php`
+changes, so edit those files only for real content changes.
+
 ## Calculator tests
 
     npm install
