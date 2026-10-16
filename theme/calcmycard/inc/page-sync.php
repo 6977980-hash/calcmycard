@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-16.1' );
+define( 'CMC_CONTENT_SYNC', '2026-10-16.2' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -39,6 +39,9 @@ function cmc_maybe_sync_content() {
 	cmc_sync_seo_meta();
 	cmc_sync_page_text();
 	cmc_sync_calculator_count_text();
+	if ( function_exists( 'cmc_maintain_root_files' ) ) {
+		cmc_maintain_root_files( true );
+	}
 
 	update_option( 'cmc_content_sync', CMC_CONTENT_SYNC );
 	delete_transient( 'cmc_content_sync_lock' );
@@ -64,6 +67,134 @@ function cmc_purge_page_cache() {
 	do_action( 'litespeed_purge_url', home_url( '/' ) );
 }
 add_action( 'init', 'cmc_maybe_sync_content', 99 );
+
+/**
+ * "Updated" dates that follow real content edits (audit FIX-014).
+ *
+ * Calculator and guide copy lives in theme files, so editing it never
+ * touched the WordPress page, and the visible "Updated" date, the schema
+ * dateModified and the sitemap lastmod all stayed at the page's last
+ * database save. Each page now stores a hash of its content file and data
+ * entry; when a deploy changes it, the page's modified date moves to now.
+ * Pages whose content didn't change keep their date.
+ *
+ * Runs only when a content file or data file changes on disk, so it costs a
+ * few stat calls per request otherwise.
+ */
+function cmc_content_files_signature() {
+	$files = array_merge(
+		glob( CMC_THEME_DIR . '/content/calculators/*.html' ) ?: array(),
+		glob( CMC_THEME_DIR . '/content/articles/*.html' ) ?: array(),
+		array( CMC_THEME_DIR . '/inc/data-calculators.php', CMC_THEME_DIR . '/inc/data-articles.php' )
+	);
+	$sig = '';
+	foreach ( $files as $f ) {
+		$sig .= basename( $f ) . ':' . @filemtime( $f ) . ':' . @filesize( $f ) . ';'; // phpcs:ignore WordPress.PHP.NoSilencedErrors
+	}
+	return md5( $sig );
+}
+
+/**
+ * Last real content change for each page before hashing started (from the
+ * content files' git history, Oct 16, 2026). Used once per page, only to
+ * move a date forward.
+ */
+function cmc_content_baseline_dates() {
+	return array(
+		'balance-transfer-calculator'                       => '2026-10-04 19:29:08',
+		'credit-utilization-calculator'                     => '2026-10-04 19:29:08',
+		'debt-payoff-snowball-avalanche'                    => '2026-10-04 19:29:08',
+		'how-to-calculate-minimum-payment-formula'          => '2026-10-04 19:29:08',
+		'intro-apr-calculator'                              => '2026-10-04 19:29:08',
+		'student-credit-card-interest-guide'                => '2026-10-04 19:29:08',
+		'balance-transfer-fees-explained'                   => '2026-10-04 19:34:51',
+		'cash-advance-calculator'                           => '2026-10-04 20:11:05',
+		'credit-card-apr-calculator'                        => '2026-10-04 20:11:05',
+		'credit-card-grace-period-explained'                => '2026-10-04 20:11:05',
+		'credit-card-interest-calculator-excel-template'    => '2026-10-04 20:11:05',
+		'debt-consolidation-vs-balance-transfer-calculator' => '2026-10-04 20:11:05',
+		'how-to-avoid-credit-card-interest'                 => '2026-10-04 20:11:05',
+		'how-to-pay-off-multiple-credit-cards-strategy'     => '2026-10-04 20:11:05',
+		'apr-vs-interest-rate-difference'                   => '2026-10-04 20:28:12',
+		'credit-card-interest-calculator'                   => '2026-10-04 20:28:12',
+		'pay-in-full-vs-minimum-payment'                    => '2026-10-04 20:28:12',
+		'total-interest-multiple-credit-cards'              => '2026-10-04 20:28:12',
+		'what-is-a-good-credit-card-interest-rate'          => '2026-10-04 20:28:12',
+		'biweekly-payment-calculator'                       => '2026-10-04 20:51:33',
+		'credit-card-glossary'                              => '2026-10-04 20:51:33',
+		'credit-card-interest-charge-checker'               => '2026-10-04 20:51:33',
+		'credit-card-payoff-calculator'                     => '2026-10-04 20:51:33',
+		'extra-payment-savings-calculator'                  => '2026-10-04 20:51:33',
+		'how-does-credit-card-interest-work'                => '2026-10-04 20:51:33',
+		'how-to-calculate-credit-card-interest'             => '2026-10-04 20:51:33',
+		'credit-card-minimum-payment-study-2026'            => '2026-10-04 21:14:56',
+		'fed-rate-change-credit-card-calculator'            => '2026-10-04 21:14:56',
+		'how-long-to-pay-off-credit-card-with-minimum-payment' => '2026-10-04 21:14:56',
+		'minimum-payment-calculator'                        => '2026-10-04 21:14:56',
+		'daily-periodic-rate-calculator'                    => '2026-10-04 21:37:55',
+		'average-credit-card-interest-rate-2026'            => '2026-10-10 09:45:49',
+	);
+}
+
+function cmc_maybe_sync_modified_dates() {
+	$sig = cmc_content_files_signature();
+	if ( get_option( 'cmc_content_files_sig' ) === $sig || get_transient( 'cmc_modified_sync_lock' ) ) {
+		return;
+	}
+	set_transient( 'cmc_modified_sync_lock', 1, 5 * MINUTE_IN_SECONDS );
+	if ( cmc_sync_modified_dates() ) {
+		cmc_purge_page_cache();
+	}
+	update_option( 'cmc_content_files_sig', $sig, false );
+	delete_transient( 'cmc_modified_sync_lock' );
+}
+add_action( 'init', 'cmc_maybe_sync_modified_dates', 100 );
+
+/**
+ * @return int Number of pages whose modified date moved.
+ */
+function cmc_sync_modified_dates() {
+	global $wpdb;
+	$baseline = cmc_content_baseline_dates();
+	$now      = current_time( 'mysql', true );
+	$moved    = 0;
+	$sets     = array(
+		'calculators' => array( cmc_calculators(), '/content/calculators/' ),
+		'guides'      => array( cmc_articles(), '/content/articles/' ),
+	);
+	foreach ( $sets as $section => $set ) {
+		foreach ( $set[0] as $item ) {
+			$page = get_page_by_path( $section . '/' . $item['slug'] );
+			if ( ! $page ) {
+				continue;
+			}
+			$file = CMC_THEME_DIR . $set[1] . $item['slug'] . '.html';
+			$hash = md5( ( is_readable( $file ) ? file_get_contents( $file ) : '' ) . wp_json_encode( $item ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+			$old  = get_post_meta( $page->ID, '_cmc_content_hash', true );
+			if ( $old === $hash ) {
+				continue;
+			}
+			// First time: catch up to the last edit before hashing began.
+			// After that: any change is an edit deployed just now.
+			$when = '' === $old ? ( isset( $baseline[ $item['slug'] ] ) ? $baseline[ $item['slug'] ] : '' ) : $now;
+			if ( $when && $when > $page->post_modified_gmt ) {
+				$wpdb->update(
+					$wpdb->posts,
+					array( 'post_modified_gmt' => $when, 'post_modified' => get_date_from_gmt( $when ) ),
+					array( 'ID' => $page->ID )
+				);
+				clean_post_cache( $page->ID );
+				$moved++;
+			}
+			update_post_meta( $page->ID, '_cmc_content_hash', $hash );
+		}
+	}
+	if ( $moved && class_exists( '\RankMath\Sitemap\Cache' ) && method_exists( '\RankMath\Sitemap\Cache', 'invalidate_storage' ) ) {
+		// Rank Math caches the sitemap; rebuild it so lastmod follows.
+		\RankMath\Sitemap\Cache::invalidate_storage();
+	}
+	return $moved;
+}
 
 /**
  * Create missing calculator pages under /calculators/.

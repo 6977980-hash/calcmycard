@@ -498,6 +498,51 @@ function cmc_merge_into_rank_math_graph( $data, $jsonld = null ) {
 add_filter( 'rank_math/json_ld', 'cmc_merge_into_rank_math_graph', 99, 2 );
 
 /**
+ * Graph clean-up (audit FIX-020), after every other change to Rank Math's
+ * graph:
+ * - text values are plain text, so "&amp;" from the stored site name or
+ *   title becomes "&";
+ * - the WebSite node uses the same URL form as everywhere else
+ *   (https://calcmycard.com/, with the slash);
+ * - no SearchAction: the site has no search results page worth sending
+ *   people to.
+ */
+function cmc_decode_schema_text( $value ) {
+	if ( is_array( $value ) ) {
+		return array_map( 'cmc_decode_schema_text', $value );
+	}
+	if ( ! is_string( $value ) || false === strpos( $value, '&' ) ) {
+		return $value;
+	}
+	for ( $i = 0; $i < 3; $i++ ) {
+		$decoded = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		if ( $decoded === $value ) {
+			break;
+		}
+		$value = $decoded;
+	}
+	return $value;
+}
+
+function cmc_clean_rank_math_graph( $data ) {
+	if ( ! is_array( $data ) ) {
+		return $data;
+	}
+	foreach ( $data as $k => $node ) {
+		if ( ! is_array( $node ) ) {
+			continue;
+		}
+		if ( in_array( 'WebSite', (array) ( isset( $node['@type'] ) ? $node['@type'] : array() ), true ) ) {
+			$node['url'] = home_url( '/' );
+			unset( $node['potentialAction'] );
+		}
+		$data[ $k ] = cmc_decode_schema_text( $node );
+	}
+	return $data;
+}
+add_filter( 'rank_math/json_ld', 'cmc_clean_rank_math_graph', 100 );
+
+/**
  * Keep RankMath's breadcrumb labels (visible + BreadcrumbList schema) in
  * line with the theme's trail, e.g. "How Does Credit Card Interest Work?"
  * instead of the full H1.

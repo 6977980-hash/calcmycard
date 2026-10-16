@@ -31,6 +31,16 @@ add_filter( 'wp_robots', function ( $robots ) {
 	return $robots;
 }, 99 );
 
+// Rank Math prints its own robots meta tag (it overrides wp_robots), so it
+// needs the same noindex for embeds, or the header and the tag disagree.
+add_filter( 'rank_math/frontend/robots', function ( $robots ) {
+	if ( cmc_is_embed_request() ) {
+		$robots['index']  = 'noindex';
+		$robots['follow'] = 'follow';
+	}
+	return $robots;
+}, 99 );
+
 /**
  * The iframe + attribution snippet for a calculator.
  */
