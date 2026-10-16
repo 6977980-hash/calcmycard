@@ -157,10 +157,10 @@ function cmc_site_author() {
  */
 function cmc_qa_status() {
 	return array(
-		'cases'    => 98,
+		'cases'    => 105,
 		'last_run' => '2026-10-16',
 		// Calculators not covered by the automated suite (none since
-		// Oct 16, 2026: all 15 are).
+		// Oct 16, 2026: all 16 are).
 		'not_in_suite' => array(),
 	);
 }
@@ -383,6 +383,18 @@ function cmc_sources() {
 			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/9/',
 			'checked'   => '2026-10-04',
 		),
+		'regz-1026-10'      => array(
+			'title'     => 'Regulation Z § 1026.10 – payment cutoff no earlier than 5 p.m.; due dates on non-business days',
+			'publisher' => 'Consumer Financial Protection Bureau',
+			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/10/',
+			'checked'   => '2026-10-16',
+		),
+		'regz-1026-52'      => array(
+			'title'     => 'Regulation Z § 1026.52(b) – limits on late fees and other penalty fees',
+			'publisher' => 'Consumer Financial Protection Bureau',
+			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/52/',
+			'checked'   => '2026-10-16',
+		),
 		'regz-1026-53'      => array(
 			'title'     => 'Regulation Z § 1026.53 – payments above the minimum go to the highest-APR balance first',
 			'publisher' => 'Consumer Financial Protection Bureau',
@@ -400,6 +412,12 @@ function cmc_sources() {
 			'publisher' => 'Consumer Financial Protection Bureau',
 			'url'       => 'https://www.consumerfinance.gov/rules-policy/regulations/1026/55/',
 			'checked'   => '2026-09-25',
+		),
+		'cfpb-penalty-fees' => array(
+			'title'     => 'Credit Card Penalty Fees final rule (2024; vacated by a federal court on April 15, 2025)',
+			'publisher' => 'Consumer Financial Protection Bureau',
+			'url'       => 'https://www.consumerfinance.gov/rules-policy/final-rules/credit-card-penalty-fees-final-rule/',
+			'checked'   => '2026-10-16',
 		),
 		'myfico-util'       => array(
 			'title'     => 'What should my credit utilization ratio be?',

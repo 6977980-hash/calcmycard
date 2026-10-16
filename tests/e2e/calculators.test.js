@@ -27,6 +27,7 @@ const CALCS = {
 	biweekly: 'calc-biweekly.js',
 	interestcheck: 'calc-interest-check.js',
 	fedrate: 'calc-fed-rate.js',
+	deferred: 'calc-deferred-interest.js',
 };
 
 const dir = fs.mkdtempSync( path.join( os.tmpdir(), 'cmc-e2e-' ) );
@@ -190,6 +191,7 @@ const NEGATIVE = {
 	interest: 'apr', payoff: 'apr', minpayment: 'percent', balancetransfer: 'feePercent', multidebt: 'apr-0',
 	apr: 'apr', dpr: 'balance', extrapayment: 'extra', introapr: 'plannedPayment', utilization: 'ubal-0',
 	consolidationvstransfer: 'originationFee', cashadvance: 'feePercent', biweekly: 'apr', interestcheck: 'apr', fedrate: 'apr',
+	deferred: 'payment',
 };
 for ( const [ id, field ] of Object.entries( NEGATIVE ) ) {
 	test( 'FIX-008: ' + id + ' rejects a negative ' + field + ' and hides results', async () => {
@@ -408,4 +410,34 @@ test( 'FIX-040: snowball/avalanche with shrinking minimums', async () => {
 	assert.deepEqual( page.errors, [] );
 	await page.close();
 	await again.close();
+} );
+
+test( 'FIX-043: deferred interest page example $2,000 / 12 months / 29.99% / $150', async () => {
+	const page = await open( 'deferred' );
+	assert.equal( await text( page, '#stat-required' ), '$166.67' );
+	assert.equal( await text( page, '#stat-left' ), '$200.00' );
+	assert.equal( await text( page, '#stat-deferred' ), '$352.38' );
+	assert.equal( await text( page, '#stat-total' ), '$386.84' );
+	await page.close();
+} );
+
+test( 'FIX-043: deferred interest is waived when the purchase is paid in time', async () => {
+	const page = await open( 'deferred', 'balance=2000&promoMonths=12&apr=29.99&payment=166.67' );
+	assert.equal( await text( page, '#stat-left' ), '$0.00 — paid in full' );
+	assert.equal( await text( page, '#stat-deferred' ), '$0.00 ($324.89 waived)' );
+	assert.equal( await text( page, '#stat-total' ), '$0.00' );
+	await set( page, 'payment', 100 );
+	assert.equal( await text( page, '#stat-deferred' ), '$434.86' );
+	assert.equal( await text( page, '#stat-total' ), '$695.14' );
+	await page.close();
+} );
+
+test( 'FIX-043: deferred interest needs a whole number of promo months', async () => {
+	const page = await open( 'deferred' );
+	for ( const v of [ 0, 12.5, 121 ] ) {
+		await set( page, 'promoMonths', v );
+		assert.equal( await shown( page, '.cmc-calc-error' ), true, 'promoMonths=' + v );
+		assert.equal( await shown( page, '#results' ), false, 'promoMonths=' + v );
+	}
+	await page.close();
 } );

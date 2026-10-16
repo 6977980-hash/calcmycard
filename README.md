@@ -36,7 +36,7 @@ changes, so edit those files only for real content changes.
 
 `tests/unit/` checks the shared math (`assets/js/finance-math.js`) against the worked examples
 published on the calculator pages and an independent reference implementation.
-`tests/e2e/` loads each of the 15 calculators in Chromium, including "Copy link to these
+`tests/e2e/` loads each of the 16 calculators in Chromium, including "Copy link to these
 results" round trips, invalid inputs and extreme values. Pull requests run both
 (`.github/workflows/tests.yml`). When the number of tests changes, update `cmc_qa_status()` in
 `inc/helpers.php` and the About / Methodology text in `inc/page-sync.php`.
