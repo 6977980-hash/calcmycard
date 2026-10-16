@@ -42,12 +42,13 @@
 			var interest = bal * rate;
 			var pay = Math.min( payment, bal + interest );
 			var principal = pay - interest;
-			if ( principal <= 0 ) { neverPaysOff = true; break; }
+			if ( principal <= 1e-9 ) { neverPaysOff = true; break; }
 			bal = Math.max( 0, bal - principal );
 			totalInterest += interest;
 		}
-		if ( month >= maxMonths && bal > 0.005 ) { neverPaysOff = true; }
-		return { months: neverPaysOff ? null : month, totalInterest: totalInterest, neverPaysOff: neverPaysOff };
+		var capped = false;
+		if ( ! neverPaysOff && month >= maxMonths && bal > 0.005 ) { neverPaysOff = true; capped = true; }
+		return { months: neverPaysOff ? null : month, totalInterest: totalInterest, neverPaysOff: neverPaysOff, capped: capped };
 	}
 
 	function calc() {
@@ -60,8 +61,9 @@
 		var goToApr = UI.num( root, 'goToApr' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance <= 0 || payment <= 0 ) {
-			err.textContent = 'Enter a balance and monthly payment greater than 0.';
+		var negative = UI.hasNegative( root, [ 'balance', 'currentApr', 'payment', 'feePercent', 'promoApr', 'promoMonths', 'goToApr' ] );
+		if ( negative || balance <= 0 || payment <= 0 ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -78,10 +80,11 @@
 		var stayCost = stay.neverPaysOff ? null : stay.totalInterest;
 		var transferCost = transfer.neverPaysOff ? null : ( transfer.totalInterest + fee );
 
-		root.querySelector( '#stat-stay-cost' ).textContent = stayCost == null ? 'Never pays off' : F.currency( stayCost );
-		root.querySelector( '#stat-transfer-cost' ).textContent = transferCost == null ? 'Never pays off' : F.currency( transferCost );
+		root.querySelector( '#stat-stay-cost' ).textContent = stayCost == null ? ( stay.capped ? 'Over 50 years to pay off' : 'Never pays off' ) : F.currency( stayCost );
+		root.querySelector( '#stat-transfer-cost' ).textContent = transferCost == null ? ( transfer.capped ? 'Over 50 years to pay off' : 'Never pays off' ) : F.currency( transferCost );
 
 		var answer = root.querySelector( '#answer' );
+		root.querySelector( '#chart-bar' ).parentNode.style.display = ( stayCost != null && transferCost != null ) ? '' : 'none';
 		if ( stayCost != null && transferCost != null ) {
 			var savings = stayCost - transferCost;
 			root.querySelector( '#stat-savings' ).textContent = F.currency( savings );
@@ -96,7 +99,7 @@
 			] );
 		} else {
 			root.querySelector( '#stat-savings' ).textContent = '—';
-			answer.innerHTML = '<span class="cmc-answer-label">Increase your payment</span><p>At this payment amount, one or both scenarios never fully pay off. Increase your monthly payment above to get a valid comparison.</p>';
+			answer.innerHTML = '<span class="cmc-answer-label">Increase your payment</span><p>At this payment amount, one or both scenarios never fully pay off, or take more than 50 years. Increase your monthly payment above to get a valid comparison.</p>';
 		}
 	}
 

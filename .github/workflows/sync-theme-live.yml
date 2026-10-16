@@ -1,7 +1,8 @@
 # Keeps the `theme-live` branch equal to theme/calcmycard/ on main, with the
 # theme files at the branch root. Hostinger's "Deploy from GitHub" pulls
 # `theme-live` into public_html/wp-content/themes/calcmycard, so no FTP
-# passwords or GitHub secrets are needed.
+# passwords or GitHub secrets are needed. The calculator tests must pass
+# first, so a failing calculator never reaches the live site.
 name: Sync theme-live branch
 
 on:
@@ -9,7 +10,9 @@ on:
     branches: [main]
     paths:
       - 'theme/calcmycard/**'
+      - 'tests/**'
       - '.github/workflows/sync-theme-live.yml'
+      - '.github/workflows/tests.yml'
   workflow_dispatch:
 
 permissions:
@@ -20,7 +23,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    uses: ./.github/workflows/tests.yml
+
   sync:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

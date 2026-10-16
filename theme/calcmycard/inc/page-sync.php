@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-10.1' );
+define( 'CMC_CONTENT_SYNC', '2026-10-16.1' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -161,15 +161,22 @@ function cmc_content_sync_replacements() {
 			'In practice, each calculator takes a monthly rate'              => 'In practice, each interest and payoff calculator takes a monthly rate',
 			'because a cash advance starts accruing interest the day you take it.' => 'because a cash advance starts accruing interest the day you take it. The <a href="/calculators/credit-card-interest-charge-checker/">Interest Charge Checker</a> uses the same daily method to check a statement, and the <a href="/calculators/biweekly-payment-calculator/">Bi-Weekly Payment Calculator</a> charges APR &times; 14 &divide; 365 for each two-week period.',
 			'It covers the original 12 calculators with 66 test cases,'      => 'It covers the site\'s original 12 calculators with 66 test cases (calculators added since launch, such as the Cash Advance, Bi-Weekly Payment and Interest Charge Checker tools, are checked against the hand-worked examples on their own pages),',
+			// Oct 16, 2026: the test suite now lives in the repo (tests/) and covers all 15 calculators.
+			'It covers the site\'s original 12 calculators with 66 test cases (calculators added since launch, such as the Cash Advance, Bi-Weekly Payment and Interest Charge Checker tools, are checked against the hand-worked examples on their own pages),' => 'It covers all 15 calculators with 89 test cases,',
+			'Last full run: September 25, 2026 (66 of 66 passed).' => 'Last full run: October 16, 2026 (89 of 89 passed). The tests also run automatically before every update to the site goes live.',
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
 			'Every calculator is checked with an automated test suite that loads' => 'The original calculators are checked with an automated test suite that loads',
 			'The suite has 66 test cases covering the original 12 calculators,' => 'Calculators added since launch (Cash Advance, Bi-Weekly Payment and Interest Charge Checker) are checked against the hand-worked examples on their own pages. The suite has 66 test cases covering the site\'s original 12 calculators (Payoff Time has since been merged into the Payoff Calculator),',
 			'(Cash Advance, Bi-Weekly Payment and Interest Charge Checker) are checked' => '(Cash Advance, Bi-Weekly Payment, Interest Charge Checker and Fed Rate Change) are checked',
+			'The original calculators are checked with an automated test suite that loads' => 'All 15 calculators are tested by an automated test suite that loads',
+			'Calculators added since launch (Cash Advance, Bi-Weekly Payment, Interest Charge Checker and Fed Rate Change) are checked against the hand-worked examples on their own pages. The suite has 66 test cases covering the site\'s original 12 calculators (Payoff Time has since been merged into the Payoff Calculator),' => 'The suite has 89 test cases covering all 15 calculators,',
+			'September 25, 2026 &mdash; all 66 cases passed. That run found and fixed these problems:' => 'October 16, 2026 &mdash; all 89 cases passed. That run found and fixed these problems: a shared link to the Minimum Payment Calculator with an issuer preset (such as Discover) used the wrong formula; shared links to the multi-card and utilization calculators dropped or restored cards; several calculators accepted negative rates or amounts; payoffs longer than 50 years were described as payments too low; and the payoff and minimum payment charts could stop short of the final month. An earlier run on September 25, 2026 found and fixed these problems:',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
+			'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,' => 'an automated test suite checks all 15 calculators in a real browser against hand-worked examples, and the shared formulas against an independent reference implementation,',
 		),
 	);
 }

@@ -133,6 +133,21 @@
 		return isNaN( v ) ? ( fallback || 0 ) : v;
 	}
 
+	/**
+	 * True when any of the listed number fields holds a negative value.
+	 * Balances, APRs, fees, payments and percentages are never negative,
+	 * so the calculators show an error instead of computing with them.
+	 */
+	function hasNegative( root, ids ) {
+		return ids.some( function ( id ) {
+			var el = root.querySelector( '#' + id );
+			var v = el ? parseFloat( el.value ) : NaN;
+			return ! isNaN( v ) && v < 0;
+		} );
+	}
+
+	var NEGATIVE_MSG = 'Amounts, rates and percentages can\'t be negative. Enter 0 or more.';
+
 	function csvCell( v ) {
 		var s = String( v == null ? '' : v );
 		return /[",\n]/.test( s ) ? '"' + s.replace( /"/g, '""' ) + '"' : s;
@@ -226,6 +241,8 @@
 		debounce: debounce,
 		onAnyChange: onAnyChange,
 		num: num,
+		hasNegative: hasNegative,
+		NEGATIVE_MSG: NEGATIVE_MSG,
 	};
 
 }( window ));

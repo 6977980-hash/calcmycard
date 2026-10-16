@@ -25,11 +25,37 @@
 		);
 	}
 
+
+	// Rows to show on load. A shared link carries each row's fields with
+	// the row's index (e.g. uname-3, ubal-3), so rebuild exactly those rows, keeping
+	// their indexes, instead of the default list.
+	function rowsFromUrl( fallback, blank ) {
+		var params;
+		try { params = new URLSearchParams( window.location.search ); } catch ( e ) { params = null; }
+		var re = /^(?:uname|ubal|ulimit)-(\d+)$/;
+		var seen = {};
+		if ( params ) {
+			params.forEach( function ( _, key ) {
+				var m = key.match( re );
+				if ( m ) { seen[ m[1] ] = true; }
+			} );
+		}
+		var idx = Object.keys( seen ).map( Number ).sort( function ( a, b ) { return a - b; } );
+		if ( ! idx.length ) {
+			return fallback.map( function ( c, i ) { return { index: i, card: c }; } );
+		}
+		return idx.map( function ( i ) { return { index: i, card: fallback[ i ] || blank( i ) }; } );
+	}
+
+	function newCard( i ) {
+		return { name: 'Card ' + ( i + 1 ), balance: 500, limit: 2000 };
+	}
+
 	var rowCount = 0;
-	function renderRows( cards ) {
-		root.querySelector( '#util-container' ).innerHTML = cards.map( function ( c, i ) {
-			rowCount = i + 1;
-			return rowHtml( c, i );
+	function renderRows( rows ) {
+		root.querySelector( '#util-container' ).innerHTML = rows.map( function ( r ) {
+			rowCount = Math.max( rowCount, r.index + 1 );
+			return rowHtml( r.card, r.index );
 		} ).join( '' );
 	}
 
@@ -49,11 +75,11 @@
 			'<div id="table-wrap"></div>' +
 		'</div>';
 
-	renderRows( defaultCards );
+	renderRows( rowsFromUrl( defaultCards, newCard ) );
 
 	root.querySelector( '#add-util-card' ).addEventListener( 'click', function () {
 		var idx = rowCount;
-		root.querySelector( '#util-container' ).insertAdjacentHTML( 'beforeend', rowHtml( { name: 'Card ' + ( idx + 1 ), balance: 500, limit: 2000 }, idx ) );
+		root.querySelector( '#util-container' ).insertAdjacentHTML( 'beforeend', rowHtml( newCard( idx ), idx ) );
 		rowCount++;
 		bindEvents();
 		calc();
@@ -97,6 +123,17 @@
 	function calc() {
 		var cards = readCards();
 		var err = root.querySelector( '#err' );
+		var ids = [];
+		root.querySelectorAll( '.cmc-util-row' ).forEach( function ( row ) {
+			var idx = row.getAttribute( 'data-row' );
+			ids.push( 'ubal-' + idx, 'ulimit-' + idx );
+		} );
+		if ( UI.hasNegative( root, ids ) ) {
+			err.textContent = UI.NEGATIVE_MSG;
+			err.style.display = 'block';
+			UI.toggleResults( root, false );
+			return;
+		}
 
 		// Cards with no credit limit entered can't have a utilization ratio,
 		// so they're left out of the totals (and flagged in the table).

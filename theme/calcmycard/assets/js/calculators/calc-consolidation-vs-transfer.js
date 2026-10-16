@@ -47,11 +47,14 @@
 			var interest = bal * rate;
 			var pay = Math.min( payment, bal + interest );
 			var principal = pay - interest;
-			if ( principal <= 0 ) { neverPaysOff = true; break; }
+			if ( principal <= 1e-9 ) { neverPaysOff = true; break; }
 			bal = Math.max( 0, bal - principal );
 			totalInterest += interest;
 		}
-		return { months: neverPaysOff ? null : month, totalInterest: totalInterest, neverPaysOff: neverPaysOff };
+		// Still owing after 50 years counts as not paying off, too.
+		var capped = ! neverPaysOff && bal > 0.005;
+		if ( capped ) { neverPaysOff = true; }
+		return { months: neverPaysOff ? null : month, totalInterest: totalInterest, neverPaysOff: neverPaysOff, capped: capped };
 	}
 
 	function loanPayment( principal, apr, months ) {
@@ -71,8 +74,10 @@
 		var originationFee = UI.num( root, 'originationFee' );
 		var err = root.querySelector( '#err' );
 
-		if ( balance < 0 || promoMonths < 1 || loanTerm < 1 ) {
-			err.textContent = 'Enter a balance of 0 or more, a promo period of at least 1 month, and a loan term of at least 1 month.';
+		var negative = UI.hasNegative( root, [ 'balance', 'feePercent', 'promoApr', 'goToApr', 'loanApr', 'originationFee' ] );
+		var wholeMonths = promoMonths === Math.floor( promoMonths ) && loanTerm === Math.floor( loanTerm );
+		if ( negative || balance <= 0 || promoMonths < 1 || loanTerm < 1 || ! wholeMonths ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance greater than 0, and a promo period and loan term of at least 1 whole month.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -94,7 +99,7 @@
 		var totalPaid = payment * loanTerm;
 		var loanCost = ( totalPaid - balance ) ; // interest + fees beyond principal
 
-		root.querySelector( '#stat-transfer-cost' ).textContent = transferCost == null ? 'Never pays off' : F.currency( transferCost );
+		root.querySelector( '#stat-transfer-cost' ).textContent = transferCost == null ? ( transferSim.capped ? 'Over 50 years to pay off' : 'Never pays off' ) : F.currency( transferCost );
 		root.querySelector( '#stat-loan-cost' ).textContent = F.currency( loanCost );
 		root.querySelector( '#stat-loan-payment' ).textContent = F.currency( payment ) + '/mo';
 
