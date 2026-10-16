@@ -542,6 +542,13 @@ function cmc_clean_rank_math_graph( $data ) {
 }
 add_filter( 'rank_math/json_ld', 'cmc_clean_rank_math_graph', 100 );
 
+// Rank Math builds the WebPage name and description from its title and
+// description (with the HTML-escaped site tagline in them) after the
+// json_ld filter runs, so decode them at the source too. Rank Math escapes
+// both again when printing the <title> and meta tags.
+add_filter( 'rank_math/frontend/title', 'cmc_decode_schema_text', 99 );
+add_filter( 'rank_math/frontend/description', 'cmc_decode_schema_text', 99 );
+
 /**
  * Keep RankMath's breadcrumb labels (visible + BreadcrumbList schema) in
  * line with the theme's trail, e.g. "How Does Credit Card Interest Work?"
