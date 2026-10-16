@@ -320,3 +320,44 @@ test( 'edge: minimum payment floor applies and never exceeds the payoff amount',
 	assert.equal( await text( page, '#stat-min' ), '$20.40' );
 	await page.close();
 } );
+
+test( 'FIX-023: headline result is a polite live region and errors are alerts', async () => {
+	for ( const id of Object.keys( CALCS ) ) {
+		const page = await open( id );
+		assert.equal( await page.locator( '[aria-live="polite"]' ).count(), 1, id + ' live regions' );
+		assert.equal( await page.getAttribute( '.cmc-calc-error', 'role' ), 'alert', id );
+		await page.close();
+	}
+} );
+
+test( 'FIX-024: every drawn chart has a text alternative', async () => {
+	for ( const id of Object.keys( CALCS ) ) {
+		const page = await open( id );
+		const charts = await page.$$eval( 'canvas', ( els ) => els.filter( ( c ) => c.offsetParent ).map( ( c ) => [ c.getAttribute( 'role' ), c.getAttribute( 'aria-label' ) ] ) );
+		for ( const [ role, label ] of charts ) {
+			assert.equal( role, 'img', id );
+			assert.ok( label && label.length > 10 && ! /NaN|undefined/.test( label ), id + ': ' + label );
+		}
+		await page.close();
+	}
+	const page = await open( 'payoff', 'mode=time&balance=5000&apr=22.99&payment=175' );
+	assert.equal( await page.getAttribute( '#chart-line', 'aria-label' ), 'Line chart of the balance: $5,000 at now, falling to $0 at month 42.' );
+	await page.close();
+} );
+
+test( 'FIX-027: adding cards does not multiply calculations per keystroke', async () => {
+	for ( const [ id, add, field ] of [ [ 'multidebt', '#add-card', 'balance-0' ], [ 'utilization', '#add-util-card', 'ubal-0' ] ] ) {
+		const page = await open( id );
+		for ( let i = 0; i < 3; i++ ) {
+			await page.click( add );
+		}
+		// Count result re-renders after one edit.
+		await page.evaluate( () => {
+			window.__renders = 0;
+			new MutationObserver( () => { window.__renders++; } ).observe( document.querySelector( '#results .cmc-stat-value' ), { childList: true, characterData: true, subtree: true } );
+		} );
+		await set( page, field, 1234 );
+		assert.equal( await page.evaluate( () => window.__renders ), 1, id );
+		await page.close();
+	}
+} );

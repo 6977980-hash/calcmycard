@@ -74,7 +74,7 @@
 			'<div class="cmc-result-stats">' +
 				'<div class="cmc-stat"><div class="cmc-stat-label">Snowball: time to debt-free</div><div class="cmc-stat-value" id="stat-snow-months"></div></div>' +
 				'<div class="cmc-stat"><div class="cmc-stat-label">Snowball: total interest</div><div class="cmc-stat-value" id="stat-snow-interest"></div></div>' +
-				'<div class="cmc-stat cmc-stat-highlight"><div class="cmc-stat-label">Avalanche: time to debt-free</div><div class="cmc-stat-value" id="stat-aval-months"></div></div>' +
+				'<div class="cmc-stat cmc-stat-highlight"><div class="cmc-stat-label">Avalanche: time to debt-free</div><div class="cmc-stat-value" id="stat-aval-months" aria-live="polite" aria-atomic="true"></div></div>' +
 				'<div class="cmc-stat cmc-stat-highlight"><div class="cmc-stat-label">Avalanche: total interest</div><div class="cmc-stat-value" id="stat-aval-interest"></div></div>' +
 			'</div>' +
 			'<div class="cmc-chart-wrap"><canvas id="chart-bar" height="220"></canvas></div>' +
@@ -90,21 +90,28 @@
 		var idx = rowCount;
 		container.insertAdjacentHTML( 'beforeend', cardRowHtml( newCard( idx ), idx ) );
 		rowCount++;
-		bindRowEvents();
 		calc();
 	} );
 
+	// One delegated listener on the row container (audit FIX-027): rows added
+	// later are covered too, without re-binding every existing input, which
+	// ran calc() once more per input for every card added.
 	function bindRowEvents() {
-		root.querySelectorAll( '.cmc-remove-row' ).forEach( function ( btn ) {
-			btn.onclick = function () {
-				var row = root.querySelector( '.cmc-card-row[data-row="' + btn.getAttribute( 'data-row' ) + '"]' );
-				if ( row && root.querySelectorAll( '.cmc-card-row' ).length > 1 ) {
-					row.remove();
-					calc();
-				}
-			};
+		var container = root.querySelector( '#cards-container' );
+		var debounced = UI.debounce( calc, 120 );
+		container.addEventListener( 'input', debounced );
+		container.addEventListener( 'change', debounced );
+		container.addEventListener( 'click', function ( e ) {
+			var btn = e.target.closest( '.cmc-remove-row' );
+			if ( ! btn ) {
+				return;
+			}
+			var r = root.querySelector( '.cmc-card-row[data-row="' + btn.getAttribute( 'data-row' ) + '"]' );
+			if ( r && root.querySelectorAll( '.cmc-card-row' ).length > 1 ) {
+				r.remove();
+				calc();
+			}
 		} );
-		UI.onAnyChange( root, '#cards-container input', calc );
 	}
 
 	function rowFieldIds() {

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_THEME_VERSION', '1.0.24' );
+define( 'CMC_THEME_VERSION', '1.0.25' );
 define( 'CMC_THEME_DIR', get_template_directory() );
 define( 'CMC_THEME_URI', get_template_directory_uri() );
 
@@ -73,6 +73,18 @@ function cmc_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'cmc_enqueue_assets' );
+
+/**
+ * Preload the two web fonts (audit FIX-026). Both are used above the fold
+ * (body text, breadcrumbs, labels), and without a preload the browser only
+ * finds them after parsing style.css. Same URLs as the @font-face rules.
+ */
+function cmc_preload_fonts() {
+	foreach ( array( 'sora-latin-wght-normal.woff2', 'jetbrains-mono-latin-wght-normal.woff2' ) as $font ) {
+		printf( '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin />' . "\n", esc_url( CMC_THEME_URI . '/assets/fonts/' . $font ) );
+	}
+}
+add_action( 'wp_head', 'cmc_preload_fonts', 1 );
 
 /** Includes */
 require_once CMC_THEME_DIR . '/inc/data-calculators.php';

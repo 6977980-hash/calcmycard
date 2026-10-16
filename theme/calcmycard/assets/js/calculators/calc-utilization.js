@@ -81,21 +81,28 @@
 		var idx = rowCount;
 		root.querySelector( '#util-container' ).insertAdjacentHTML( 'beforeend', rowHtml( newCard( idx ), idx ) );
 		rowCount++;
-		bindEvents();
 		calc();
 	} );
 
+	// One delegated listener on the row container (audit FIX-027): rows added
+	// later are covered too, without re-binding every existing input, which
+	// ran calc() once more per input for every card added.
 	function bindEvents() {
-		root.querySelectorAll( '.cmc-remove-util-row' ).forEach( function ( btn ) {
-			btn.onclick = function () {
-				var row = root.querySelector( '.cmc-util-row[data-row="' + btn.getAttribute( 'data-row' ) + '"]' );
-				if ( row && root.querySelectorAll( '.cmc-util-row' ).length > 1 ) {
-					row.remove();
-					calc();
-				}
-			};
+		var container = root.querySelector( '#util-container' );
+		var debounced = UI.debounce( calc, 120 );
+		container.addEventListener( 'input', debounced );
+		container.addEventListener( 'change', debounced );
+		container.addEventListener( 'click', function ( e ) {
+			var btn = e.target.closest( '.cmc-remove-util-row' );
+			if ( ! btn ) {
+				return;
+			}
+			var r = root.querySelector( '.cmc-util-row[data-row="' + btn.getAttribute( 'data-row' ) + '"]' );
+			if ( r && root.querySelectorAll( '.cmc-util-row' ).length > 1 ) {
+				r.remove();
+				calc();
+			}
 		} );
-		UI.onAnyChange( root, '#util-container input', calc );
 	}
 
 	function rating( pct ) {

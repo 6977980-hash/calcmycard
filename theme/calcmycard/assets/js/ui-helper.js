@@ -71,11 +71,20 @@
 	 * stats: [{id, label, value, highlight}]
 	 */
 	function statsRow( stats ) {
-		return '<div class="cmc-result-stats">' + stats.map( function ( s ) {
+		// Screen readers announce the headline result (the first highlighted
+		// stat) when it changes, and only that one, so announcements stay
+		// short while someone is typing.
+		var live = 0;
+		for ( var i = 0; i < stats.length; i++ ) {
+			if ( stats[ i ].highlight ) { live = i; break; }
+		}
+		return '<div class="cmc-result-stats">' + stats.map( function ( s, i ) {
 			return (
 				'<div class="cmc-stat' + ( s.highlight ? ' cmc-stat-highlight' : '' ) + '">' +
 					'<div class="cmc-stat-label">' + esc( s.label ) + '</div>' +
-					'<div class="cmc-stat-value" id="' + esc( s.id ) + '">' + esc( s.value || '—' ) + '</div>' +
+					'<div class="cmc-stat-value" id="' + esc( s.id ) + '"' +
+						( i === live ? ' aria-live="polite" aria-atomic="true"' : '' ) +
+					'>' + esc( s.value || '—' ) + '</div>' +
 				'</div>'
 			);
 		} ).join( '' ) + '</div>';
@@ -91,7 +100,7 @@
 	}
 
 	function errorBox( id ) {
-		return '<p class="cmc-calc-error" id="' + esc( id ) + '"></p>';
+		return '<p class="cmc-calc-error" id="' + esc( id ) + '" role="alert"></p>';
 	}
 
 	/**
