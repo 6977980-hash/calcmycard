@@ -59,7 +59,7 @@ function cmc_render_embed_box( array $calc ) {
 	<details class="cmc-embed-box">
 		<summary>Embed this calculator on your site</summary>
 		<p>Free for blogs, newsletters and community sites. Copy this code into your page's HTML:</p>
-		<textarea id="<?php echo esc_attr( $id ); ?>" readonly rows="5" onclick="this.select()"><?php echo esc_textarea( cmc_embed_code( $calc ) ); ?></textarea>
+		<textarea id="<?php echo esc_attr( $id ); ?>" aria-label="Embed code" readonly rows="5" onclick="this.select()"><?php echo esc_textarea( cmc_embed_code( $calc ) ); ?></textarea>
 		<button type="button" class="cmc-btn cmc-btn-secondary" onclick="var t=document.getElementById('<?php echo esc_js( $id ); ?>');t.select();if(navigator.clipboard){navigator.clipboard.writeText(t.value);}else{document.execCommand('copy');}this.textContent='Copied';">Copy code</button>
 	</details>
 	<?php

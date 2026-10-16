@@ -30,7 +30,24 @@
 		return { ctx: ctx, w: w, h: h };
 	}
 
+	function money( v ) {
+		return '$' + Math.round( v ).toLocaleString( 'en-US' );
+	}
+
+	/**
+	 * Canvas charts are invisible to screen readers, so each draw also
+	 * writes a short text summary of what the chart shows (audit FIX-024).
+	 */
+	function describe( canvas, text ) {
+		canvas.setAttribute( 'role', 'img' );
+		canvas.setAttribute( 'aria-label', text );
+	}
+
 	function drawDonut( canvas, data ) {
+		var total0 = data.values.reduce( function ( a, b ) { return a + b; }, 0 ) || 1;
+		describe( canvas, 'Donut chart: ' + data.labels.map( function ( l, i ) {
+			return l + ' ' + Math.round( data.values[ i ] / total0 * 100 ) + '%';
+		} ).join( ', ' ) + '.' );
 		var p = prepCanvas( canvas );
 		var ctx = p.ctx, w = p.w, h = p.h;
 		var cx = w * 0.32, cy = h / 2, r = Math.min( cx, cy ) - 10;
@@ -67,6 +84,14 @@
 	}
 
 	function drawLineChart( canvas, series, labels ) {
+		var d = ( series[0] && series[0].data ) || [];
+		var at = function ( l ) {
+			return l ? ' at ' + String( l ).replace( /^M(\d+)$/, 'month $1' ).toLowerCase() : '';
+		};
+		if ( d.length ) {
+			describe( canvas, 'Line chart of the balance: ' + money( d[0] ) + at( labels && labels[0] ) +
+				', falling to ' + money( d[ d.length - 1 ] ) + at( labels && labels[ labels.length - 1 ] ) + '.' );
+		}
 		var p = prepCanvas( canvas );
 		var ctx = p.ctx, w = p.w, h = p.h;
 		var padL = 46, padB = 24, padT = 14, padR = 14;
@@ -125,6 +150,9 @@
 	function drawBarChart( canvas, bars, opts ) {
 		// bars: [{label, value, color, displayValue}]
 		opts = opts || {};
+		describe( canvas, bars.length ? 'Bar chart: ' + bars.map( function ( b ) {
+			return b.label + ' ' + ( b.displayValue || ( ( opts.suffix || '$' ) === '%' ? Math.round( b.value ) + '%' : money( b.value ) ) );
+		} ).join( ', ' ) + '.' : 'Empty chart.' );
 		var p = prepCanvas( canvas );
 		var ctx = p.ctx, w = p.w, h = p.h;
 		var padL = 10, padR = 10, padT = 16, padB = 30;
