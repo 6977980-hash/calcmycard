@@ -35,11 +35,23 @@ changes, so edit those files only for real content changes.
     npm test
 
 `tests/unit/` checks the shared math (`assets/js/finance-math.js`) against the worked examples
-published on the calculator pages and an independent reference implementation.
+published on the calculator pages and an independent reference implementation, and
+`links.test.js` checks that every internal link, related-page slug and source key in the theme
+exists.
 `tests/e2e/` loads each of the 16 calculators in Chromium, including "Copy link to these
-results" round trips, invalid inputs and extreme values. Pull requests run both
+results" round trips, invalid inputs and extreme values; `layout.test.js` fails if a calculator
+shifts the page below it as it renders (lab CLS 0.1 or more at 1280, 800 or 390 px), which means
+its reserved height in `style.css` is missing or too small. Pull requests run both
 (`.github/workflows/tests.yml`). When the number of tests changes, update `cmc_qa_status()` in
 `inc/helpers.php` and the About / Methodology text in `inc/page-sync.php`.
+
+## Live site monitor
+
+`npm run monitor` (`tests/monitor/live-check.js`) checks calcmycard.com itself: the sitemap
+named in robots.txt, that every calculator, guide and page is in it and returns 200, is indexable
+and self-canonical, the downloads, and the deployed theme version. The "Live site monitor"
+workflow runs it every morning and after each theme deploy; a failed run emails the repository
+owner, and the run summary lists each problem.
 
 ## Rolling back a release
 
