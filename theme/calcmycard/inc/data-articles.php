@@ -184,6 +184,18 @@ function cmc_articles() {
 			'related_calculators' => array( 'credit-card-interest-calculator', 'daily-periodic-rate-calculator', 'minimum-payment-calculator' ),
 		),
 
+		'credit-card-late-fees-explained' => array(
+			'slug'             => 'credit-card-late-fees-explained',
+			'title'            => 'Credit Card Late Fees, Explained: Limits, Costs and How to Avoid Them',
+			'breadcrumb'       => 'Credit Card Late Fees',
+			'seo_title'        => 'Credit Card Late Fees: How Much They Cost (2026 Rules)',
+			'meta_description' => 'How much a credit card late fee can be under federal rules, what happened to the $8 cap, when a payment counts as late, and what 30 and 60 days late cost.',
+			'card_description' => 'The federal limits on late fees, what happened to the $8 cap, and what a payment 30 or 60 days late can cost.',
+			'target_keyword'   => 'credit card late fee',
+			'sources'          => array( 'regz-1026-52', 'cfpb-penalty-fees', 'regz-1026-5', 'regz-1026-10', 'regz-1026-55', 'cfpb-deferred' ),
+			'related_calculators' => array( 'credit-card-apr-calculator', 'minimum-payment-calculator', 'deferred-interest-calculator' ),
+		),
+
 		'credit-card-minimum-payment-study-2026' => array(
 			'slug'             => 'credit-card-minimum-payment-study-2026',
 			'title'            => 'The Minimum Payment Trap: How Long Each Big Issuer\'s Minimum Takes (2026 Study)',

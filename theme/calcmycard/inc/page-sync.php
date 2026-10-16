@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-16.5' );
+define( 'CMC_CONTENT_SYNC', '2026-10-16.6' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -306,6 +306,9 @@ function cmc_content_sync_replacements() {
 			// Oct 16, 2026 (Phase 5): tests for the new tool options.
 			'It covers all 15 calculators with 92 test cases,' => 'It covers all 15 calculators with 98 test cases,',
 			'Last full run: October 16, 2026 (92 of 92 passed).' => 'Last full run: October 16, 2026 (98 of 98 passed).',
+			// Oct 16, 2026 (Phase 6): Deferred Interest Calculator added.
+			'It covers all 15 calculators with 98 test cases,' => 'It covers all 16 calculators with 105 test cases,',
+			'Last full run: October 16, 2026 (98 of 98 passed).' => 'Last full run: October 16, 2026 (105 of 105 passed).',
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
@@ -319,10 +322,15 @@ function cmc_content_sync_replacements() {
 			'October 16, 2026 &mdash; all 89 cases passed.' => 'October 16, 2026 &mdash; all 92 cases passed.',
 			'The suite has 92 test cases covering all 15 calculators,' => 'The suite has 98 test cases covering all 15 calculators,',
 			'October 16, 2026 &mdash; all 92 cases passed.' => 'October 16, 2026 &mdash; all 98 cases passed.',
+			// Oct 16, 2026 (Phase 6): Deferred Interest Calculator added.
+			'All 15 calculators are tested by an automated test suite' => 'All 16 calculators are tested by an automated test suite',
+			'The suite has 98 test cases covering all 15 calculators,' => 'The suite has 105 test cases covering all 16 calculators,',
+			'October 16, 2026 &mdash; all 98 cases passed.' => 'October 16, 2026 &mdash; all 105 cases passed.',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
 			'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,' => 'an automated test suite checks all 15 calculators in a real browser against hand-worked examples, and the shared formulas against an independent reference implementation,',
+			'an automated test suite checks all 15 calculators in a real browser' => 'an automated test suite checks all 16 calculators in a real browser',
 		),
 	);
 }
@@ -334,7 +342,7 @@ function cmc_content_sync_replacements() {
  */
 function cmc_page_bodies() {
 	return array(
-		'methodology'    => '2026-10-16.2',
+		'methodology'    => '2026-10-16.3',
 		'privacy-policy' => '2026-10-16',
 	);
 }
@@ -361,7 +369,7 @@ function cmc_page_seo_descriptions() {
 	return array(
 		'about'          => 'About CalcMyCard: who builds the free credit card calculators and guides, how every calculator is tested, and how errors are corrected.',
 		'contact'        => 'Contact CalcMyCard to report a calculator error, send a content correction, ask a question or suggest a new calculator or guide.',
-		'methodology'    => 'How each CalcMyCard calculator works: the formulas, assumptions and limits behind all 15 tools, the issuer formulas we use, and how we test them.',
+		'methodology'    => 'How each CalcMyCard calculator works: the formulas, assumptions and limits behind all 16 tools, the issuer formulas we use, and how we test them.',
 		'privacy-policy' => 'How CalcMyCard handles your data: calculator inputs stay in your browser, and the site uses no analytics, ads or tracking cookies.',
 	);
 }

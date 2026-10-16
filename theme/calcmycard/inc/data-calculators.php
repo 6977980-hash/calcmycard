@@ -380,7 +380,7 @@ function cmc_calculators() {
 			'calc_id'          => 'introapr',
 			'js'               => 'calc-intro-apr.js',
 			'sources'          => array( 'cfpb-deferred', 'regz-1026-55', 'regz-1026-53' ),
-			'related'          => array( 'balance-transfer-calculator', 'credit-card-payoff-calculator', 'credit-card-apr-calculator' ),
+			'related'          => array( 'balance-transfer-calculator', 'deferred-interest-calculator', 'credit-card-payoff-calculator', 'credit-card-apr-calculator' ),
 			'faqs'             => array(
 				array(
 					'q' => 'What happens if I don\'t pay off my balance before the 0% APR period ends?',
@@ -405,6 +405,46 @@ function cmc_calculators() {
 				array(
 					'q' => 'Do new purchases get the 0% rate too?',
 					'a' => 'Only if the offer covers purchases. Some intro offers apply only to balance transfers, so new purchases would accrue interest at the regular purchase APR.',
+				),
+			),
+		),
+
+		'deferred-interest-calculator' => array(
+			'slug'             => 'deferred-interest-calculator',
+			'title'            => 'Deferred Interest Calculator',
+			'seo_title'        => 'Deferred Interest Calculator — What Missing the Deadline Costs',
+			'meta_description' => 'See how much interest builds up on a "no interest if paid in full" store card or financing offer, the payment that avoids it, and the cost if you miss the deadline.',
+			'h1'               => 'Deferred Interest Calculator',
+			'dek'              => 'For "no interest if paid in full" store card and retail financing offers: see the interest building up in the background, the payment that avoids it, and what you owe if you miss the deadline.',
+			'target_keyword'   => 'deferred interest calculator',
+			'calc_id'          => 'deferred',
+			'js'               => 'calc-deferred-interest.js',
+			'sources'          => array( 'cfpb-deferred', 'regz-1026-53', 'regz-1026-55' ),
+			'related'          => array( 'intro-apr-calculator', 'balance-transfer-calculator', 'minimum-payment-calculator' ),
+			'faqs'             => array(
+				array(
+					'q' => 'What is deferred interest?',
+					'a' => 'Deferred interest is a promotion, usually worded "no interest if paid in full within" a set number of months, where interest builds up at the card\'s regular APR from the purchase date. If you pay the whole promotional balance by the deadline, that interest is waived. If any of it is left, the issuer charges all of the built-up interest at once.',
+				),
+				array(
+					'q' => 'Is deferred interest the same as 0% APR?',
+					'a' => 'No. With a true 0% intro APR, no interest builds during the promotion, and only the balance left at the end starts accruing interest. With deferred interest, interest on the full purchase is charged back to day one if you miss the deadline. On a $2,000 purchase at 29.99%, a $200 shortfall costs about $352 under deferred interest, but only about $6 under a 0% intro APR.',
+				),
+				array(
+					'q' => 'Is the deferred interest charged only on the amount I still owe?',
+					'a' => 'No. It is the interest that built up on the whole promotional balance, month by month, from the purchase date, even on the part you already paid off. That is why a small leftover balance can bring a large interest charge.',
+				),
+				array(
+					'q' => 'Will the minimum payment pay off a deferred-interest purchase in time?',
+					'a' => 'Often not. The CFPB warns that paying only the minimum may leave a balance at the end of the promotion, which triggers the deferred interest. Divide the purchase by the promo months and pay at least that much.',
+				),
+				array(
+					'q' => 'Can a late payment trigger deferred interest early?',
+					'a' => 'The CFPB notes that being more than 60 days late on a payment can end the promotion and trigger the deferred interest. A shorter late payment can still bring a late fee, so check your card\'s terms.',
+				),
+				array(
+					'q' => 'How are payments applied if my store card has other balances?',
+					'a' => 'Amounts above the minimum generally go to the highest-APR balance first. Under Regulation Z § 1026.53, during the last two billing cycles before a deferred-interest promotion ends, the issuer must apply the excess to the deferred-interest balance first. Earlier in the promotion, new purchases on the card can slow payoff of the promotional balance.',
 				),
 			),
 		),
