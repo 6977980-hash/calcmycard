@@ -35,7 +35,7 @@ function cmc_articles() {
 			'seo_title'        => 'How to Avoid Credit Card Interest Completely (7 Ways)',
 			'meta_description' => 'Seven practical ways to avoid paying credit card interest, from the grace period rule to 0% APR cards, and how to check if you\'re paying more than you need to.',
 			'target_keyword'   => 'how to avoid credit card interest',
-			'sources'          => array( 'cfpb-grace', 'cfpb-cash-advance', 'cfpb-deferred' ),
+			'sources'          => array( 'cfpb-grace', 'cfpb-cash-advance', 'cfpb-deferred', 'regz-1026-54' ),
 			'related_calculators' => array( 'credit-card-interest-calculator', 'intro-apr-calculator' ),
 		),
 

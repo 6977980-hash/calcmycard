@@ -206,3 +206,57 @@ test( 'formatting helpers', () => {
 	assert.equal( F.monthsToYearsMonths( null ), 'Never (payment too low)' );
 	assert.equal( cents( F.dailyPeriodicRate( 36.5 ) * 100 ), 0.1 );
 } );
+
+test( 'FIX-036: new monthly charges, hand-checked', () => {
+	// $1,000 at 12% (1% a month), $100 of charges, $300 payment:
+	// 1,100 + 11 - 300 = 811; 911 + 9.11 - 300 = 620.11; ... paid in month 6.
+	const r = F.amortize( { balance: 1000, apr: 12, payment: 300, charges: 100 } );
+	assert.equal( r.months, 6 );
+	assert.equal( cents( r.schedule[0].balance ), 811 );
+	assert.equal( cents( r.schedule[1].balance ), 620.11 );
+	assert.equal( cents( r.schedule[2].balance ), 427.31 );
+	near( r.schedule[5].payment, 137.27, 0.01, 'final payment' );
+	near( r.totalPaid, 1000 + 6 * 100 + r.totalInterest, 1e-6, 'paid = balance + charges + interest' );
+	// No charges keeps the old behavior; charges eating the payment never pay off.
+	assert.deepEqual( F.amortize( { balance: 5000, apr: 22.99, payment: 175, charges: 0 } ).months, 42 );
+	const page = F.amortize( { balance: 5000, apr: 22.99, payment: 175, charges: 50 } );
+	assert.equal( page.months, 78 );
+	assert.equal( Math.round( page.totalInterest ), 4745 );
+	const never = F.amortize( { balance: 5000, apr: 22.99, payment: 175, charges: 100 } );
+	assert.equal( never.neverPaysOff, true );
+	assert.equal( never.capped, false );
+} );
+
+test( 'FIX-035: keeping the first minimum fixed matches the study CSV', () => {
+	const chase = { balance: 5000, apr: 22.15, percent: 0, floor: 40, method: 'percent_plus_interest', interestPlusPercent: 1, interestPlusFixed: 0 };
+	const first = F.estimateMinimumPayment( chase );
+	assert.equal( cents( first ), 142.29 );
+	assert.equal( F.simulateMinimumOnly( chase ).months, 184 );
+	const fixed = F.amortize( { balance: 5000, apr: 22.15, payment: first } );
+	assert.equal( fixed.months, 58 );
+	assert.equal( cents( fixed.totalInterest ), 3136.67 );
+} );
+
+test( 'FIX-040: shrinking minimums on the multi-card page example', () => {
+	const cards = [
+		{ name: 'Card 1', balance: 1200, apr: 19.99, minPayment: 35 },
+		{ name: 'Card 2', balance: 4500, apr: 26.99, minPayment: 95 },
+		{ name: 'Card 3', balance: 2300, apr: 22.99, minPayment: 55 },
+	];
+	const snow = F.simulateMultiCardPayoff( cards, 200, 'snowball', { shrink: { floor: 25 } } );
+	const aval = F.simulateMultiCardPayoff( cards, 200, 'avalanche', { shrink: { floor: 25 } } );
+	assert.equal( snow.monthlyBudget, 385 ); // month 1 = the entered minimums + extra
+	assert.equal( snow.months, 34 );
+	assert.equal( cents( snow.totalInterest ), 3096.41 );
+	assert.equal( aval.months, 35 );
+	assert.equal( cents( aval.totalInterest ), 2901.67 );
+	assert.ok( aval.totalInterest < snow.totalInterest );
+	// Fixed minimums (no option) are unchanged.
+	assert.equal( cents( F.simulateMultiCardPayoff( cards, 200, 'avalanche' ).totalInterest ), 2446.97 );
+	// One card, no extra, 2% share with a $25 floor: month 2's minimum is
+	// 2% of the month-start balance (1,000 + 20 interest - 20 = 1,000), so
+	// the minimum only matches interest and the balance never falls.
+	const flat = F.simulateMultiCardPayoff( [ { balance: 1000, apr: 24, minPayment: 20 } ], 0, 'avalanche', { shrink: { floor: 0 } } );
+	assert.equal( flat.neverPaysOff, true );
+	assert.equal( flat.capped, false );
+} );

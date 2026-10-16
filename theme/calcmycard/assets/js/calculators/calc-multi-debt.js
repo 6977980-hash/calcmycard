@@ -68,6 +68,11 @@
 		'<div style="margin-top:14px;"><button type="button" class="cmc-btn cmc-btn-secondary" id="add-card">+ Add another card</button></div>' +
 		UI.formGrid( [
 			UI.field( { id: 'extra', label: 'Extra amount you can pay per month (total, across all cards)', value: 200, min: 0, step: '0.01' } ),
+			UI.field( { id: 'minmode', label: 'Minimum payments', type: 'select', value: 'fixed', options: [
+				{ value: 'fixed', label: 'Stay the same each month' },
+				{ value: 'shrink', label: 'Shrink as each balance falls (like your statement)' },
+			], hint: 'Shrinking minimums keep the same share of each balance, down to the floor below' } ),
+			UI.field( { id: 'minfloor', label: 'Minimum payment floor ($)', value: 25, min: 0, step: '1', hint: 'Most cards never ask for less than this (often $25 to $41)' } ),
 		] ) +
 		UI.errorBox( 'err' ) +
 		'<div class="cmc-results is-visible" id="results">' +
@@ -115,7 +120,7 @@
 	}
 
 	function rowFieldIds() {
-		var ids = [ 'extra' ];
+		var ids = [ 'extra', 'minfloor' ];
 		root.querySelectorAll( '.cmc-card-row' ).forEach( function ( row ) {
 			var idx = row.getAttribute( 'data-row' );
 			ids.push( 'balance-' + idx, 'apr-' + idx, 'minpay-' + idx );
@@ -142,6 +147,9 @@
 	function calc() {
 		var cards = readCards();
 		var extra = UI.num( root, 'extra' );
+		var shrinking = root.querySelector( '#minmode' ).value === 'shrink';
+		root.querySelector( '#minfloor' ).closest( '.cmc-field' ).style.display = shrinking ? '' : 'none';
+		var opts = shrinking ? { shrink: { floor: UI.num( root, 'minfloor' ) } } : null;
 		var err = root.querySelector( '#err' );
 
 		var negative = UI.hasNegative( root, rowFieldIds() );
@@ -154,8 +162,8 @@
 		err.style.display = 'none';
 		UI.toggleResults( root, true );
 
-		var snow = F.simulateMultiCardPayoff( cards, extra, 'snowball' );
-		var aval = F.simulateMultiCardPayoff( cards, extra, 'avalanche' );
+		var snow = F.simulateMultiCardPayoff( cards, extra, 'snowball', opts );
+		var aval = F.simulateMultiCardPayoff( cards, extra, 'avalanche', opts );
 
 		root.querySelector( '#stat-snow-months' ).textContent = snow.neverPaysOff ? ( snow.capped ? 'More than 50 years' : 'Never' ) : F.monthsToYearsMonths( snow.months );
 		root.querySelector( '#stat-snow-interest' ).textContent = snow.neverPaysOff ? '—' : F.currency( snow.totalInterest );
@@ -163,7 +171,7 @@
 		root.querySelector( '#stat-aval-interest' ).textContent = aval.neverPaysOff ? '—' : F.currency( aval.totalInterest );
 
 		if ( snow.neverPaysOff && aval.neverPaysOff ) {
-			root.querySelector( '#answer' ).innerHTML = '<span class="cmc-answer-label">Payments too low</span><p>Your total monthly payment of ' + F.currency( snow.monthlyBudget ) + ' (all minimums plus your extra amount) doesn\'t pay down these cards fast enough for either method to reach a zero balance within 50 years. Increase the extra amount to see a payoff plan.</p>';
+			root.querySelector( '#answer' ).innerHTML = '<span class="cmc-answer-label">Payments too low</span><p>Your ' + ( shrinking ? 'starting ' : '' ) + 'total monthly payment of ' + F.currency( snow.monthlyBudget ) + ' (all minimums plus your extra amount' + ( shrinking ? ', with the minimums shrinking as balances fall' : '' ) + ') doesn\'t pay down these cards fast enough for either method to reach a zero balance within 50 years. Increase the extra amount to see a payoff plan.</p>';
 			root.querySelector( '#order-tables' ).innerHTML = '';
 			C.drawBarChart( root.querySelector( '#chart-bar' ), [] );
 			return;
@@ -176,12 +184,13 @@
 
 		var diff = snow.totalInterest - aval.totalInterest;
 		var answer = root.querySelector( '#answer' );
+		var modeNote = shrinking ? ' This assumes each minimum shrinks as its balance falls (not below ' + F.currency( UI.num( root, 'minfloor' ) ) + '), your extra amount stays the same, and a paid-off card\'s last minimum moves to the next card.' : '';
 		if ( snow.neverPaysOff !== aval.neverPaysOff ) {
-			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>At this payment level only the ' + ( snow.neverPaysOff ? 'avalanche' : 'snowball' ) + ' method reaches a zero balance within 50 years. Increasing your extra amount would make both methods work.</p>';
+			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>At this payment level only the ' + ( snow.neverPaysOff ? 'avalanche' : 'snowball' ) + ' method reaches a zero balance within 50 years. Increasing your extra amount would make both methods work.' + modeNote + '</p>';
 		} else if ( diff > 1 ) {
-			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>The avalanche method (highest APR first) saves you about ' + F.currency( diff ) + ' in interest compared to the snowball method for these cards. The snowball method may still be worth it if paying off small balances first keeps you motivated to stick with the plan.</p>';
+			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>The avalanche method (highest APR first) saves you about ' + F.currency( diff ) + ' in interest compared to the snowball method for these cards. The snowball method may still be worth it if paying off small balances first keeps you motivated to stick with the plan.' + modeNote + '</p>';
 		} else {
-			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>For these specific balances and rates, snowball and avalanche cost about the same — so pick whichever order keeps you most motivated to stay consistent.</p>';
+			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>For these specific balances and rates, snowball and avalanche cost about the same — so pick whichever order keeps you most motivated to stay consistent.' + modeNote + '</p>';
 		}
 
 		var orderHtml = '<div class="cmc-calc-grid">';
@@ -192,7 +201,7 @@
 	}
 
 	bindRowEvents();
-	UI.onAnyChange( root, '#extra', calc );
+	UI.onAnyChange( root, '#extra, #minmode, #minfloor', calc );
 	calc();
 	window.addEventListener( 'resize', UI.debounce( calc, 250 ) );
 }());

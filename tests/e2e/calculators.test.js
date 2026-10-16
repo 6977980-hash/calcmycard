@@ -361,3 +361,51 @@ test( 'FIX-027: adding cards does not multiply calculations per keystroke', asyn
 		await page.close();
 	}
 } );
+
+test( 'FIX-035: minimum payment shows what keeping the first minimum saves', async () => {
+	const page = await open( 'minpayment', 'balance=5000&apr=22.15&issuer=chase&method=percent_plus_interest&percent=0&floor=40' );
+	assert.equal( await text( page, '#stat-min' ), '$142.29' );
+	assert.equal( await text( page, '#stat-fixed-months' ), '4 years, 10 months' );
+	assert.equal( await text( page, '#stat-fixed-interest' ), '$3,136.67' );
+	assert.match( await text( page, '#fixedbox' ), /Keep paying \$142\.29.*126 months sooner/ );
+	assert.deepEqual( page.errors, [] );
+	await page.close();
+} );
+
+test( 'FIX-036: payoff with new monthly charges', async () => {
+	const page = await open( 'payoff', 'mode=time&balance=5000&apr=22.99&payment=175&charges=50' );
+	assert.equal( await text( page, '#stat-months' ), '6 years, 6 months' );
+	assert.match( await text( page, '#answer' ), /plus \$50\.00 of new charges each month/ );
+	assert.match( await page.locator( '#schedule-wrap th' ).allTextContents().then( ( t ) => t.join( '|' ) ), /New charges/ );
+	// The deadline payment still clears the balance on time with charges.
+	await set( page, 'mode', 'goal' );
+	await set( page, 'months', 24 );
+	assert.equal( await text( page, '#stat-months' ), '2 years' );
+	// Charges larger than the payment can cover: never.
+	await set( page, 'mode', 'time' );
+	await set( page, 'charges', 100 );
+	assert.equal( await text( page, '#stat-date' ), 'Never at this payment' );
+	await set( page, 'charges', -5 );
+	assert.equal( await shown( page, '.cmc-calc-error' ), true );
+	assert.deepEqual( page.errors, [] );
+	await page.close();
+} );
+
+test( 'FIX-040: snowball/avalanche with shrinking minimums', async () => {
+	const page = await open( 'multidebt' );
+	assert.equal( await shown( page, '#minfloor' ), false );
+	assert.equal( await text( page, '#stat-aval-months' ), '2 years, 4 months' );
+	await set( page, 'minmode', 'shrink' );
+	assert.equal( await shown( page, '#minfloor' ), true );
+	assert.equal( await text( page, '#stat-snow-interest' ), '$3,096.41' );
+	assert.equal( await text( page, '#stat-aval-months' ), '2 years, 11 months' );
+	assert.match( await text( page, '#answer' ), /shrinks as its balance falls/ );
+	// The mode survives a shared link.
+	await page.click( '.cmc-share-bar button' );
+	await page.waitForFunction( () => window.__copied );
+	const again = await open( 'multidebt', ( await page.evaluate( () => window.__copied ) ).split( '?' )[1] );
+	assert.deepEqual( await statTexts( again ), await statTexts( page ) );
+	assert.deepEqual( page.errors, [] );
+	await page.close();
+	await again.close();
+} );

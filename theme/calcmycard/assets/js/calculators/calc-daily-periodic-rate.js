@@ -23,7 +23,7 @@
 		UI.errorBox( 'err' ) +
 		'<div class="cmc-results is-visible" id="results">' +
 			UI.statsRow( [
-				{ id: 'stat-dpr', label: 'Daily periodic rate', value: '', highlight: true },
+				{ id: 'stat-dpr', label: 'Daily interest rate (daily periodic rate)', value: '', highlight: true },
 				{ id: 'stat-daily-cost', label: 'Interest per day', value: '' },
 				{ id: 'stat-cycle-cost', label: 'Interest this billing cycle', value: '' },
 				{ id: 'stat-effective-apr', label: 'Effective APR (with daily compounding)', value: '' },

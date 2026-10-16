@@ -108,7 +108,7 @@ function cmc_calculators() {
 				),
 				array(
 					'q' => 'Does this calculator account for new purchases?',
-					'a' => 'No. It assumes you stop adding charges. Any new spending on the card will push the payoff date back.',
+					'a' => 'Yes, if you enter them. Put the purchases you expect to keep making in "New charges each month" and the calculator adds them to the balance every month before interest. For example, $5,000 at 22.99% APR paid at $175 a month takes 42 months with no new charges, but 78 months with $50 of new charges each month.',
 				),
 				array(
 					'q' => 'What if my APR changes?',
@@ -248,7 +248,7 @@ function cmc_calculators() {
 				),
 				array(
 					'q' => 'Does this calculator include new purchases or fees?',
-					'a' => 'No. It assumes no new charges and fixed minimum payments. Real minimums usually fall as balances fall, and new spending would lengthen the plan.',
+					'a' => 'No. It assumes no new charges or fees, and new spending would lengthen the plan. Minimums stay fixed by default; switch "Minimum payments" to "Shrink as each balance falls" to model minimums that fall with each balance, down to a dollar floor.',
 				),
 			),
 		),
