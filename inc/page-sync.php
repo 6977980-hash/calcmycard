@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-25.4' );
+define( 'CMC_CONTENT_SYNC', '2026-10-25.5' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -316,7 +316,7 @@ function cmc_content_sync_replacements() {
 			// Oct 25, 2026 (A25 Phase 1): input validation and fee tests added.
 			'It covers all 16 calculators with 126 test cases,' => 'It covers all 16 calculators with 145 test cases,',
 			'Last full run: October 16, 2026 (126 of 126 passed).' => 'Last full run: October 25, 2026 (145 of 145 passed).',
-			// Oct 25, 2026 (A25 Phase 3/4): the body is copied from content/pages/methodology.html (version 2026-10-25.3), which has 156.
+			// Oct 25, 2026 (A25 Phase 3/4): the body is copied from content/pages/methodology.html (version 2026-10-25.3), which has 156; version 2026-10-25.4 has 157.
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
@@ -346,6 +346,9 @@ function cmc_content_sync_replacements() {
 			// Oct 25, 2026 (A25 Phase 4): link target size, heading and Terms page checks added.
 			'The suite has 153 test cases covering all 16 calculators,' => 'The suite has 156 test cases covering all 16 calculators,',
 			'October 25, 2026 &mdash; all 153 cases passed. That run added checks for APRs over 100%, fractional promo months, balance transfer fees, the origination fee option in the consolidation calculator, and key facts in our guides.' => 'October 25, 2026 &mdash; all 156 cases passed. That run added checks for APRs over 100%, fractional promo months, balance transfer fees, the origination fee option in the consolidation calculator, key facts in our guides, link tap-target sizes and heading order.',
+			// Oct 25, 2026 (A25 Phase 5): XML-RPC check added.
+			'The suite has 156 test cases covering all 16 calculators,' => 'The suite has 157 test cases covering all 16 calculators,',
+			'October 25, 2026 &mdash; all 156 cases passed.' => 'October 25, 2026 &mdash; all 157 cases passed.',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
@@ -362,7 +365,7 @@ function cmc_content_sync_replacements() {
  */
 function cmc_page_bodies() {
 	return array(
-		'methodology'    => '2026-10-25.3',
+		'methodology'    => '2026-10-25.4',
 		'privacy-policy' => '2026-10-16',
 		'terms'          => '2026-10-25',
 	);
