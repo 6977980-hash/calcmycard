@@ -37,7 +37,10 @@
 			filename: 'credit-card-interest-schedule.csv',
 			headers: [ 'Month', 'Payment', 'Interest', 'Principal', 'Ending balance' ],
 			rows: lastSchedule.map( function ( r ) {
-				return [ r.month, r.payment.toFixed( 2 ), r.interest.toFixed( 2 ), r.principal.toFixed( 2 ), r.balance.toFixed( 2 ) ];
+				// Principal = payment - interest after both are rounded to the
+				// cent, so each row adds up (same rule as the stats above).
+				var cents = Math.round( r.payment * 100 ) - Math.round( r.interest * 100 );
+				return [ r.month, r.payment.toFixed( 2 ), r.interest.toFixed( 2 ), ( cents / 100 ).toFixed( 2 ), r.balance.toFixed( 2 ) ];
 			} ),
 		};
 	} );

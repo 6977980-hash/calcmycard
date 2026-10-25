@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-25.2' );
+define( 'CMC_CONTENT_SYNC', '2026-10-25.3' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -315,6 +315,7 @@ function cmc_content_sync_replacements() {
 			// Oct 25, 2026 (A25 Phase 1): input validation and fee tests added.
 			'It covers all 16 calculators with 126 test cases,' => 'It covers all 16 calculators with 145 test cases,',
 			'Last full run: October 16, 2026 (126 of 126 passed).' => 'Last full run: October 25, 2026 (145 of 145 passed).',
+			// Oct 25, 2026 (A25 Phase 3): the body is copied from content/pages/methodology.html (version 2026-10-25.2), which has 153.
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
@@ -338,6 +339,9 @@ function cmc_content_sync_replacements() {
 			// Oct 25, 2026 (A25 Phase 1): input validation and fee tests added.
 			'The suite has 126 test cases covering all 16 calculators,' => 'The suite has 145 test cases covering all 16 calculators,',
 			'October 16, 2026 &mdash; all 126 cases passed. That run found' => 'October 25, 2026 &mdash; all 145 cases passed. That run added checks for APRs over 100%, fractional promo months and balance transfer fees. The October 16, 2026 run found',
+			// Oct 25, 2026 (A25 Phase 3): content accuracy and consolidation tests added; link to the test summary.
+			'The suite has 145 test cases covering all 16 calculators,' => 'The suite has 153 test cases covering all 16 calculators,',
+			'October 25, 2026 &mdash; all 145 cases passed. That run added checks for APRs over 100%, fractional promo months and balance transfer fees.' => 'October 25, 2026 &mdash; all 153 cases passed. That run added checks for APRs over 100%, fractional promo months, balance transfer fees, the origination fee option in the consolidation calculator, and key facts in our guides. <a href="/methodology/#how-we-test">See what every test case checks</a>.',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
@@ -354,7 +358,7 @@ function cmc_content_sync_replacements() {
  */
 function cmc_page_bodies() {
 	return array(
-		'methodology'    => '2026-10-25.1',
+		'methodology'    => '2026-10-25.2',
 		'privacy-policy' => '2026-10-16',
 	);
 }
