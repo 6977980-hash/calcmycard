@@ -120,7 +120,7 @@ function cmc_articles() {
 			'meta_description' => 'How balance transfer fees work, typical rates, and the simple math for deciding whether a transfer still saves you money after the fee.',
 			'target_keyword'   => 'balance transfer fee',
 			'sources'          => array( 'cfpb-bt-fee', 'cfpb-deferred', 'regz-1026-55' ),
-			'related_calculators' => array( 'balance-transfer-calculator', 'debt-consolidation-vs-balance-transfer-calculator', 'intro-apr-calculator' ),
+			'related_calculators' => array( 'balance-transfer-calculator', 'debt-consolidation-vs-balance-transfer-calculator', 'intro-apr-calculator', 'deferred-interest-calculator' ),
 		),
 
 		'credit-card-interest-calculator-excel-template' => array(

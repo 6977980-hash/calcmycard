@@ -56,7 +56,7 @@ function cmc_calculators() {
 				),
 				array(
 					'q' => 'How do I avoid paying credit card interest?',
-					'a' => 'On cards with a grace period, paying your full statement balance by the due date each month typically avoids interest on purchases. If you already carry a balance, paying more each month, or moving it to a lower-rate offer, reduces the interest you pay.',
+					'a' => 'On cards with a <a href="/guides/credit-card-grace-period-explained/">grace period</a>, paying your full statement balance by the due date each month typically avoids interest on purchases. If you already carry a balance, paying more each month, or moving it to a lower-rate offer, reduces the interest you pay.',
 				),
 				array(
 					'q' => 'What\'s a good APR for a credit card?',
@@ -180,7 +180,7 @@ function cmc_calculators() {
 			'calc_id'          => 'balancetransfer',
 			'js'               => 'calc-balance-transfer.js',
 			'sources'          => array( 'cfpb-bt-fee', 'cfpb-deferred', 'regz-1026-55' ),
-			'related'          => array( 'intro-apr-calculator', 'debt-consolidation-vs-balance-transfer-calculator', 'credit-card-interest-calculator' ),
+			'related'          => array( 'intro-apr-calculator', 'deferred-interest-calculator', 'debt-consolidation-vs-balance-transfer-calculator', 'credit-card-interest-calculator' ),
 			'faqs'             => array(
 				array(
 					'q' => 'Is a balance transfer worth the transfer fee?',
@@ -412,8 +412,8 @@ function cmc_calculators() {
 		'deferred-interest-calculator' => array(
 			'slug'             => 'deferred-interest-calculator',
 			'title'            => 'Deferred Interest Calculator',
-			'seo_title'        => 'Deferred Interest Calculator — What Missing the Deadline Costs',
-			'meta_description' => 'See how much interest builds up on a "no interest if paid in full" store card or financing offer, the payment that avoids it, and the cost if you miss the deadline.',
+			'seo_title'        => 'Deferred Interest Calculator: No Interest If Paid in Full',
+			'meta_description' => 'No interest if paid in full calculator: see deferred interest on a store card or financing deal, the payment that avoids it, and the cost of a missed deadline.',
 			'h1'               => 'Deferred Interest Calculator',
 			'dek'              => 'For "no interest if paid in full" store card and retail financing offers: see the interest building up in the background, the payment that avoids it, and what you owe if you miss the deadline.',
 			'target_keyword'   => 'deferred interest calculator',
