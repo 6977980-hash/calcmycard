@@ -12,7 +12,8 @@
  * - copies seo_title / meta_description / target_keyword from the data
  *   files into each calculator and guide page's Rank Math fields;
  * - replaces the body of the plain pages in cmc_page_bodies() with
- *   /content/pages/{path}.html when that page's version changes;
+ *   /content/pages/{path}.html when that page's version changes, and
+ *   creates the ones listed in cmc_new_plain_pages() if they don't exist;
  * - applies the text replacements listed in cmc_content_sync_replacements();
  * - sets the Rank Math descriptions in cmc_page_seo_descriptions();
  * - renames or unpublishes pages listed in cmc_moved_pages(), whose old
@@ -25,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-10-25.3' );
+define( 'CMC_CONTENT_SYNC', '2026-10-25.4' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -315,7 +316,7 @@ function cmc_content_sync_replacements() {
 			// Oct 25, 2026 (A25 Phase 1): input validation and fee tests added.
 			'It covers all 16 calculators with 126 test cases,' => 'It covers all 16 calculators with 145 test cases,',
 			'Last full run: October 16, 2026 (126 of 126 passed).' => 'Last full run: October 25, 2026 (145 of 145 passed).',
-			// Oct 25, 2026 (A25 Phase 3): the body is copied from content/pages/methodology.html (version 2026-10-25.2), which has 153.
+			// Oct 25, 2026 (A25 Phase 3/4): the body is copied from content/pages/methodology.html (version 2026-10-25.3), which has 156.
 		),
 		'about'       => array(
 			'The suite has 66 test cases covering all 12 calculators,' => 'The suite has 66 test cases covering the original 12 calculators,',
@@ -342,6 +343,9 @@ function cmc_content_sync_replacements() {
 			// Oct 25, 2026 (A25 Phase 3): content accuracy and consolidation tests added; link to the test summary.
 			'The suite has 145 test cases covering all 16 calculators,' => 'The suite has 153 test cases covering all 16 calculators,',
 			'October 25, 2026 &mdash; all 145 cases passed. That run added checks for APRs over 100%, fractional promo months and balance transfer fees.' => 'October 25, 2026 &mdash; all 153 cases passed. That run added checks for APRs over 100%, fractional promo months, balance transfer fees, the origination fee option in the consolidation calculator, and key facts in our guides. <a href="/methodology/#how-we-test">See what every test case checks</a>.',
+			// Oct 25, 2026 (A25 Phase 4): link target size, heading and Terms page checks added.
+			'The suite has 153 test cases covering all 16 calculators,' => 'The suite has 156 test cases covering all 16 calculators,',
+			'October 25, 2026 &mdash; all 153 cases passed. That run added checks for APRs over 100%, fractional promo months, balance transfer fees, the origination fee option in the consolidation calculator, and key facts in our guides.' => 'October 25, 2026 &mdash; all 156 cases passed. That run added checks for APRs over 100%, fractional promo months, balance transfer fees, the origination fee option in the consolidation calculator, key facts in our guides, link tap-target sizes and heading order.',
 		),
 		'editorial-policy' => array(
 			'an automated test suite runs every calculator in a real browser and compares its output with hand-worked examples and an independent reference implementation,' => 'every calculator\'s output is compared with hand-worked examples, and the original calculators are also run by an automated test suite in a real browser against an independent reference implementation,',
@@ -358,8 +362,19 @@ function cmc_content_sync_replacements() {
  */
 function cmc_page_bodies() {
 	return array(
-		'methodology'    => '2026-10-25.2',
+		'methodology'    => '2026-10-25.3',
 		'privacy-policy' => '2026-10-16',
+		'terms'          => '2026-10-25',
+	);
+}
+
+/**
+ * Plain pages the theme creates when they are missing (default template),
+ * by page path => title. Their body then comes from cmc_page_bodies().
+ */
+function cmc_new_plain_pages() {
+	return array(
+		'terms' => 'Terms of Use',
 	);
 }
 
@@ -367,6 +382,18 @@ function cmc_sync_page_bodies() {
 	foreach ( cmc_page_bodies() as $path => $version ) {
 		$page = get_page_by_path( $path );
 		$file = CMC_THEME_DIR . '/content/pages/' . $path . '.html';
+		$new  = cmc_new_plain_pages();
+		if ( ! $page && isset( $new[ $path ] ) && is_readable( $file ) ) {
+			$admins = get_users( array( 'role' => 'administrator', 'number' => 1, 'orderby' => 'ID', 'fields' => 'ID' ) );
+			$id     = wp_insert_post( array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+				'post_title'  => $new[ $path ],
+				'post_name'   => $path,
+				'post_author' => $admins ? (int) $admins[0] : 1,
+			) );
+			$page = ( $id && ! is_wp_error( $id ) ) ? get_post( $id ) : null;
+		}
 		if ( ! $page || ! is_readable( $file ) || get_post_meta( $page->ID, '_cmc_body_version', true ) === $version ) {
 			continue;
 		}
@@ -387,6 +414,7 @@ function cmc_page_seo_descriptions() {
 		'contact'        => 'Contact CalcMyCard to report a calculator error, send a content correction, ask a question or suggest a new calculator or guide.',
 		'methodology'    => 'How each CalcMyCard calculator works: the formulas, assumptions and limits behind all 16 tools, the issuer formulas we use, and how we test them.',
 		'privacy-policy' => 'How CalcMyCard handles your data: calculator inputs stay in your browser, and the site uses no analytics, ads or tracking cookies.',
+		'terms'          => 'CalcMyCard Terms of Use: free educational estimates, not financial advice, how you may use and embed our calculators, and the limits of our liability.',
 	);
 }
 
