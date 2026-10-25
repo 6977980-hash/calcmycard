@@ -67,6 +67,31 @@ remove_action( 'wp_head', 'feed_links_extra', 3 );
 remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 
 /**
+ * XML-RPC off (25 Oct 2026 audit, A25-018). Nothing on the site uses it
+ * (no mobile app, no Jetpack), and xmlrpc.php answered system.listMethods
+ * and pingback.ping for anyone, a common target for password guessing and
+ * pingback abuse. The filters cover any XML-RPC call; the early exit makes
+ * xmlrpc.php itself answer 403 instead of listing its methods. A full block
+ * before WordPress loads would need an .htaccess rule on the server.
+ */
+add_filter( 'xmlrpc_enabled', '__return_false' );
+add_filter( 'xmlrpc_methods', '__return_empty_array' );
+add_filter( 'pings_open', '__return_false' );
+add_filter( 'wp_headers', function ( $headers ) {
+	unset( $headers['X-Pingback'] );
+	return $headers;
+} );
+add_filter( 'bloginfo_url', function ( $output, $show ) {
+	return 'pingback_url' === $show ? '' : $output;
+}, 10, 2 );
+if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {
+	status_header( 403 );
+	header( 'Content-Type: text/plain; charset=utf-8' );
+	echo 'XML-RPC is disabled on this site.';
+	exit;
+}
+
+/**
  * Serve /llms.txt: a plain-text map of the site for AI assistants, built from
  * the same calculator and guide data the pages use, so it never drifts.
  */
