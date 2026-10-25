@@ -6,17 +6,17 @@
 <p>Two tools solve the same problem &mdash; a high-interest card balance &mdash; in different ways. A balance transfer moves the debt to a card with a temporary low rate; a consolidation loan replaces it with a fixed-rate, fixed-term installment loan.</p>
 
 <h2>How the Calculator Works</h2>
-<p>Enter the balance, the transfer offer (fee, promo APR, promo months, go-to APR), and the loan terms (APR, term in months, origination fee).</p>
+<p>Enter the balance, the transfer offer (fee, promo APR, promo months, go-to APR), and the loan terms (APR, term in months, origination fee, and whether the lender adds that fee to the loan or takes it out of the loan money).</p>
 <ul>
 <li><strong>Balance transfer:</strong> adds the fee to the balance and assumes a flat payment of (balance + fee) &divide; promo months, then simulates payoff with the monthly model.</li>
-<li><strong>Consolidation loan:</strong> adds the origination fee to the amount borrowed, calculates a fixed installment payment, and totals interest and fees over the term.</li>
+<li><strong>Consolidation loan:</strong> adds the origination fee to the amount borrowed (or, if the lender takes the fee out of the loan money, borrows enough that what's left still clears the balance), calculates a fixed installment payment, and totals interest and fees over the term.</li>
 </ul>
-<p>It reports the total cost of each, the loan's monthly payment, and which option costs less.</p>
+<p>It reports the total cost of each, which option costs less in total, and the monthly payment each one needs, because the cheaper option often needs the bigger payment.</p>
 
 <h2>Formula</h2>
 <div class="cmc-formula">Transfer Cost = Transfer Fee + Interest (promo APR, then go-to APR, APR &divide; 12)<br>
 Transfer Payment = (Balance + Fee) &divide; Promo Months<br>
-Loan Payment = L &times; r &divide; [1 &minus; (1 + r)<sup>&minus;n</sup>], where L = balance + origination fee, r = APR &divide; 12, n = months<br>
+Loan Payment = L &times; r &divide; [1 &minus; (1 + r)<sup>&minus;n</sup>], where L = balance + origination fee (or balance &divide; (1 &minus; fee %) if the fee is taken out of the loan money), r = APR &divide; 12, n = months<br>
 Loan Cost = Loan Payment &times; n &minus; Balance</div>
 <p class="cmc-formula-note">This is a simplified estimate, not an issuer-specific statement calculation. The loan formula is the standard installment-loan formula; your lender's actual payment may differ.</p>
 
@@ -29,6 +29,8 @@ Loan Cost = Loan Payment &times; n &minus; Balance</div>
 <tr><td>Consolidation loan</td><td>12.99% APR, 36 months, 2% origination fee</td><td>$274.90</td><td>$1,896.52</td></tr>
 </tbody>
 </table></div>
+
+<p>If the lender takes the 2% fee out of the loan money instead, you'd borrow $8,163.27 to have $8,000 left, so the payment is $275.01 and the total cost $1,900.48.</p>
 
 <p>If you can afford about $458 a month, the transfer is far cheaper here. If you can only manage about $275, the loan's fixed payment may be more realistic &mdash; and at that payment the transfer would leave a balance at the go-to APR once the promo ends.</p>
 
@@ -43,7 +45,6 @@ Loan Cost = Loan Payment &times; n &minus; Balance</div>
 <li><strong>New purchases:</strong> the estimate assumes you stop adding charges. Any new spending lengthens payoff and raises interest.</li>
 <li><strong>Different APR categories:</strong> purchases, balance transfers, cash advances, and penalty APRs can carry different rates on the same card, and how payments are allocated between them affects the total.</li>
 <li><strong>Approval and terms:</strong> the APR, fee, and credit limit or loan amount you're offered depend on your credit profile and may differ from the inputs.</li>
-<li><strong>How origination fees are charged:</strong> some lenders deduct the fee from the loan proceeds instead of adding it to the amount borrowed.</li>
 <li><strong>Promo rules:</strong> paying more than 60 days late can let an issuer end a promotional rate early, and deferred-interest offers work differently from true 0% APR.</li>
 <li><strong>Running up the old cards:</strong> both options only help if the paid-off cards don't collect new balances.</li>
 </ul>

@@ -512,7 +512,7 @@ function cmc_calculators() {
 				),
 				array(
 					'q' => 'What is an origination fee?',
-					'a' => 'It\'s a one-time fee some lenders charge to make a personal loan, often a percentage of the loan amount. Some add it to the amount you borrow and others deduct it from the money you receive; this calculator adds it to the loan.',
+					'a' => 'It\'s a one-time fee some lenders charge to make a personal loan, often a percentage of the loan amount. Some add it to the amount you borrow and others deduct it from the money you receive. Choose which one your lender does in the calculator; when the fee is deducted, it assumes you borrow enough that the money left still pays off the full balance.',
 				),
 				array(
 					'q' => 'What if my balance is larger than the transfer card\'s limit?',

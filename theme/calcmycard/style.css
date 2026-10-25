@@ -4,7 +4,7 @@ Theme URI: https://calcmycard.com
 Author: Ali Ahmad
 Author URI: https://calcmycard.com/about/
 Description: A fast, lightweight, SEO/AEO-optimized WordPress theme purpose-built for a credit card calculator authority site. Built for Core Web Vitals, schema markup, and AdSense-ready layout.
-Version: 1.0.32
+Version: 1.0.33
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.6
@@ -359,7 +359,7 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-calculator[data-calc="extrapayment"] { min-height: 1102px; }
 .cmc-calculator[data-calc="introapr"] { min-height: 688px; }
 .cmc-calculator[data-calc="utilization"] { min-height: 1233px; }
-.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1282px; }
+.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1330px; }
 .cmc-calculator[data-calc="cashadvance"] { min-height: 1084px; }
 .cmc-calculator[data-calc="biweekly"] { min-height: 1042px; }
 .cmc-calculator[data-calc="interestcheck"] { min-height: 683px; }
@@ -376,7 +376,7 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-calculator[data-calc="extrapayment"] { min-height: 1121px; }
 .cmc-calculator[data-calc="introapr"] { min-height: 688px; }
 .cmc-calculator[data-calc="utilization"] { min-height: 1270px; }
-.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1312px; }
+.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1360px; }
 .cmc-calculator[data-calc="cashadvance"] { min-height: 1124px; }
 .cmc-calculator[data-calc="biweekly"] { min-height: 1090px; }
 .cmc-calculator[data-calc="interestcheck"] { min-height: 731px; }
@@ -394,7 +394,7 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-calculator[data-calc="extrapayment"] { min-height: 1531px; }
 .cmc-calculator[data-calc="introapr"] { min-height: 1095px; }
 .cmc-calculator[data-calc="utilization"] { min-height: 1746px; }
-.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 1822px; }
+.cmc-calculator[data-calc="consolidationvstransfer"] { min-height: 2011px; }
 .cmc-calculator[data-calc="cashadvance"] { min-height: 1615px; }
 .cmc-calculator[data-calc="biweekly"] { min-height: 1429px; }
 .cmc-calculator[data-calc="interestcheck"] { min-height: 1050px; }

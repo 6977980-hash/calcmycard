@@ -82,7 +82,7 @@ $articles    = cmc_articles();
 		),
 		array(
 			'q' => 'Do you sell my data or require an account?',
-			'a' => 'No. There is no account, no login, and no data collection tied to the calculators themselves. See our Privacy Policy for details on site analytics and advertising.',
+			'a' => 'No. There is no account, no login, and no data collection tied to the calculators themselves. The site has no analytics and no ads today; see our Privacy Policy for details.',
 		),
 	), 'Frequently Asked Questions' );
 

@@ -25,6 +25,10 @@
 			UI.field( { id: 'loanApr', label: 'Fixed loan APR (%)', value: 12.99, min: 0, step: '0.01' } ),
 			UI.field( { id: 'loanTerm', label: 'Loan term (months)', value: 36, min: 1, step: '1' } ),
 			UI.field( { id: 'originationFee', label: 'Origination fee (%)', value: 2, min: 0, step: '0.1' } ),
+			UI.field( { id: 'feeMode', label: 'Origination fee is', type: 'select', value: 'added', options: [
+				{ value: 'added', label: 'Added to the loan' },
+				{ value: 'deducted', label: 'Taken out of the loan money' },
+			] } ),
 		] ) +
 		UI.errorBox( 'err' ) +
 		'<div class="cmc-results is-visible" id="results">' +
@@ -32,7 +36,7 @@
 				{ id: 'stat-transfer-cost', label: 'Balance transfer: total cost', value: '' },
 				{ id: 'stat-loan-cost', label: 'Consolidation loan: total cost', value: '' },
 				{ id: 'stat-loan-payment', label: 'Consolidation loan: monthly payment', value: '' },
-				{ id: 'stat-winner', label: 'Cheaper option', value: '', highlight: true },
+				{ id: 'stat-winner', label: 'Cheaper in total cost', value: '', highlight: true },
 			] ) +
 			'<div class="cmc-chart-wrap"><canvas id="chart-bar" height="220"></canvas></div>' +
 			'<div class="cmc-answer-box" id="answer"></div>' +
@@ -72,6 +76,7 @@
 		var loanApr = UI.num( root, 'loanApr' );
 		var loanTerm = UI.num( root, 'loanTerm' );
 		var originationFee = UI.num( root, 'originationFee' );
+		var feeDeducted = root.querySelector( '#feeMode' ).value === 'deducted';
 		var err = root.querySelector( '#err' );
 
 		if ( UI.aprTooHigh( root, [ 'promoApr', 'goToApr', 'loanApr' ] ) ) {
@@ -79,8 +84,8 @@
 		}
 		var negative = UI.hasNegative( root, [ 'balance', 'feePercent', 'promoApr', 'goToApr', 'loanApr', 'originationFee' ] );
 		var wholeMonths = promoMonths === Math.floor( promoMonths ) && loanTerm === Math.floor( loanTerm );
-		if ( negative || balance <= 0 || promoMonths < 1 || loanTerm < 1 || ! wholeMonths ) {
-			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance greater than 0, and a promo period and loan term of at least 1 whole month.';
+		if ( negative || balance <= 0 || promoMonths < 1 || loanTerm < 1 || ! wholeMonths || ( feeDeducted && originationFee >= 100 ) ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : ( feeDeducted && originationFee >= 100 ? 'An origination fee taken out of the loan money must be under 100%.' : 'Enter a balance greater than 0, and a promo period and loan term of at least 1 whole month.' );
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -96,9 +101,11 @@
 		var transferSim = simulateBlended( balance + fee, promoApr, promoMonths, goToApr, flatPayment );
 		var transferCost = transferSim.neverPaysOff ? null : ( transferSim.totalInterest + fee );
 
-		// Option B: fixed-rate installment loan.
-		var origFee = balance * ( originationFee / 100 );
-		var payment = loanPayment( balance + origFee, loanApr, loanTerm );
+		// Option B: fixed-rate installment loan. The fee is either added to
+		// the amount borrowed, or taken out of the loan money, in which case
+		// you borrow enough that what's left still clears the balance.
+		var borrowed = feeDeducted ? balance / ( 1 - originationFee / 100 ) : balance * ( 1 + originationFee / 100 );
+		var payment = loanPayment( borrowed, loanApr, loanTerm );
 		var totalPaid = payment * loanTerm;
 		var loanCost = ( totalPaid - balance ) ; // interest + fees beyond principal
 
@@ -112,7 +119,7 @@
 			var winner = transferCost < loanCost ? 'Balance Transfer' : 'Consolidation Loan';
 			root.querySelector( '#stat-winner' ).textContent = winner;
 			var diff = Math.abs( transferCost - loanCost );
-			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>Based on these numbers, the <strong>' + winner + '</strong> option costs about ' + F.currency( diff ) + ' less in total fees and interest. Remember: the balance transfer estimate assumes you can pay it off within the promo window at a flat ' + F.currency( flatPayment ) + '/month — if your budget can\'t support that, the fixed loan payment of ' + F.currency( payment ) + '/month may be more realistic.</p>';
+			answer.innerHTML = '<span class="cmc-answer-label">Bottom line</span><p>Based on these numbers, the <strong>' + winner + '</strong> option costs about ' + F.currency( diff ) + ' less in total fees and interest. The monthly payments differ, though: <strong>' + F.currency( flatPayment ) + '/mo</strong> for ' + promoMonths + ' months on the balance transfer vs <strong>' + F.currency( payment ) + '/mo</strong> for ' + loanTerm + ' months on the loan. The transfer estimate assumes you can pay that flat amount to clear it within the promo window. If your budget can\'t support it, the fixed loan payment may be more realistic.</p>';
 			C.drawBarChart( root.querySelector( '#chart-bar' ), [
 				{ label: 'Balance Transfer', value: transferCost, color: C.palette.accent },
 				{ label: 'Consolidation Loan', value: loanCost, color: C.palette.brand },
