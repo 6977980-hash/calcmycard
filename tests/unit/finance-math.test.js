@@ -260,3 +260,14 @@ test( 'FIX-040: shrinking minimums on the multi-card page example', () => {
 	assert.equal( flat.neverPaysOff, true );
 	assert.equal( flat.capped, false );
 } );
+
+test( 'A25-004: pay-in-full guide table, $4,000 at 22% minimum-only', () => {
+	const plus = F.simulateMinimumOnly( { balance: 4000, apr: 22, floor: 25, method: 'percent_plus_interest' } );
+	assert.equal( plus.months, 208 );
+	assert.equal( Math.round( plus.totalInterest ), 6266 );
+	assert.equal( cents( plus.schedule[0].payment ), 113.33 );
+	const flat = F.simulateMinimumOnly( { balance: 4000, apr: 22, floor: 25, method: 'percent', percent: 2 } );
+	assert.equal( flat.capped, true );
+	assert.equal( Math.round( flat.schedule[ 599 ].balance ), 1470 );
+	assert.ok( flat.totalInterest > 27800 && flat.totalInterest < 27900 );
+} );

@@ -25,7 +25,7 @@ function cmc_articles() {
 			'seo_title'        => 'How Credit Card Interest Works: When It Starts and Stops',
 			'meta_description' => 'How credit card interest works in plain English: when it starts, how you lose and regain the grace period, residual interest, and separate APRs.',
 			'target_keyword'   => 'how credit card interest works',
-			'sources'          => array( 'cfpb-grace', 'cfpb-cash-advance', 'regz-1026-53' ),
+			'sources'          => array( 'cfpb-grace', 'cfpb-cash-advance', 'regz-1026-53', 'regz-1026-54' ),
 			'related_calculators' => array( 'credit-card-interest-calculator', 'daily-periodic-rate-calculator' ),
 		),
 
@@ -67,8 +67,19 @@ function cmc_articles() {
 			'seo_title'        => 'What Is a Credit Card Grace Period? How to Keep It',
 			'meta_description' => 'What a credit card grace period is, how it works, and the rule that usually keeps it: paying your full statement balance by the due date.',
 			'target_keyword'   => 'what is a credit card grace period',
-			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'cfpb-cash-advance', 'cfpb-deferred' ),
+			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'regz-1026-54', 'cfpb-cash-advance', 'cfpb-deferred' ),
 			'related_calculators' => array( 'credit-card-interest-calculator' ),
+		),
+
+		'statement-balance-vs-current-balance' => array(
+			'slug'             => 'statement-balance-vs-current-balance',
+			'title'            => 'Statement Balance vs. Current Balance vs. Payoff Amount',
+			'breadcrumb'       => 'Statement vs. Current Balance',
+			'seo_title'        => 'Statement Balance vs Current Balance: Which Should You Pay?',
+			'meta_description' => 'Statement balance, current balance or payoff amount: which one to pay to avoid interest, why interest can appear after you pay in full, and what to do.',
+			'target_keyword'   => 'statement balance vs current balance',
+			'sources'          => array( 'cfpb-grace', 'regz-1026-54', 'myfico-util' ),
+			'related_calculators' => array( 'credit-card-interest-charge-checker', 'credit-card-interest-calculator', 'credit-utilization-calculator' ),
 		),
 
 		'pay-in-full-vs-minimum-payment' => array(
@@ -180,7 +191,7 @@ function cmc_articles() {
 			'seo_title'        => 'Credit Card Glossary: APR, Grace Period & More Explained',
 			'meta_description' => 'Plain-English definitions of credit card terms: APR, daily periodic rate, average daily balance, grace period, minimum payment, penalty APR, and more.',
 			'target_keyword'   => 'credit card terms glossary',
-			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'regz-1026-53', 'regz-1026-55' ),
+			'sources'          => array( 'cfpb-grace', 'regz-1026-5', 'regz-1026-53', 'regz-1026-54', 'regz-1026-55' ),
 			'related_calculators' => array( 'credit-card-interest-calculator', 'daily-periodic-rate-calculator', 'minimum-payment-calculator' ),
 		),
 
@@ -192,7 +203,7 @@ function cmc_articles() {
 			'meta_description' => 'How much a credit card late fee can be under federal rules, what happened to the $8 cap, when a payment counts as late, and what 30 and 60 days late cost.',
 			'card_description' => 'The federal limits on late fees, what happened to the $8 cap, and what a payment 30 or 60 days late can cost.',
 			'target_keyword'   => 'credit card late fee',
-			'sources'          => array( 'regz-1026-52', 'cfpb-penalty-fees', 'regz-1026-5', 'regz-1026-10', 'regz-1026-55', 'cfpb-deferred' ),
+			'sources'          => array( 'regz-1026-52', 'fr-safe-harbor-2022', 'cfpb-penalty-fees', 'regz-1026-5', 'regz-1026-10', 'regz-1026-55', 'cfpb-deferred' ),
 			'related_calculators' => array( 'credit-card-apr-calculator', 'minimum-payment-calculator', 'deferred-interest-calculator' ),
 		),
 

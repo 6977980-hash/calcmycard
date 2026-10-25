@@ -257,6 +257,30 @@ test( 'A25-009: principal part of a payment never exceeds the balance', async ()
 	await page.close();
 } );
 
+test( 'A25-014: consolidation verdict shows both monthly payments', async () => {
+	const page = await open( 'consolidationvstransfer' );
+	assert.equal( await text( page, '#stat-loan-cost' ), '$1,896.52' );
+	const answer = await text( page, '#answer' );
+	assert.ok( answer.includes( '$457.78/mo' ) && answer.includes( '$274.90/mo' ), answer );
+	await page.close();
+} );
+
+test( 'A25-014: origination fee taken out of the loan money', async () => {
+	const page = await open( 'consolidationvstransfer', 'feeMode=deducted' );
+	assert.equal( await text( page, '#stat-loan-payment' ), '$275.01/mo' );
+	assert.equal( await text( page, '#stat-loan-cost' ), '$1,900.48' );
+	await set( page, 'originationFee', 100 );
+	assert.equal( await shown( page, '.cmc-calc-error' ), true );
+	await page.close();
+} );
+
+test( 'A25-020: interest split and CSV row add up to the payment', async () => {
+	const page = await open( 'interest', 'balance=5000&apr=24.99&payment=150' );
+	assert.equal( await text( page, '#stat-interest-portion' ), '$104.13' );
+	assert.equal( await text( page, '#stat-principal-portion' ), '$45.87' );
+	await page.close();
+} );
+
 test( 'FIX-010: consolidation needs a balance and whole months', async () => {
 	const page = await open( 'consolidationvstransfer' );
 	for ( const [ field, value ] of [ [ 'balance', 0 ], [ 'loanTerm', 36.5 ], [ 'promoMonths', 12.5 ] ] ) {
