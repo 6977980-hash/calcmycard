@@ -98,6 +98,7 @@ function cmc_llms_txt() {
 	$lines[] = '- [Methodology](' . home_url( '/methodology/' ) . '): the exact formulas behind every calculator and how they are tested.';
 	$lines[] = '- [Editorial policy](' . home_url( '/editorial-policy/' ) . '): sourcing standards (Federal Reserve G.19, CFPB, Regulation Z, FICO) and corrections.';
 	$lines[] = '- [About](' . home_url( '/about/' ) . ')';
+	$lines[] = '- [Terms of Use](' . home_url( '/terms/' ) . '): estimates are educational, not financial advice; how the calculators may be used and embedded.';
 	$lines[] = '';
 
 	status_header( 200 );

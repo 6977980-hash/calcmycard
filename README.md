@@ -45,11 +45,13 @@ changes, so edit those files only for real content changes.
 published on the calculator pages and an independent reference implementation, and
 `links.test.js` checks that every internal link, related-page slug and source key in the theme
 exists; `content.test.js` guards facts corrected in the 25 Oct 2026 audit (Reg Z 1026.54 on the
-grace period pages, the 2026 late fee safe harbor, homepage privacy FAQ).
+grace period pages, the 2026 late fee safe harbor, homepage privacy FAQ), and `a11y.test.js`
+checks the heading outline (no h2 → h4 skips) and that the Terms of Use page is created and linked.
 `tests/e2e/` loads each of the 16 calculators in Chromium, including "Copy link to these
 results" round trips, invalid inputs and extreme values; `layout.test.js` fails if a calculator
 shifts the page below it as it renders (lab CLS 0.1 or more at 1280, 800 or 390 px), which means
-its reserved height in `style.css` is missing or too small. Pull requests run both
+its reserved height in `style.css` is missing or too small, and that stand-alone links are at
+least 24 px tall (WCAG 2.2 2.5.8). Pull requests run both
 (`.github/workflows/tests.yml`, pinned to `ubuntu-24.04` because Playwright 1.56 has no Chromium
 build for ubuntu 26.04). When the number of tests changes, update `cmc_qa_status()` in
 `inc/helpers.php`, the About text in `inc/page-sync.php` and the "How we test" list in

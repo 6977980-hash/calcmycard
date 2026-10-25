@@ -61,6 +61,8 @@ $related_guides = cmc_articles_related_to_calculator( $slug, 3 );
 		cmc_render_calc_method_note( $calc['calc_id'] );
 		?>
 
+		<?php // The tools print h3 subheadings, so the calculator gets an h2 (screen readers only) to keep the outline h1 > h2 > h3. ?>
+		<h2 class="cmc-visually-hidden"><?php echo esc_html( $calc['title'] ); ?></h2>
 		<!-- Interactive calculator mount point: fully rendered by
 		     /assets/js/calculators/<?php echo esc_html( $calc['js'] ); ?> -->
 		<div id="cmc-calc-<?php echo esc_attr( $calc['calc_id'] ); ?>"
@@ -103,7 +105,7 @@ $related_guides = cmc_articles_related_to_calculator( $slug, 3 );
 	<aside class="cmc-sidebar">
 		<?php cmc_render_ad_slot( 'rectangle', 'Advertisement' ); ?>
 		<div class="cmc-related-card">
-			<h4 style="margin-top:0;">All <?php echo (int) cmc_calculator_count(); ?> Calculators</h4>
+			<h3>All <?php echo (int) cmc_calculator_count(); ?> Calculators</h3>
 			<p class="cmc-muted" style="font-size:0.85rem;">Explore the full CalcMyCard toolkit.</p>
 			<a href="<?php echo esc_url( home_url( '/calculators/' ) ); ?>">Browse all calculators &rarr;</a>
 		</div>

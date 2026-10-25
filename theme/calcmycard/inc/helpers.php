@@ -157,7 +157,7 @@ function cmc_site_author() {
  */
 function cmc_qa_status() {
 	return array(
-		'cases'    => 153,
+		'cases'    => 156,
 		'last_run' => '2026-10-25',
 		// Calculators not covered by the automated suite (none since
 		// Oct 16, 2026: all 16 are).

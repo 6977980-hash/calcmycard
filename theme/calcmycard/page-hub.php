@@ -32,7 +32,7 @@ $is_guides = ( 'guides' === $slug );
 		<div class="cmc-hub-grid">
 			<?php foreach ( cmc_articles() as $a ) : ?>
 				<div class="cmc-hub-card">
-					<h3><a href="<?php echo esc_url( home_url( '/guides/' . $a['slug'] . '/' ) ); ?>"><?php echo esc_html( $a['title'] ); ?></a></h3>
+					<h2><a href="<?php echo esc_url( home_url( '/guides/' . $a['slug'] . '/' ) ); ?>"><?php echo esc_html( $a['title'] ); ?></a></h2>
 					<p class="cmc-muted"><?php echo esc_html( ! empty( $a['card_description'] ) ? $a['card_description'] : $a['meta_description'] ); ?></p>
 				</div>
 			<?php endforeach; ?>
@@ -41,7 +41,7 @@ $is_guides = ( 'guides' === $slug );
 		<div class="cmc-hub-grid">
 			<?php foreach ( cmc_calculators() as $c ) : ?>
 				<div class="cmc-hub-card">
-					<h3><a href="<?php echo esc_url( home_url( '/calculators/' . $c['slug'] . '/' ) ); ?>"><?php echo esc_html( $c['title'] ); ?></a></h3>
+					<h2><a href="<?php echo esc_url( home_url( '/calculators/' . $c['slug'] . '/' ) ); ?>"><?php echo esc_html( $c['title'] ); ?></a></h2>
 					<p class="cmc-muted"><?php echo esc_html( $c['dek'] ); ?></p>
 					<a class="cmc-hub-cta" href="<?php echo esc_url( home_url( '/calculators/' . $c['slug'] . '/' ) ); ?>">Open calculator &rarr;</a>
 				</div>
