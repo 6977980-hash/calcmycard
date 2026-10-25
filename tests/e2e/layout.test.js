@@ -81,3 +81,29 @@ for ( const id of Object.keys( CALCS ) ) {
 		}
 	} );
 }
+
+// A25-017 (WCAG 2.2 2.5.8): stand-alone links in breadcrumbs, nav, cards,
+// sources, list items and the footer give at least 24px of hit area.
+test( 'A25-017: stand-alone links are at least 24px tall', async () => {
+	const html = '<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="' + href( path.join( THEME, 'style.css' ) ) + '"></head><body>' +
+		'<header class="cmc-site-header"><nav class="cmc-primary-nav"><ul class="menu"><li><a href="#">Calculators</a></li><li><a href="#">Guides</a></li></ul></nav></header>' +
+		'<main id="cmc-main"><div class="cmc-page-hero"><div class="cmc-container"><nav class="cmc-breadcrumbs"><a href="#">Home</a> &rsaquo; <a href="#">Calculators</a> &rsaquo; <span>Page</span></nav></div></div>' +
+		'<div class="cmc-container"><ul><li><a href="#">List link</a></li><li><strong><a href="#">Bold list link</a></strong></li></ul>' +
+		'<div class="cmc-related-card"><h3>All Calculators</h3><a href="#">Browse all calculators</a></div>' +
+		'<div class="cmc-hub-grid"><div class="cmc-hub-card"><h2><a href="#">Hub card</a></h2><a class="cmc-hub-cta" href="#">Open</a></div></div>' +
+		'<section class="cmc-sources"><ol><li><a href="#">Source one</a></li><li><a href="#">Source two</a></li></ol></section>' +
+		'<div class="cmc-author-box"><div><h3><a href="#">Ali Ahmad</a></h3></div></div></div></main>' +
+		'<footer class="cmc-site-footer"><div class="cmc-footer-grid"><div><h3>Company</h3><ul><li><a href="#">About</a></li><li><a href="#">Terms of Use</a></li></ul></div></div>' +
+		'<div class="cmc-footer-bottom"><span>Built by <a href="#">Ali Ahmad</a>.</span></div></footer></body></html>';
+	const p = path.join( dir, 'targets.html' );
+	fs.writeFileSync( p, html );
+	for ( const viewport of [ VIEWPORTS.desktop, VIEWPORTS.phone ] ) {
+		const page = await browser.newPage( { viewport } );
+		await page.goto( href( p ) );
+		const small = await page.evaluate( () => [ ...document.querySelectorAll( 'a' ) ]
+			.filter( ( a ) => a.getClientRects().length && a.getBoundingClientRect().height < 24 )
+			.map( ( a ) => a.textContent + ' ' + a.getBoundingClientRect().height.toFixed( 1 ) + 'px' ) );
+		await page.close();
+		assert.deepEqual( small, [], 'links under 24px at ' + viewport.width + 'px (see "Link target size" in style.css)' );
+	}
+} );

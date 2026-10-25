@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_THEME_VERSION', '1.0.33' );
+define( 'CMC_THEME_VERSION', '1.0.34' );
 define( 'CMC_THEME_DIR', get_template_directory() );
 define( 'CMC_THEME_URI', get_template_directory_uri() );
 
@@ -117,8 +117,8 @@ function cmc_widgets_init() {
 		'id'            => 'sidebar-1',
 		'before_widget' => '<div class="cmc-widget">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h4>',
-		'after_title'   => '</h4>',
+		'before_title'  => '<h3>',
+		'after_title'   => '</h3>',
 	) );
 }
 add_action( 'widgets_init', 'cmc_widgets_init' );

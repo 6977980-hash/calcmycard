@@ -4,7 +4,7 @@ Theme URI: https://calcmycard.com
 Author: Ali Ahmad
 Author URI: https://calcmycard.com/about/
 Description: A fast, lightweight, SEO/AEO-optimized WordPress theme purpose-built for a credit card calculator authority site. Built for Core Web Vitals, schema markup, and AdSense-ready layout.
-Version: 1.0.33
+Version: 1.0.34
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.6
@@ -275,6 +275,7 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-related-card { background: #fff; border: 1px solid var(--cmc-border); border-radius: 10px; padding: 14px; transition: border-color .15s, box-shadow .15s; }
 .cmc-related-card:hover { border-color: var(--cmc-ink); box-shadow: 3px 3px 0 var(--cmc-amber); }
 .cmc-related-card a { font-weight: 700; }
+.cmc-sidebar .cmc-related-card h3 { margin-top: 0; font-size: 1rem; }
 .cmc-related-card p { margin: 6px 0 0; font-size: 0.84rem; color: var(--cmc-text-muted); }
 
 /* Author / trust box (E-E-A-T) */
@@ -285,15 +286,15 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-author-box p:last-child { margin-bottom: 0; }
 .cmc-sources { margin: 28px 0 0; font-size: 0.86rem; }
 .cmc-sources h2 { font-size: 1.1rem; }
-.cmc-sources li { margin-bottom: 4px; overflow-wrap: anywhere; }
+.cmc-sources li { margin-bottom: 8px; overflow-wrap: anywhere; }
 
 /* Hub / index grid */
 .cmc-hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 24px 0; }
 .cmc-hub-card { border: 1px solid var(--cmc-border); border-radius: var(--cmc-radius); padding: 20px; background: #fff; box-shadow: var(--cmc-shadow); display: flex; flex-direction: column; transition: border-color .15s, box-shadow .15s, transform .15s; }
 .cmc-hub-card:hover { border-color: var(--cmc-ink); box-shadow: 4px 4px 0 var(--cmc-amber); transform: translate(-1px, -1px); }
-.cmc-hub-card h3 { margin-top: 0; font-size: 1.05rem; }
-.cmc-hub-card h3 a { color: var(--cmc-text); }
-.cmc-hub-card h3 a:hover { color: var(--cmc-brand); }
+.cmc-hub-card h2, .cmc-hub-card h3 { margin-top: 0; font-size: 1.05rem; font-weight: 700; }
+.cmc-hub-card h2 a, .cmc-hub-card h3 a { color: var(--cmc-text); }
+.cmc-hub-card h2 a:hover, .cmc-hub-card h3 a:hover { color: var(--cmc-brand); }
 .cmc-hub-card .cmc-muted { font-size: 0.9rem; flex: 1; }
 .cmc-hub-card .cmc-hub-cta { font-weight: 700; font-size: 0.9rem; }
 
@@ -307,10 +308,17 @@ code { background: var(--cmc-bg-alt); padding: 0.1em 0.4em; border-radius: 4px; 
 .cmc-site-footer .cmc-muted { color: #aab3c6; }
 .cmc-footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 28px; }
 @media (max-width: 780px) { .cmc-footer-grid { grid-template-columns: 1fr 1fr; } }
-.cmc-footer-grid h4 { color: #fff; font-size: 0.8rem; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--cmc-mono); }
+.cmc-footer-grid h3 { color: #fff; font-size: 0.8rem; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--cmc-mono); }
 .cmc-footer-grid ul { list-style: none; margin: 0; padding: 0; }
 .cmc-footer-grid li { margin-bottom: 8px; font-size: 0.88rem; }
 .cmc-footer-bottom { margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.78rem; color: #8791a6; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+/* Link target size (WCAG 2.2 2.5.8, audit A25-017): links that stand alone
+   in lists, breadcrumbs, cards and the footer get at least 24px of hit area.
+   Vertical padding on an inline link grows its target without moving the
+   text around it, so no layout (or reserved calculator height) changes. */
+main li a, .cmc-related-card a, .cmc-hub-card a, .cmc-author-box h3 a { padding-block: 2px; }
+.cmc-breadcrumbs a, .cmc-primary-nav a, .cmc-sources a, .cmc-site-footer a { padding-block: 4px; }
 
 /* Utility */
 .cmc-muted { color: var(--cmc-text-muted); }

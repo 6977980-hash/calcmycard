@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="cmc-container">
 		<div class="cmc-footer-grid">
 			<div>
-				<h4><?php bloginfo( 'name' ); ?></h4>
+				<h3><?php bloginfo( 'name' ); ?></h3>
 				<p class="cmc-muted" style="max-width:320px;">Free, independent credit card calculators and guides. We are not a card issuer, lender, credit union, or financial adviser — just tested tools and plain-English explanations.</p>
 			</div>
 			<div>
-				<h4>Calculators</h4>
+				<h3>Calculators</h3>
 				<ul>
 					<li><a href="<?php echo esc_url( home_url( '/calculators/credit-card-interest-calculator/' ) ); ?>">Interest Calculator</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/calculators/credit-card-payoff-calculator/' ) ); ?>">Payoff Calculator</a></li>
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</ul>
 			</div>
 			<div>
-				<h4>Guides</h4>
+				<h3>Guides</h3>
 				<ul>
 					<li><a href="<?php echo esc_url( home_url( '/guides/how-does-credit-card-interest-work/' ) ); ?>">How Interest Works</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/guides/how-to-avoid-credit-card-interest/' ) ); ?>">How to Avoid Interest</a></li>
@@ -31,12 +31,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</ul>
 			</div>
 			<div>
-				<h4>Company</h4>
+				<h3>Company</h3>
 				<ul>
 					<li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About Us</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/editorial-policy/' ) ); ?>">Editorial Policy</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/methodology/' ) ); ?>">Methodology</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms of Use</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Contact</a></li>
 				</ul>
 			</div>

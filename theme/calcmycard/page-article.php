@@ -71,7 +71,7 @@ $body = cmc_get_article_body( $slug );
 	<aside class="cmc-sidebar">
 		<?php cmc_render_ad_slot( 'rectangle', 'Advertisement' ); ?>
 		<div class="cmc-related-card">
-			<h4 style="margin-top:0;">More Guides</h4>
+			<h3>More Guides</h3>
 			<a href="<?php echo esc_url( home_url( '/guides/' ) ); ?>">Browse all guides &rarr;</a>
 		</div>
 	</aside>
