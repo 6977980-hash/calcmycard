@@ -97,6 +97,9 @@
 		var floor = UI.num( root, 'floor' );
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		var negative = UI.hasNegative( root, [ 'balance', 'apr', 'percent', 'floor' ] );
 		if ( negative || balance <= 0 ) {
 			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance greater than 0.';

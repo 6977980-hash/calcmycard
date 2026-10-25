@@ -42,7 +42,8 @@ exists.
 results" round trips, invalid inputs and extreme values; `layout.test.js` fails if a calculator
 shifts the page below it as it renders (lab CLS 0.1 or more at 1280, 800 or 390 px), which means
 its reserved height in `style.css` is missing or too small. Pull requests run both
-(`.github/workflows/tests.yml`). When the number of tests changes, update `cmc_qa_status()` in
+(`.github/workflows/tests.yml`, pinned to `ubuntu-24.04` because Playwright 1.56 has no Chromium
+build for ubuntu 26.04). When the number of tests changes, update `cmc_qa_status()` in
 `inc/helpers.php` and the About / Methodology text in `inc/page-sync.php`.
 
 ## Live site monitor

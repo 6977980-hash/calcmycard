@@ -37,6 +37,9 @@
 		var basis = UI.num( root, 'basis' ) || 365;
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		if ( apr < 0 || balance < 0 || days <= 0 ) {
 			err.textContent = 'Enter a valid APR, balance, and number of days.';
 			err.style.display = 'block';

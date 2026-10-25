@@ -56,6 +56,9 @@
 		var payment = UI.num( root, 'payment' );
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		if ( balance <= 0 || payment <= 0 || apr < 0 ) {
 			err.textContent = apr < 0 ? UI.NEGATIVE_MSG : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';

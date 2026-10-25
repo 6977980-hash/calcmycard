@@ -203,6 +203,60 @@ for ( const [ id, field ] of Object.entries( NEGATIVE ) ) {
 	} );
 }
 
+// A25-013: every APR field stops at 100% (1e12 used to print "Infinity%").
+const APR_FIELD = {
+	interest: 'apr', payoff: 'apr', minpayment: 'apr', balancetransfer: 'goToApr', multidebt: 'apr-0',
+	apr: 'apr', dpr: 'apr', extrapayment: 'apr', introapr: 'goToApr', consolidationvstransfer: 'loanApr',
+	cashadvance: 'apr', biweekly: 'apr', interestcheck: 'apr', fedrate: 'apr', deferred: 'apr',
+};
+for ( const [ id, field ] of Object.entries( APR_FIELD ) ) {
+	test( 'A25-013: ' + id + ' rejects an APR over 100%', async () => {
+		const page = await open( id );
+		await set( page, field, 1e12 );
+		assert.equal( await text( page, '.cmc-calc-error' ), 'Enter an APR of 100% or less.' );
+		assert.equal( await shown( page, '#results' ), false );
+		await page.close();
+	} );
+}
+
+test( 'A25-013: promo months must be a whole number of 1 or more', async () => {
+	for ( const id of [ 'balancetransfer', 'introapr' ] ) {
+		const page = await open( id );
+		for ( const value of [ '', 0, 2.5 ] ) {
+			await page.reload();
+			await set( page, 'promoMonths', value );
+			assert.match( await text( page, '.cmc-calc-error' ), /whole number of months/, id + ' promoMonths=' + value );
+			assert.equal( await shown( page, '#results' ), false, id + ' promoMonths=' + value );
+		}
+		await page.close();
+	}
+} );
+
+test( 'A25-013: interest charge checker needs whole days from 1 to 366', async () => {
+	const page = await open( 'interestcheck' );
+	for ( const value of [ 2.5, 367 ] ) {
+		await page.reload();
+		await set( page, 'days', value );
+		assert.equal( await shown( page, '.cmc-calc-error' ), true, 'days=' + value );
+		assert.equal( await shown( page, '#results' ), false, 'days=' + value );
+	}
+	await page.close();
+} );
+
+test( 'A25-003: intro APR adds the balance transfer fee', async () => {
+	const page = await open( 'introapr', 'balance=3000&feePercent=3&promoMonths=18&plannedPayment=150&goToApr=24.99' );
+	assert.equal( await text( page, '#stat-required' ), '$171.67' );
+	assert.equal( await text( page, '#stat-shortfall' ), '$390.00' );
+	await page.close();
+} );
+
+test( 'A25-009: principal part of a payment never exceeds the balance', async () => {
+	const page = await open( 'interest', 'balance=100&apr=24.99&payment=150' );
+	assert.equal( await text( page, '#stat-interest-portion' ), '$2.08' );
+	assert.equal( await text( page, '#stat-principal-portion' ), '$100.00' );
+	await page.close();
+} );
+
 test( 'FIX-010: consolidation needs a balance and whole months', async () => {
 	const page = await open( 'consolidationvstransfer' );
 	for ( const [ field, value ] of [ [ 'balance', 0 ], [ 'loanTerm', 36.5 ], [ 'promoMonths', 12.5 ] ] ) {
