@@ -1,6 +1,6 @@
 # CalcMyCard Content Importer
 
-WordPress plugin for calcmycard.com. Imports posts and pages from JSON or CSV with SEO title,
+Retired WordPress plugin for calcmycard.com (see Deploy). This repository also holds the site theme and its tests (below). Imports posts and pages from JSON or CSV with SEO title,
 meta description, focus keyword, canonical and FAQ schema (FAQPage JSON-LD). Works with Yoast
 and Rank Math; falls back to its own meta tags when neither is active.
 
@@ -12,10 +12,13 @@ Sample files are in `samples/`.
 
 ## Deploy
 
-Plugin files live at the repository root. Hostinger "Deploy from GitHub" deploys the `main`
-branch to:
-
-    public_html/wp-content/plugins/calcmycard-content-importer
+**Retired (25 Oct 2026, audit A25-011):** the importer is no longer used on calcmycard.com; the
+theme creates and updates all pages itself (`inc/page-sync.php`). The plugin was deactivated and
+deleted in WP admin and its Hostinger Git deployment (which copied `main` to
+`public_html/wp-content/plugins/calcmycard-content-importer`) was removed, because that folder
+had gone stale and served README, samples and an old theme copy to anyone. The code stays here
+for reference; to use it again, deploy only `calcmycard-content-importer.php` and `includes/`
+(not the whole repository) to that plugin folder.
 
 ## Theme
 
@@ -46,7 +49,8 @@ published on the calculator pages and an independent reference implementation, a
 `links.test.js` checks that every internal link, related-page slug and source key in the theme
 exists; `content.test.js` guards facts corrected in the 25 Oct 2026 audit (Reg Z 1026.54 on the
 grace period pages, the 2026 late fee safe harbor, homepage privacy FAQ), and `a11y.test.js`
-checks the heading outline (no h2 → h4 skips) and that the Terms of Use page is created and linked.
+checks the heading outline (no h2 → h4 skips) and that the Terms of Use page is created and linked, and
+`security.test.js` checks that XML-RPC and pingbacks stay off (`inc/hardening.php`).
 `tests/e2e/` loads each of the 16 calculators in Chromium, including "Copy link to these
 results" round trips, invalid inputs and extreme values; `layout.test.js` fails if a calculator
 shifts the page below it as it renders (lab CLS 0.1 or more at 1280, 800 or 390 px), which means
