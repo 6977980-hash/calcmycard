@@ -24,6 +24,13 @@ The site theme lives in `theme/calcmycard/`. On every push to `main` that touche
 `theme-live` branch, which Hostinger deploys to `public_html/wp-content/themes/calcmycard`.
 If the tests fail, nothing is deployed.
 
+Hostinger's CDN (`server: hcdn`) sits in front of the site. The theme sends
+`Cache-Control: s-maxage=600`, so a deploy should show everywhere within about ten minutes.
+Check with `curl -sI https://calcmycard.com/ | grep -i 'age\|hcdn'`: on a `HIT`, `age` should
+stay under 600. If a page still shows old content after that, flush the cache in the CDN
+section of the website in hPanel. The live site monitor fails when a CDN copy is more than an
+hour old.
+
 A calculator or guide page's "Updated" date (and its schema `dateModified` and sitemap `lastmod`)
 moves to the deploy time only when its file in `content/` or its entry in `inc/data-*.php`
 changes, so edit those files only for real content changes.

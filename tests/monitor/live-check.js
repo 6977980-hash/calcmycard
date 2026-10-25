@@ -6,7 +6,8 @@
 // Checks: robots.txt names a sitemap that returns XML; every calculator,
 // guide and page the theme defines is in the sitemap; every sitemap URL
 // returns 200, is indexable, has a self-referencing canonical and a title;
-// the downloads exist; the live theme version matches the repo.
+// the downloads exist; the live theme version matches the repo; the
+// Hostinger CDN isn't serving a copy much older than s-maxage (A25-016).
 'use strict';
 const fs = require( 'node:fs' );
 const path = require( 'node:path' );
@@ -111,6 +112,13 @@ async function checkPage( url ) {
 	}
 	if ( ! /<title>[^<]{10,}<\/title>/i.test( r.body ) ) {
 		fail( url + ': missing or short <title>' );
+	}
+	// The theme sends s-maxage=600, so a CDN copy should be at most ten
+	// minutes old. An hour leaves room for edge timing; older means the CDN
+	// ignores the header and needs a purge in hPanel (see README, Deploy).
+	const age = Number( r.headers.get( 'age' ) || 0 );
+	if ( /HIT/i.test( r.headers.get( 'x-hcdn-cache-status' ) || '' ) && age > 3600 ) {
+		fail( url + ': CDN copy is ' + Math.round( age / 3600 ) + ' h old (purge the CDN in hPanel)' );
 	}
 }
 
