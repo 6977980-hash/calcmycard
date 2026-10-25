@@ -42,8 +42,11 @@
 		var basis = UI.num( root, 'basis' ) || 365;
 		var err = root.querySelector( '#err' );
 
-		if ( charged < 0 || balance <= 0 || apr < 0 || days < 1 ) {
-			err.textContent = 'Enter an average daily balance greater than 0, at least 1 day, and an interest charge and APR of 0 or more.';
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
+		if ( charged < 0 || balance <= 0 || apr < 0 || days < 1 || days > 366 || Math.floor( days ) !== days ) {
+			err.textContent = 'Enter an average daily balance greater than 0, a whole number of days from 1 to 366, and an interest charge and APR of 0 or more.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;

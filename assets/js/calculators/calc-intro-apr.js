@@ -1,6 +1,7 @@
 /**
  * 0% Intro APR Calculator — required flat payment to clear a balance before
- * the promo ends, and the cost if the planned payment falls short.
+ * the promo ends, and the cost if the planned payment falls short. A balance
+ * transfer fee is added to the balance on day one, so it is paid off too.
  */
 (function () {
 	'use strict';
@@ -12,6 +13,7 @@
 	root.innerHTML =
 		UI.formGrid( [
 			UI.field( { id: 'balance', label: 'Balance (purchase or transferred amount)', value: 3000, min: 0, step: '0.01' } ),
+			UI.field( { id: 'feePercent', label: 'Balance transfer fee (%)', value: 0, min: 0, step: '0.1', hint: 'Usually 3–5% for a balance transfer; 0 for a new purchase' } ),
 			UI.field( { id: 'promoMonths', label: 'Promotional 0% period (months)', value: 18, min: 1, step: '1' } ),
 			UI.field( { id: 'plannedPayment', label: 'Your planned monthly payment', value: 150, min: 0, step: '0.01' } ),
 			UI.field( { id: 'goToApr', label: 'APR after the promo ends (%)', value: 24.99, min: 0, step: '0.01' } ),
@@ -28,14 +30,18 @@
 
 	function calc() {
 		var balance = UI.num( root, 'balance' );
+		var feePercent = UI.num( root, 'feePercent' );
 		var promoMonths = UI.num( root, 'promoMonths' );
 		var plannedPayment = UI.num( root, 'plannedPayment' );
 		var goToApr = UI.num( root, 'goToApr' );
 		var err = root.querySelector( '#err' );
 
-		var negative = UI.hasNegative( root, [ 'balance', 'promoMonths', 'plannedPayment', 'goToApr' ] );
-		if ( negative || balance <= 0 || promoMonths <= 0 ) {
-			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance greater than 0 and at least 1 promotional month.';
+		if ( UI.aprTooHigh( root, [ 'goToApr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
+		var negative = UI.hasNegative( root, [ 'balance', 'feePercent', 'promoMonths', 'plannedPayment', 'goToApr' ] );
+		if ( negative || balance <= 0 || UI.badMonths( promoMonths ) ) {
+			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance greater than 0 and the promotional period as a whole number of months, 1 or more.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
@@ -43,12 +49,14 @@
 		err.style.display = 'none';
 		UI.toggleResults( root, true );
 
+		var total = balance * ( 1 + feePercent / 100 );
+
 		// Round UP to the cent so paying the displayed amount always clears the balance.
-		var required = Math.ceil( ( balance / promoMonths ) * 100 - 1e-9 ) / 100;
+		var required = Math.ceil( ( total / promoMonths ) * 100 - 1e-9 ) / 100;
 		root.querySelector( '#stat-required' ).textContent = F.currency( required );
 
-		var paidDuringPromo = Math.min( balance, plannedPayment * promoMonths );
-		var remainder = Math.max( 0, balance - paidDuringPromo );
+		var paidDuringPromo = Math.min( total, plannedPayment * promoMonths );
+		var remainder = Math.max( 0, total - paidDuringPromo );
 
 		root.querySelector( '#stat-shortfall' ).textContent = remainder > 0 ? F.currency( remainder ) : '$0.00 — fully paid off';
 

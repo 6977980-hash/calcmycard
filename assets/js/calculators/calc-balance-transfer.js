@@ -61,12 +61,18 @@
 		var goToApr = UI.num( root, 'goToApr' );
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'currentApr', 'promoApr', 'goToApr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		var negative = UI.hasNegative( root, [ 'balance', 'currentApr', 'payment', 'feePercent', 'promoApr', 'promoMonths', 'goToApr' ] );
 		if ( negative || balance <= 0 || payment <= 0 ) {
 			err.textContent = negative ? UI.NEGATIVE_MSG : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';
 			UI.toggleResults( root, false );
 			return;
+		}
+		if ( UI.badMonths( promoMonths ) ) {
+			return UI.fail( root, err, 'Enter the promotional period as a whole number of months, 1 or more.' );
 		}
 		err.style.display = 'none';
 		UI.toggleResults( root, true );

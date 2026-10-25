@@ -92,6 +92,9 @@
 		var payment = goal ? ( balance > 0 && months >= 1 ? goalPayment( balance, apr, months, charges ) : 0 ) : UI.num( root, 'payment' );
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		var negative = UI.hasNegative( root, goal ? [ 'balance', 'apr', 'charges' ] : [ 'balance', 'apr', 'payment', 'charges' ] );
 		if ( negative || balance <= 0 || payment <= 0 || ( goal && ( months < 1 || months > 600 ) ) ) {
 			err.textContent = negative ? UI.NEGATIVE_MSG : goal ? 'Enter a balance greater than 0 and a payoff time between 1 and 600 months.' : 'Enter a balance and monthly payment greater than 0.';

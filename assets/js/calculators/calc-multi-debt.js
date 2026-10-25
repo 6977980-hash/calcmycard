@@ -152,6 +152,9 @@
 		var opts = shrinking ? { shrink: { floor: UI.num( root, 'minfloor' ) } } : null;
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, rowFieldIds().filter( function ( id ) { return id.indexOf( 'apr-' ) === 0; } ) ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		var negative = UI.hasNegative( root, rowFieldIds() );
 		if ( negative || ! cards.length ) {
 			err.textContent = negative ? UI.NEGATIVE_MSG : 'Add at least one card with a balance greater than 0.';

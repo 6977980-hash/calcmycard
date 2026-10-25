@@ -60,7 +60,7 @@ function cmc_calculators() {
 				),
 				array(
 					'q' => 'What\'s a good APR for a credit card?',
-					'a' => 'It depends on your credit profile and the type of card. For context, the Federal Reserve\'s G.19 data put the average rate at 20.94% across all accounts and 22.15% on accounts charged interest in Q2 2026. The higher your APR, the more it matters to pay in full or pay the balance down quickly.',
+					'a' => 'It depends on your credit profile and the type of card. For context, the Federal Reserve\'s G.19 data put the average rate at 21.19% across all accounts and 22.36% on accounts charged interest in Q3 2026. The higher your APR, the more it matters to pay in full or pay the balance down quickly.',
 				),
 				array(
 					'q' => 'What if my payment doesn\'t cover the interest?',
@@ -388,7 +388,7 @@ function cmc_calculators() {
 				),
 				array(
 					'q' => 'How do I make sure I pay off my balance in time?',
-					'a' => 'Divide your balance by the number of months in the promotional period — that\'s the flat payment needed to reach zero when the promo ends. This calculator does that division for you and flags if your planned payment falls short.',
+					'a' => 'Divide your balance, plus any balance transfer fee, by the number of months in the promotional period — that\'s the flat payment needed to reach zero when the promo ends. This calculator does that division for you and flags if your planned payment falls short.',
 				),
 				array(
 					'q' => 'What\'s the difference between 0% APR and deferred interest?',

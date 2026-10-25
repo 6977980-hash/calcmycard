@@ -43,7 +43,7 @@ function cmc_articles() {
 			'slug'             => 'average-credit-card-interest-rate-2026',
 			'title'            => 'Average Credit Card Interest Rate in 2026',
 			'seo_title'        => 'Average Credit Card Interest Rate in 2026: What\'s Normal?',
-			'meta_description' => 'The latest Federal Reserve data on average credit card APRs (Q2 2026), what the two averages mean, and whether your card\'s rate is above or below average.',
+			'meta_description' => 'The latest Federal Reserve data on average credit card APRs (Q3 2026), what the two averages mean, and whether your card\'s rate is above or below average.',
 			'target_keyword'   => 'average credit card interest rate',
 			'sources'          => array( 'fed-g19' ),
 			'related_calculators' => array( 'credit-card-apr-calculator', 'credit-card-interest-calculator' ),
