@@ -44,6 +44,9 @@
 		var atmFee = UI.num( root, 'atmFee' );
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		if ( amount <= 0 || days < 1 || apr < 0 || feePercent < 0 || minFee < 0 || atmFee < 0 ) {
 			err.textContent = 'Enter an amount greater than 0, at least 1 day, and fees and APR of 0 or more.';
 			err.style.display = 'block';

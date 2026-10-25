@@ -157,8 +157,8 @@ function cmc_site_author() {
  */
 function cmc_qa_status() {
 	return array(
-		'cases'    => 126,
-		'last_run' => '2026-10-16',
+		'cases'    => 145,
+		'last_run' => '2026-10-25',
 		// Calculators not covered by the automated suite (none since
 		// Oct 16, 2026: all 16 are).
 		'not_in_suite' => array(),
@@ -330,10 +330,10 @@ function cmc_render_calc_method_note( $calc_id ) {
 function cmc_sources() {
 	return array(
 		'fed-g19'           => array(
-			'title'     => 'Consumer Credit – G.19 (credit card interest rates, Q2 2026)',
+			'title'     => 'Consumer Credit – G.19 (credit card interest rates, Q3 2026)',
 			'publisher' => 'Federal Reserve Board',
 			'url'       => 'https://www.federalreserve.gov/releases/g19/current/default.htm',
-			'checked'   => '2026-09-25',
+			'checked'   => '2026-10-25',
 		),
 		'fed-fomc'          => array(
 			'title'     => 'Federal Open Market Committee meeting calendars and statements (September 16, 2026 decision)',

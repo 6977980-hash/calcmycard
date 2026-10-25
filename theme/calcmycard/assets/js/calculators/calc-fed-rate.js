@@ -18,7 +18,7 @@
 	root.innerHTML =
 		UI.formGrid( [
 			UI.field( { id: 'balance', label: 'Card balance', value: 5000, min: 0, step: '0.01' } ),
-			UI.field( { id: 'apr', label: 'Current APR (%)', value: 22.15, min: 0, step: '0.01', hint: 'On your statement. 22.15% is the Fed\'s latest average for accounts charged interest' } ),
+			UI.field( { id: 'apr', label: 'Current APR (%)', value: 22.36, min: 0, step: '0.01', hint: 'On your statement. 22.36% is the Fed\'s Q3 2026 average for accounts charged interest' } ),
 			UI.field( { id: 'payment', label: 'Monthly payment', value: 200, min: 0, step: '0.01' } ),
 			UI.field( { id: 'change', label: 'Fed rate change', type: 'select', value: '0.25', options: [
 				{ value: '-1', label: 'Cut of 1.00 point' },
@@ -61,6 +61,9 @@
 		var fixed = root.querySelector( '#ratetype' ).value === 'fixed';
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		if ( balance <= 0 || payment <= 0 || apr < 0 ) {
 			err.textContent = apr < 0 ? UI.NEGATIVE_MSG : 'Enter a balance and monthly payment greater than 0.';
 			err.style.display = 'block';

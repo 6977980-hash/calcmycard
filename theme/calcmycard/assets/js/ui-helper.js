@@ -157,6 +157,39 @@
 
 	var NEGATIVE_MSG = 'Amounts, rates and percentages can\'t be negative. Enter 0 or more.';
 
+	/**
+	 * True when any of the listed APR fields is above 100%. Card APRs never
+	 * come close, so a larger value is a typo (and 1e12 would print
+	 * "Infinity%").
+	 */
+	var APR_MAX = 100;
+	var APR_MAX_MSG = 'Enter an APR of ' + APR_MAX + '% or less.';
+	function aprTooHigh( root, ids ) {
+		return ids.some( function ( id ) {
+			var el = root.querySelector( '#' + id );
+			var v = el ? parseFloat( el.value ) : NaN;
+			return ! isNaN( v ) && v > APR_MAX;
+		} );
+	}
+
+	/**
+	 * True unless the value is a whole number of months, 1 or more. num()
+	 * reads an empty field as 0, so empty counts as bad too.
+	 */
+	function badMonths( value ) {
+		return ! ( value >= 1 && Math.floor( value ) === value );
+	}
+
+	/**
+	 * Show an input error and hide the results. Returns nothing, so a
+	 * calculator can write "return UI.fail( ... );".
+	 */
+	function fail( root, err, msg ) {
+		err.textContent = msg;
+		err.style.display = 'block';
+		toggleResults( root, false );
+	}
+
 	function csvCell( v ) {
 		var s = String( v == null ? '' : v );
 		return /[",\n]/.test( s ) ? '"' + s.replace( /"/g, '""' ) + '"' : s;
@@ -252,6 +285,10 @@
 		num: num,
 		hasNegative: hasNegative,
 		NEGATIVE_MSG: NEGATIVE_MSG,
+		aprTooHigh: aprTooHigh,
+		APR_MAX_MSG: APR_MAX_MSG,
+		badMonths: badMonths,
+		fail: fail,
 	};
 
 }( window ));

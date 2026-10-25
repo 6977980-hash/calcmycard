@@ -30,6 +30,9 @@
 		var apr = UI.num( root, 'apr' );
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'apr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		if ( balance < 0 || apr < 0 ) {
 			err.textContent = 'Enter values of 0 or greater.';
 			err.style.display = 'block';

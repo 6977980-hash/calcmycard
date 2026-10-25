@@ -74,6 +74,9 @@
 		var originationFee = UI.num( root, 'originationFee' );
 		var err = root.querySelector( '#err' );
 
+		if ( UI.aprTooHigh( root, [ 'promoApr', 'goToApr', 'loanApr' ] ) ) {
+			return UI.fail( root, err, UI.APR_MAX_MSG );
+		}
 		var negative = UI.hasNegative( root, [ 'balance', 'feePercent', 'promoApr', 'goToApr', 'loanApr', 'originationFee' ] );
 		var wholeMonths = promoMonths === Math.floor( promoMonths ) && loanTerm === Math.floor( loanTerm );
 		if ( negative || balance <= 0 || promoMonths < 1 || loanTerm < 1 || ! wholeMonths ) {
