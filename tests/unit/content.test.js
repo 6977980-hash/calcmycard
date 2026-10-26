@@ -27,6 +27,12 @@ test( 'A25-012: late fee guide gives the exact 2026 safe harbor', () => {
 test( 'A25-005 / A25-006: homepage FAQ and methodology match what the site does', () => {
 	assert.ok( ! read( 'front-page.php' ).includes( 'analytics and advertising' ) );
 	assert.ok( ! read( 'content/pages/methodology.html' ).includes( 'promotional deferred-interest structures' ) );
+	// GA4 is on: every page that talks about analytics has to say so.
+	assert.ok( read( 'functions.php' ).includes( 'G-FVYH8DJVC5' ) );
+	for ( const f of [ 'front-page.php', 'inc/page-sync.php', 'content/pages/privacy-policy.html', 'content/pages/terms.html' ] ) {
+		assert.ok( ! /no analytics|use analytics today|any analytics service/.test( read( f ) ), f + ' still says no analytics' );
+	}
+	assert.ok( read( 'content/pages/privacy-policy.html' ).includes( 'Google Analytics Opt-out' ) );
 } );
 
 test( 'G-2: the statement balance guide is linked from other pages', () => {

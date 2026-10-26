@@ -366,8 +366,8 @@ function cmc_content_sync_replacements() {
 function cmc_page_bodies() {
 	return array(
 		'methodology'    => '2026-10-25.4',
-		'privacy-policy' => '2026-10-16',
-		'terms'          => '2026-10-25',
+		'privacy-policy' => '2026-10-26',
+		'terms'          => '2026-10-26',
 	);
 }
 
@@ -416,7 +416,7 @@ function cmc_page_seo_descriptions() {
 		'about'          => 'About CalcMyCard: who builds the free credit card calculators and guides, how every calculator is tested, and how errors are corrected.',
 		'contact'        => 'Contact CalcMyCard to report a calculator error, send a content correction, ask a question or suggest a new calculator or guide.',
 		'methodology'    => 'How each CalcMyCard calculator works: the formulas, assumptions and limits behind all 16 tools, the issuer formulas we use, and how we test them.',
-		'privacy-policy' => 'How CalcMyCard handles your data: calculator inputs stay in your browser, and the site uses no analytics, ads or tracking cookies.',
+		'privacy-policy' => 'How CalcMyCard handles your data: calculator inputs stay in your browser, Google Analytics counts visits, and the site shows no ads.',
 		'terms'          => 'CalcMyCard Terms of Use: free educational estimates, not financial advice, how you may use and embed our calculators, and the limits of our liability.',
 	);
 }
