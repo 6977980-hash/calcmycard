@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_THEME_VERSION', '1.0.35' );
+define( 'CMC_THEME_VERSION', '1.0.36' );
 define( 'CMC_THEME_DIR', get_template_directory() );
 define( 'CMC_THEME_URI', get_template_directory_uri() );
 
@@ -144,6 +144,41 @@ function cmc_head_ad_snippet() {
 	}
 }
 add_action( 'wp_head', 'cmc_head_ad_snippet', 1 );
+
+/**
+ * Google Analytics 4 (gtag.js), loaded async so it never blocks rendering or
+ * shifts layout. Skipped for logged-in editors (keeps their own visits out of
+ * the reports) and for ?embed=1 iframes on other people's sites. Share links
+ * carry calculator inputs in the query string, so page_location is sent with
+ * only campaign (utm_*) and click-id parameters kept: inputs never reach GA,
+ * as the Privacy Policy says.
+ */
+define( 'CMC_GA_ID', 'G-FVYH8DJVC5' );
+
+function cmc_google_analytics() {
+	if ( ! CMC_GA_ID || current_user_can( 'edit_posts' ) || cmc_is_embed_request() ) {
+		return;
+	}
+	$id = esc_js( CMC_GA_ID );
+	?>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( CMC_GA_ID ); ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+(function () {
+	var keep = [];
+	location.search.replace(/^\?/, '').split('&').forEach(function (p) {
+		if (/^(utm_[a-z_]+|gclid|gbraid|wbraid)=/i.test(p)) { keep.push(p); }
+	});
+	gtag('config', '<?php echo $id; // phpcs:ignore -- escaped above. ?>', {
+		page_location: location.origin + location.pathname + (keep.length ? '?' + keep.join('&') : '')
+	});
+})();
+</script>
+	<?php
+}
+add_action( 'wp_head', 'cmc_google_analytics', 2 );
 
 /**
  * Hide WordPress core's built-in "Tools > Import" screen from the admin
