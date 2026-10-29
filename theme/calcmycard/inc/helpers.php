@@ -336,10 +336,10 @@ function cmc_sources() {
 			'checked'   => '2026-10-25',
 		),
 		'fed-fomc'          => array(
-			'title'     => 'Federal Open Market Committee meeting calendars and statements (September 16, 2026 decision)',
+			'title'     => 'Federal Open Market Committee meeting calendars and statements (October 28, 2026 decision)',
 			'publisher' => 'Federal Reserve Board',
 			'url'       => 'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
-			'checked'   => '2026-10-04',
+			'checked'   => '2026-10-29',
 		),
 		'cfpb-grace'        => array(
 			'title'     => 'What is a grace period for a credit card?',
