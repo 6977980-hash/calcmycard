@@ -25,8 +25,10 @@ function cmc_articles() {
 			'seo_title'        => 'How Credit Card Interest Works: When It Starts and Stops',
 			'meta_description' => 'How credit card interest works in plain English: when it starts, how you lose and regain the grace period, residual interest, and separate APRs.',
 			'target_keyword'   => 'how credit card interest works',
+			// Also covers "how to calculate credit card interest" since that guide was merged in here (Nov 2026).
+			'embed_calc'       => 'daily-periodic-rate-calculator',
 			'sources'          => array( 'cfpb-grace', 'cfpb-cash-advance', 'regz-1026-53', 'regz-1026-54' ),
-			'related_calculators' => array( 'credit-card-interest-calculator', 'daily-periodic-rate-calculator' ),
+			'related_calculators' => array( 'daily-periodic-rate-calculator', 'credit-card-interest-calculator', 'credit-card-interest-charge-checker' ),
 		),
 
 		'how-to-avoid-credit-card-interest' => array(
@@ -49,16 +51,6 @@ function cmc_articles() {
 			'related_calculators' => array( 'credit-card-apr-calculator', 'credit-card-interest-calculator' ),
 		),
 
-		'how-to-calculate-credit-card-interest' => array(
-			'slug'             => 'how-to-calculate-credit-card-interest',
-			'title'            => 'How to Calculate Credit Card Interest by Hand',
-			'seo_title'        => 'How to Calculate Credit Card Interest (Formula + Steps)',
-			'meta_description' => 'How to calculate credit card interest: the daily-rate formula, a worked example with purchases and payments, the monthly shortcut, and a calculator to try it.',
-			'target_keyword'   => 'how to calculate credit card interest',
-			'embed_calc'       => 'daily-periodic-rate-calculator',
-			'sources'          => array( 'cfpb-grace' ),
-			'related_calculators' => array( 'daily-periodic-rate-calculator', 'credit-card-interest-calculator' ),
-		),
 
 		'credit-card-grace-period-explained' => array(
 			'slug'             => 'credit-card-grace-period-explained',
@@ -110,7 +102,7 @@ function cmc_articles() {
 			'seo_title'        => 'How to Calculate Minimum Payment on a Credit Card',
 			'meta_description' => 'Two common formulas issuers use to set your minimum payment, plus how to find yours on your statement and estimate next month\'s minimum.',
 			'target_keyword'   => 'how to calculate minimum payment on credit card',
-			'sources'          => array( 'regz-1026-7' ),
+			'sources'          => array( 'regz-1026-7', 'fed-g19' ),
 			'related_calculators' => array( 'minimum-payment-calculator' ),
 		),
 
@@ -130,7 +122,7 @@ function cmc_articles() {
 			'seo_title'        => 'Balance Transfer Fees Explained: When Do They Pay Off?',
 			'meta_description' => 'How balance transfer fees work, typical rates, and the simple math for deciding whether a transfer still saves you money after the fee.',
 			'target_keyword'   => 'balance transfer fee',
-			'sources'          => array( 'cfpb-bt-fee', 'cfpb-deferred', 'regz-1026-55' ),
+			'sources'          => array( 'cfpb-bt-fee', 'cfpb-deferred', 'regz-1026-55', 'fed-g19' ),
 			'related_calculators' => array( 'balance-transfer-calculator', 'debt-consolidation-vs-balance-transfer-calculator', 'intro-apr-calculator', 'deferred-interest-calculator' ),
 		),
 
@@ -170,7 +162,7 @@ function cmc_articles() {
 			'seo_title'        => 'APR vs. Interest Rate on Credit Cards: What\'s the Difference',
 			'meta_description' => 'Why APR and interest rate mean almost the same thing on a credit card (but not on a mortgage), explained simply.',
 			'target_keyword'   => 'apr vs interest rate credit card',
-			'sources'          => array( 'cfpb-cash-advance', 'regz-1026-55', 'fed-g19' ),
+			'sources'          => array( 'cfpb-cash-advance', 'regz-1026-55', 'regz-1026-53', 'fed-g19' ),
 			'related_calculators' => array( 'credit-card-apr-calculator', 'daily-periodic-rate-calculator' ),
 		),
 

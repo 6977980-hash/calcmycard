@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CMC_CONTENT_SYNC', '2026-11-10.1' );
+define( 'CMC_CONTENT_SYNC', '2026-11-10.2' );
 
 function cmc_maybe_sync_content() {
 	if ( get_option( 'cmc_content_sync' ) === CMC_CONTENT_SYNC ) {
@@ -132,7 +132,6 @@ function cmc_content_baseline_dates() {
 		'credit-card-payoff-calculator'                     => '2026-10-04 20:51:33',
 		'extra-payment-savings-calculator'                  => '2026-10-04 20:51:33',
 		'how-does-credit-card-interest-work'                => '2026-10-04 20:51:33',
-		'how-to-calculate-credit-card-interest'             => '2026-10-04 20:51:33',
 		'credit-card-minimum-payment-study-2026'            => '2026-10-04 21:14:56',
 		'fed-rate-change-credit-card-calculator'            => '2026-10-04 21:14:56',
 		'how-long-to-pay-off-credit-card-with-minimum-payment' => '2026-10-04 21:14:56',
@@ -481,6 +480,12 @@ function cmc_moved_pages() {
 			'from'     => 'guides/credit-card-interest-calculator-for-multiple-cards',
 			'to'       => 'total-interest-multiple-credit-cards',
 			'redirect' => '/guides/total-interest-multiple-credit-cards/',
+		),
+		array(
+			// Merged into "How credit card interest works" (Nov 2026, GSC cannibalization fix).
+			'from'     => 'guides/how-to-calculate-credit-card-interest',
+			'to'       => null,
+			'redirect' => '/guides/how-does-credit-card-interest-work/',
 		),
 	);
 }
